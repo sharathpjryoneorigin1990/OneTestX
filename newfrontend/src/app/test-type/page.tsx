@@ -5,55 +5,88 @@ import Link from 'next/link';
 import React from 'react';
 import { NewNavbar } from "@/components/layout/NewNavbar";
 
+interface TestType {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  href: string;
+  isSpecial?: boolean;
+}
+
 export default function TestTypePage() {
-  const testTypes = [
+  const testTypes: TestType[] = [
     {
       title: 'AI Tests',
       description: 'Smart testing using artificial intelligence',
       icon: '🤖',
-      color: 'from-purple-500 to-indigo-600'
+      color: 'from-purple-500 to-indigo-600',
+      href: '/test-type/ai',
+      isSpecial: false
     },
     {
       title: 'UI Tests',
       description: 'Verify visual elements, layouts, and user interactions',
       icon: '🎨',
-      color: 'from-blue-500 to-cyan-600'
+      color: 'from-blue-500 to-cyan-600',
+      href: '/test-type/ui',
+      isSpecial: false
     },
     {
       title: 'API Tests',
       description: 'Test API endpoints and data flows',
       icon: '🔌',
-      color: 'from-emerald-500 to-teal-600'
+      color: 'from-emerald-500 to-teal-600',
+      href: '/test-type/api',
+      isSpecial: false
     },
     {
       title: 'E2E Tests',
       description: 'End-to-end testing of user flows',
       icon: '🔄',
-      color: 'from-amber-500 to-orange-600'
+      color: 'from-amber-500 to-orange-600',
+      href: '/test-type/e2e',
+      isSpecial: false
     },
     {
       title: 'Performance Tests',
       description: 'Measure and optimize performance',
       icon: '⚡',
-      color: 'from-rose-500 to-pink-600'
+      color: 'from-rose-500 to-pink-600',
+      href: '/test-type/performance',
+      isSpecial: false
     },
     {
       title: 'Security Tests',
       description: 'Verify security measures and vulnerabilities',
       icon: '🔒',
-      color: 'from-red-500 to-rose-600'
+      color: 'from-red-500 to-rose-600',
+      href: '/test-type/security',
+      isSpecial: false
     },
     {
       title: 'Integration Tests',
       description: 'Test component and service interactions',
       icon: '🔗',
-      color: 'from-indigo-500 to-violet-600'
+      color: 'from-indigo-500 to-violet-600',
+      href: '/test-type/integration',
+      isSpecial: false
     },
     {
       title: 'Accessibility Tests',
       description: 'Ensure WCAG compliance and accessibility',
       icon: '♿',
-      color: 'from-fuchsia-500 to-purple-600'
+      color: 'from-fuchsia-500 to-purple-600',
+      href: '/test-type/accessibility',
+      isSpecial: false
+    },
+    {
+      title: 'CI/CD Pipeline',
+      description: 'Set up automated testing and deployment',
+      icon: '⚙️',
+      color: 'from-cyan-500 to-blue-600',
+      href: '/ci-cd',
+      isSpecial: true
     }
   ];
 
@@ -95,44 +128,49 @@ export default function TestTypePage() {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className="h-full"
               >
-                <Link href={`/test-type/${test.title.toLowerCase().split(' ')[0]}`}>
-                  <div className="relative h-full group">
-                    <div className={`h-full flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 transition-all duration-300 hover:border-opacity-50 hover:shadow-xl hover:shadow-${test.color.split('-')[1]}/10`}>
-                      <div className={`mb-4 w-12 h-12 rounded-lg bg-gradient-to-br ${test.color} flex items-center justify-center text-2xl`}>
-                        {test.icon}
-                      </div>
-                      <h3 className="text-xl font-semibold mb-2 text-white">{test.title}</h3>
-                      <p className="text-gray-300 text-sm flex-grow">{test.description}</p>
-                      <div className="mt-4 text-sm text-gray-400 group-hover:text-white transition-colors flex items-center">
-                        Get started
+                <Link href={test.href} className="h-full block group">
+                  <div className="relative h-full flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 transition-all duration-300 hover:border-opacity-50 hover:shadow-xl hover:shadow-cyan-500/10 h-full">
+                    <div className={`mb-4 w-12 h-12 rounded-lg bg-gradient-to-br ${test.color} flex items-center justify-center text-2xl`}>
+                      {test.icon}
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 text-white">{test.title}</h3>
+                    <p className="text-gray-300 text-sm mb-4 line-clamp-3">{test.description}</p>
+                    <div className="mt-auto pt-2">
+                      <div className="text-sm text-gray-400 group-hover:text-white transition-colors flex items-center">
+                        {test.isSpecial ? 'Set up pipeline' : 'Configure'}
                         <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                       </div>
                     </div>
                     <div className={`absolute inset-0 bg-gradient-to-br ${test.color} rounded-xl opacity-0 group-hover:opacity-10 transition-opacity -z-10`}></div>
+                    {test.isSpecial && (
+                      <div className="absolute -top-2 -right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded-md">
+                        New
+                      </div>
+                    )}
                   </div>
                 </Link>
               </motion.div>
             ))}
-          </div>
-
-          <div className="col-span-full flex justify-center mt-8">
-            <motion.div 
-              className="w-full sm:max-w-md"
+            
+            {/* Create Custom Test Flow Card */}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: testTypes.length * 0.05 + 0.1 }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              className="h-full"
             >
-              <Link href="/custom-flow">
-                <div className="relative h-full group">
-                  <div className="h-full flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 transition-all duration-300 hover:border-opacity-50 hover:shadow-xl hover:shadow-purple-500/10">
-                    <div className="mb-4 w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
-                      🔧
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2 text-white">Create Custom Test Flow</h3>
-                    <p className="text-gray-300 text-sm flex-grow">Design and execute custom test workflows with our visual editor</p>
-                    <div className="mt-4 text-sm text-gray-400 group-hover:text-white transition-colors flex items-center">
+              <Link href="/custom-flow" className="h-full block group">
+                <div className="relative h-full flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 transition-all duration-300 hover:border-opacity-50 hover:shadow-xl hover:shadow-purple-500/10">
+                  <div className="mb-4 w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
+                    🔧
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-white">Create Custom Test Flow</h3>
+                  <p className="text-gray-300 text-sm mb-4 line-clamp-3">Design and execute custom test workflows with our visual editor</p>
+                  <div className="mt-auto pt-2">
+                    <div className="text-sm text-gray-400 group-hover:text-white transition-colors flex items-center">
                       Get started
                       <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
