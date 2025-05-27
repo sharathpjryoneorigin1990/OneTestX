@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "start": "node src/clean-server.js",
+    "dev": "node src/clean-server.js",
+    "test:perf:smoke": "k6 run tests/performance/k6/tests/smoke.js",
+    "test:perf:load": "k6 run tests/performance/k6/tests/load-test.js",
+    "test:perf:stress": "k6 run tests/performance/k6/tests/stress-test.js",
+    "test:perf:soak": "k6 run tests/performance/k6/tests/soak-test.js",
+    "test:perf:all": "node tests/performance/k6/run-all.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^4.17.22",
+    "@types/node": "^22.15.19",
+    "chokidar": "^4.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "node-fetch": "^2.7.0",
+    "socket.io": "^4.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}

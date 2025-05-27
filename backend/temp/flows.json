@@ -1,0 +1,76 @@
+{
+  "1748013044615": {
+    "name": "new",
+    "nodes": [
+      {
+        "id": "auth-1748013018605",
+        "type": "default",
+        "position": {
+          "x": 418,
+          "y": 222
+        },
+        "data": {
+          "label": "Auth",
+          "type": "auth",
+          "params": {}
+        },
+        "style": {
+          "background": "#4f46e5",
+          "color": "white",
+          "boxShadow": "0 0 10px rgba(0,0,0,0.1)",
+          "borderRadius": "8px",
+          "padding": "10px",
+          "border": "2px solid transparent",
+          "transition": "all 0.2s ease"
+        },
+        "width": 150,
+        "height": 41
+      },
+      {
+        "id": "navigation-1748013023058",
+        "type": "default",
+        "position": {
+          "x": 405,
+          "y": 345
+        },
+        "data": {
+          "label": "Navigation",
+          "type": "navigation",
+          "params": {}
+        },
+        "style": {
+          "background": "#0ea5e9",
+          "color": "white",
+          "boxShadow": "0 0 10px rgba(0,0,0,0.1)",
+          "borderRadius": "8px",
+          "padding": "10px",
+          "border": "2px solid transparent",
+          "transition": "all 0.2s ease"
+        },
+        "width": 150,
+        "height": 41,
+        "selected": true,
+        "positionAbsolute": {
+          "x": 405,
+          "y": 345
+        },
+        "dragging": false
+      }
+    ],
+    "edges": [
+      {
+        "style": {
+          "stroke": "#6366F1"
+        },
+        "animated": true,
+        "source": "auth-1748013018605",
+        "sourceHandle": null,
+        "target": "navigation-1748013023058",
+        "targetHandle": null,
+        "id": "reactflow__edge-auth-1748013018605-navigation-1748013023058"
+      }
+    ],
+    "lastModified": "2025-05-23T15:10:44.573Z",
+    "id": "1748013044615"
+  }
+}
