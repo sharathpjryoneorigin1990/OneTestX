@@ -178,10 +178,21 @@ export default function TestFilesPage() {
   const [runningTests, setRunningTests] = useState<string[]>([]);
   const [testLogs, setTestLogs] = useState<Record<string, string[]>>({});
 
-  const loadTests = useCallback(async () => {
+  const loadTests = useCallback(async (category?: string, type?: string) => {
     try {
       setLoading(true);
-      const response = await fetch('/api/tests');
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (category) params.append('category', category);
+      if (type) params.append('type', type);
+      
+      // Use the full backend URL for API requests
+      const baseUrl = 'http://localhost:3005';
+      const url = `${baseUrl}/api/tests${params.toString() ? `?${params.toString()}` : ''}`;
+      console.log('Fetching tests from:', url);
+      
+      const response = await fetch(url);
       const data = await response.json();
       
       if (!response.ok) {
@@ -190,32 +201,89 @@ export default function TestFilesPage() {
       
       // Transform the data to match the TestFile interface
       const transformedTests = data.tests.map((test: any) => {
-        const testName = test.name || test.path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Unnamed Test';
-        const uniqueTags = Array.from(new Set([...test.tags || [], ...(test.tags || [])]));
+        // Extract test name from path if not provided
+        const testName = test.name || test.path.split(/[\\/]/).pop()?.replace(/\.[^/.]+$/, '') || 'Unnamed Test';
+        
+        // Extract tags from the test path and any existing tags
+        const pathTags = extractTagsFromFile(test.path);
+        const uniqueTags = Array.from(new Set([
+          ...(test.tags || []),
+          ...pathTags,
+          test.type,
+          test.category
+        ].filter(Boolean)));
+        
+        // Create a default test case if none exists
+        const testCases = test.testCases?.length 
+          ? test.testCases 
+          : [{ name: testName, group: null, line: 1 }];
         
         return {
-          ...test,
+          id: test.id || `${test.category}-${test.type}-${testName}`.toLowerCase().replace(/\s+/g, '-'),
           name: testName,
+          path: test.path,
+          category: test.category,
+          type: test.type,
           tags: uniqueTags,
-          testCases: [{ name: testName, group: null, line: 1 }]
+          testCases: testCases,
+          status: test.status || 'not run',
+          duration: test.duration || '0s',
+          timestamp: test.timestamp || new Date().toISOString(),
+          passed: test.passed || 0,
+          failed: test.failed || 0,
+          skipped: test.skipped || 0
         };
       });
       
       setTests(transformedTests);
       
-      // Extract unique categories and tags
-      const categories = new Set<string>();
-      const allTags = new Set<string>();
+      // Extract unique categories and tags from all available tests (not just filtered ones)
+      // We'll make a separate call to get all categories and tags for the filters
+      const allTestsResponse = await fetch('http://localhost:3005/api/tests');
+      const allTestsData = await allTestsResponse.json();
       
-      transformedTests.forEach((test: TestFile) => {
-        if (test.category) {
-          categories.add(test.category);
+      if (allTestsResponse.ok) {
+        const allCategories = new Set<string>();
+        const allTags = new Set<string>();
+        
+        allTestsData.tests.forEach((test: any) => {
+          if (test.category) {
+            allCategories.add(test.category);
+          }
+          (test.tags || []).forEach((tag: string) => allTags.add(tag));
+        });
+        
+        setCategories(Array.from(allCategories));
+        setTags(Array.from(allTags));
+      }
+      
+      // Update URL to reflect current filters
+      const newParams = new URLSearchParams(window.location.search);
+      
+      // Only update the URL if the parameters have changed
+      const currentCategory = newParams.get('category');
+      const currentType = newParams.get('type');
+      
+      if (category !== currentCategory || type !== currentType) {
+        // Update URL parameters
+        if (category) {
+          newParams.set('category', category);
+        } else {
+          newParams.delete('category');
         }
-        test.tags.forEach(tag => allTags.add(tag));
-      });
-      
-      setCategories(Array.from(categories));
-      setTags(Array.from(allTags));
+        
+        if (type) {
+          newParams.set('type', type);
+        } else {
+          newParams.delete('type');
+        }
+        
+        // Only update the URL if we're on the client side
+        if (typeof window !== 'undefined') {
+          const newUrl = `${window.location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+          window.history.replaceState({}, '', newUrl);
+        }
+      }
       
     } catch (error) {
       console.error('Error loading tests:', error);
@@ -233,29 +301,19 @@ export default function TestFilesPage() {
   // Handle URL search params changes
   useEffect(() => {
     const loadInitialData = async () => {
-      await loadTests();
+      // Load tests with URL parameters as filters
+      await loadTests(urlCategory || undefined, urlType || undefined);
       
-      // Access URL parameters
-      const category = urlCategory;
-      const type = urlType;
-      
-      if (category && type) {
-        // Find the test with matching category and type
-        const matchingTest = tests.find(
-          test => test.category?.toLowerCase() === category.toLowerCase() && 
-                 test.tags.some(t => t.toLowerCase() === type.toLowerCase())
-        );
-        
-        if (matchingTest) {
-          setSelectedCategory(category);
-          setSelectedTags([type]);
-          setSearchQuery(type);
-        }
+      // Update UI state based on URL parameters
+      if (urlCategory) setSelectedCategory(urlCategory);
+      if (urlType) {
+        setSelectedTags([urlType]);
+        setSearchQuery(urlType);
       }
     };
 
     loadInitialData();
-  }, [loadTests, urlCategory, urlType, tests.length]);
+  }, [loadTests, urlCategory, urlType]);
 
   const runTest = async (testPath: string) => {
     if (runningTests.includes(testPath)) return;

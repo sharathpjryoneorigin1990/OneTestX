@@ -2,20 +2,267 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import cors from 'cors';
 import { exec, spawn } from 'child_process';
 import { promisify } from 'util';
+import getPort from 'get-port';
 const execAsync = promisify(exec);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const router = express.Router();
 
+// Enable CORS for all test routes
+router.use(cors({
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Handle preflight requests
+router.options('*', cors());
+
+// Run a specific test
+router.post('/run', async (req, res) => {
+  try {
+    const { testPath, env = 'development' } = req.body;
+    
+    if (!testPath) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Test path is required' 
+      });
+    }
+
+    console.log(`===== Test Execution Requested =====`);
+    console.log(`Test Path: ${testPath}`);
+    console.log(`Environment: ${env}`);
+    
+    // Execute the test using the runTests function
+    const result = await runTests([testPath], env);
+    
+    console.log('Test execution completed:', result.success ? 'SUCCESS' : 'FAILED');
+    
+    // Return the result with appropriate status code
+    if (result.success) {
+      res.json({
+        success: true,
+        output: result.stdout,
+        message: 'Test executed successfully'
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: result.error || 'Test execution failed',
+        output: result.stdout,
+        errorOutput: result.stderr
+      });
+    }
+    
+  } catch (error) {
+    console.error('Error running test:', error);
+    
+    const errorResponse = {
+      success: false,
+      error: error.error || error.message || 'Failed to run test',
+      ...(error.stdout && { output: error.stdout }),
+      ...(error.stderr && { errorOutput: error.stderr })
+    };
+    
+    if (process.env.NODE_ENV === 'development') {
+      errorResponse.stack = error.stack;
+    }
+    
+    res.status(500).json(errorResponse);
+  }
+});
+
 console.log('Test routes module loaded');
+
+// Function to determine test runner based on file extension and path
+const getTestRunner = (testPath) => {
+  const lowerPath = testPath.toLowerCase();
+  
+  // Check for k6 tests
+  if (lowerPath.endsWith('.js') && testPath.includes('k6')) {
+    return 'k6';
+  }
+  
+  // Check for Playwright tests
+  if (lowerPath.endsWith('.spec.js') || lowerPath.endsWith('.test.js')) {
+    if (testPath.includes('playwright') || testPath.includes('e2e')) {
+      return 'playwright';
+    }
+  }
+  
+  // Default to Jest for other JavaScript tests
+  if (lowerPath.endsWith('.js') || lowerPath.endsWith('.jsx') || 
+      lowerPath.endsWith('.ts') || lowerPath.endsWith('.tsx')) {
+    return 'jest';
+  }
+  
+  // Default to Jest if we can't determine the runner
+  return 'jest';
+};
+
+// Function to run tests with Playwright
+const runTests = async (testPaths, env = 'development') => {
+  // Get the absolute path to the project root (backend directory)
+  const projectRoot = path.resolve(__dirname, '../..');
+  console.log('Project root:', projectRoot);
+  
+  // Ensure test results directory exists
+  const resultsDir = path.join(projectRoot, 'test-results');
+  if (!fs.existsSync(resultsDir)) {
+    fs.mkdirSync(resultsDir, { recursive: true });
+  }
+
+  // Find an available port dynamically
+  const port = await getPort({ port: 9323 }); // Start checking from port 9323 (Playwright's default)
+  
+  return new Promise((resolve, reject) => {
+    // Normalize test paths
+    const normalizedPaths = testPaths.map(p => {
+      // Remove any leading ./ or ../
+      const cleanPath = p.replace(/^[.\\/]+/, '');
+      // If the path already starts with tests/ or ui/, use it as is
+      if (cleanPath.startsWith('tests/') || cleanPath.startsWith('ui/')) {
+        return cleanPath;
+      }
+      // Otherwise, prepend tests/
+      return `tests/${cleanPath}`;
+    });
+    
+    // Build the command to run the tests
+    const testList = normalizedPaths.join(' ');
+    const cmd = `npx playwright test ${testList} --workers=1 --timeout=60000 --reporter=list,json --output=test-results && npx playwright show-report --port ${port} || true`;
+
+    console.log('Project root:', projectRoot);
+    console.log('Resolved test paths:', normalizedPaths);
+    console.log(`Running tests: ${cmd}`);
+    console.log(`Environment: ${env}`);
+    
+    // Set up environment variables
+    const envVars = {
+      ...process.env,
+      NODE_ENV: 'test',
+      PLAYWRIGHT_ENV: env,
+      PLAYWRIGHT_TEST_BASE_URL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://127.0.0.1:3000',
+      // Ensure npm and npx are in the PATH
+      PATH: process.env.PATH
+    };
+    
+    // Ensure test results directory exists
+    const resultsDir = path.join(projectRoot, 'test-results');
+    if (!fs.existsSync(resultsDir)) {
+      fs.mkdirSync(resultsDir, { recursive: true });
+    }
+
+    // Execute the command from the project root
+    console.log(`Executing from directory: ${projectRoot}`);
+    
+    // Create a variable to store test status
+    let testOutput = '';
+    let testError = '';
+    
+    const testProcess = exec(cmd, { 
+      env: envVars,
+      maxBuffer: 1024 * 1024 * 10, // 10MB buffer
+      cwd: projectRoot,  // Run from project root
+      shell: true        // Use shell to ensure PATH is resolved correctly
+    });
+    
+    // Collect stdout and stderr
+    testProcess.stdout?.on('data', (data) => {
+      testOutput += data.toString();
+    });
+    
+    testProcess.stderr?.on('data', (data) => {
+      testError += data.toString();
+    });
+    
+    testProcess.on('close', (code) => {
+      const now = new Date().toISOString();
+      console.log(`Test run completed at ${now} with code ${code}`);
+      
+      if (code !== 0) {
+        console.error('Test run error:', testError || 'Non-zero exit code');
+        return reject({
+          success: false,
+          error: testError || 'Test failed with non-zero exit code',
+          stdout: testOutput,
+          stderr: testError,
+          status: 'failed',
+          timestamp: now
+        });
+      }
+      
+      // Parse test results if available
+      let testResults = [];
+      try {
+        const resultsPath = path.join(projectRoot, 'test-results', 'test-results.json');
+        if (fs.existsSync(resultsPath)) {
+          const resultsData = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+          testResults = resultsData.suites.flatMap(suite => 
+            suite.specs.map(spec => ({
+              title: spec.title,
+              status: spec.tests[0]?.results[0]?.status || 'unknown',
+              duration: spec.tests[0]?.results[0]?.duration || 0,
+              error: spec.tests[0]?.results[0]?.error?.message || null
+            }))
+          );
+        }
+      } catch (err) {
+        console.error('Error parsing test results:', err);
+      }
+
+      const result = {
+        success: true,
+        status: 'completed',
+        timestamp: now,
+        port: port, // Include the dynamic port in the response
+        testCount: testResults.length,
+        passed: testResults.filter(t => t.status === 'passed').length,
+        failed: testResults.filter(t => t.status === 'failed').length,
+        skipped: testResults.filter(t => t.status === 'skipped').length,
+        results: testResults,
+        output: testOutput.split('\n').filter(line => line.trim()),
+        error: testError,
+        reportUrl: `http://localhost:${port}` // Include the full report URL
+      };
+      
+      console.log(`Test report available at: ${result.reportUrl}`);
+      resolve(result);
+    });
+    
+    testProcess.on('error', (error) => {
+      console.error('Test process error:', error);
+      reject({
+        success: false,
+        error: error.message,
+        stdout: testOutput,
+        stderr: testError,
+        status: 'error',
+        timestamp: new Date().toISOString()
+      });
+    });
+  });
+};
+
+// Wrapper function to maintain backward compatibility
+const runTest = (testPath, env = 'development') => {
+  return runTests([testPath], env);
+};
 
 // List all available tests across all test directories
 router.get('/', (req, res) => {
   console.log('\n=== Test Listing Request ===');
   console.log('Received request to list tests');
+  
+  // Get query parameters for filtering
+  const { category, type } = req.query;
+  console.log('Query parameters:', { category, type });
   
   // Try multiple possible test directory locations
   const possibleTestDirs = [
@@ -96,12 +343,15 @@ router.get('/', (req, res) => {
           }
           
           const fullPath = path.join(dir, entry.name);
-          const relPath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+          // Normalize path separators to forward slashes for consistent handling
+          const normalizedRelPath = relativePath 
+            ? `${relativePath}${path.sep}${entry.name}`.replace(/\\/g, '/')
+            : entry.name;
           
           if (entry.isDirectory()) {
             // Recursively scan subdirectories
             console.log(`Entering subdirectory: ${fullPath}`);
-            scanForTests(fullPath, relPath);
+            scanForTests(fullPath, normalizedRelPath);
           } else {
             const isTestFile = (
               entry.name.endsWith('.test.js') || 
@@ -116,63 +366,82 @@ router.get('/', (req, res) => {
             
             if (isTestFile) {
               console.log(`Found test file: ${fullPath}`);
-              const testId = relPath.replace(/[\\/]/g, '-').replace(/\.(js|ts)$/, '');
-              const testType = getTestType(entry.name, relativePath);
-              const category = relativePath.split('/')[0] || 'other';
+              const testId = normalizedRelPath.replace(/[\\/]/g, '-').replace(/\.(js|ts)$/, '');
+              const testType = getTestType(entry.name, normalizedRelPath);
+              // Get the first directory as category
+              const category = normalizedRelPath.split('/')[0]?.toLowerCase() || 'other';
               
               allTestFiles.push({
                 id: testId,
                 name: entry.name.replace(/\.(js|ts)$/, '').replace(/-/g, ' '),
-                path: `tests/${relPath.replace(/\\/g, '/')}`,
+                path: `tests/${normalizedRelPath}`,
                 type: testType,
                 category: category,
                 fullPath: fullPath,
                 size: fs.statSync(fullPath).size,
                 modified: fs.statSync(fullPath).mtime
               });
+              
+              console.log(`Added test file: ${normalizedRelPath} (type: ${testType}, category: ${category})`);
             } else {
               console.log(`Skipping non-test file: ${fullPath}`);
             }
           }
         }
       } catch (error) {
-        console.error(`Error scanning directory ${dir}:`, error.message);
+        console.error(`Error scanning directory ${dir}:`, error);
       }
     };
     
-    // Function to determine test type based on filename and path
+    // Function to determine test type based on directory structure
     const getTestType = (filename, filePath) => {
+      // Convert to lowercase for case-insensitive comparison
+      const lowerPath = filePath.toLowerCase().replace(/\\/g, '/');
       const lowerName = filename.toLowerCase();
-      const lowerPath = filePath.toLowerCase();
       
-      // Check for visual tests first
-      if (lowerName.includes('visual') || lowerPath.includes('visual')) return 'visual';
+      // Define test type patterns with priority order
+      const typePatterns = [
+        { type: 'smoke', patterns: ['smoke', 'smoketest', 'smoke-test'] },
+        { type: 'e2e', patterns: ['e2e', 'endtoend', 'end-to-end', 'flow'] },
+        { type: 'visual', patterns: ['visual', 'screenshot'] },
+        { type: 'accessibility', patterns: ['accessibility', 'a11y'] },
+        { type: 'unit', patterns: ['unit', 'unittest', 'unit-test'] },
+        { type: 'integration', patterns: ['integration', 'integ', 'integtest', 'integ-test'] },
+        { type: 'performance', patterns: ['performance', 'perf', 'load', 'stress'] },
+        { type: 'security', patterns: ['security', 'sec', 'sast', 'dast'] }
+      ];
       
-      // Check for accessibility tests
-      if (lowerName.includes('accessibility') || lowerName.includes('a11y') || 
-          lowerPath.includes('accessibility') || lowerPath.includes('a11y')) {
-        return 'accessibility';
+      // Check each directory in the path (from specific to general)
+      const pathParts = lowerPath.split('/');
+      
+      // First, check the immediate parent directory
+      if (pathParts.length > 1) {
+        const parentDir = pathParts[pathParts.length - 2]; // Get parent directory
+        for (const { type, patterns } of typePatterns) {
+          if (patterns.some(pattern => parentDir.includes(pattern))) {
+            return type;
+          }
+        }
       }
       
-      // Check for other test types
-      if (lowerName.includes('smoke') || lowerPath.includes('smoke')) return 'smoke';
-      if (lowerName.includes('e2e') || lowerPath.includes('e2e') || 
-          lowerName.includes('end-to-end') || lowerPath.includes('end-to-end')) {
-        return 'e2e';
-      }
-      if (lowerName.includes('unit') || lowerPath.includes('unit')) return 'unit';
-      if (lowerName.includes('integration') || lowerPath.includes('integration')) return 'integration';
-      if (lowerName.includes('performance') || lowerPath.includes('performance')) return 'performance';
-      if (lowerName.includes('security') || lowerPath.includes('security')) return 'security';
-      
-      // Default to the parent directory name if it matches a test type
-      const parentDir = filePath.split('/')[0].toLowerCase();
-      const validTypes = ['smoke', 'e2e', 'visual', 'accessibility', 'unit', 'integration', 'performance', 'security'];
-      if (validTypes.includes(parentDir)) {
-        return parentDir;
+      // Then check all directories in the path
+      for (const part of pathParts) {
+        for (const { type, patterns } of typePatterns) {
+          if (patterns.some(pattern => part.includes(pattern))) {
+            return type;
+          }
+        }
       }
       
-      return 'other';
+      // Finally, check the filename
+      for (const { type, patterns } of typePatterns) {
+        if (patterns.some(pattern => lowerName.includes(pattern))) {
+          return type;
+        }
+      }
+      
+      // Default to 'e2e' for any test file we can't categorize
+      return 'e2e';
     };
     
     // Start scanning from the tests directory and all its subdirectories
@@ -194,8 +463,29 @@ router.get('/', (req, res) => {
       console.log('3. Check server logs for any scanning errors');
     }
     
-    // Group tests by category
-    const testsByCategory = allTestFiles.reduce((acc, test) => {
+    // Filter tests by category and type query parameters
+    const filteredTests = allTestFiles.filter(test => {
+      // Normalize the test category and type for comparison
+      const testCategory = test.category ? test.category.toLowerCase() : '';
+      const testType = test.type ? test.type.toLowerCase() : '';
+      const queryCategory = category ? category.toLowerCase() : '';
+      const queryType = type ? type.toLowerCase().replace(/\s+/g, '') : '';
+      
+      // Log filtering for debugging
+      console.log(`Filtering test: ${test.path}`);
+      console.log(`- Test category: '${testCategory}', type: '${testType}'`);
+      console.log(`- Query category: '${queryCategory}', type: '${queryType}'`);
+      
+      const categoryMatch = !queryCategory || testCategory === queryCategory;
+      const typeMatch = !queryType || testType === queryType;
+      
+      console.log(`- Matches: category=${categoryMatch}, type=${typeMatch}\n`);
+      
+      return categoryMatch && typeMatch;
+    });
+    
+    // Group filtered tests by category
+    const testsByCategory = filteredTests.reduce((acc, test) => {
       if (!acc[test.category]) {
         acc[test.category] = [];
       }
@@ -205,21 +495,35 @@ router.get('/', (req, res) => {
     
     const response = {
       success: true,
-      tests: allTestFiles,
-      testsByCategory,
-      totalTests: allTestFiles.length,
-      categories: Object.keys(testsByCategory),
-      scanInfo: {
-        scanDir: testsDir,
-        timestamp: new Date().toISOString(),
-        cwd: process.cwd(),
-        nodeEnv: process.env.NODE_ENV || 'development'
+      count: filteredTests.length,
+      tests: filteredTests,
+      testsByCategory: testsByCategory,
+      testsDir: testsDir,
+      filters: {
+        category: category || 'all',
+        type: type || 'all'
       }
     };
     
-    if (allTestFiles.length === 0) {
+    if (filteredTests.length === 0) {
       response.warning = 'No test files found';
       response.help = 'Check that test files exist in the expected location and match the required naming patterns';
+      
+      // If we have a category filter but no tests, check if the category exists
+      if (category) {
+        const allCategories = [...new Set(allTestFiles.map(t => t.category))];
+        if (!allCategories.some(c => c.toLowerCase() === category.toLowerCase())) {
+          response.help += `\nCategory '${category}' not found. Available categories: ${allCategories.join(', ')}`;
+        }
+      }
+      
+      // If we have a type filter but no tests, check if the type exists
+      if (type) {
+        const allTypes = [...new Set(allTestFiles.map(t => t.type))];
+        if (!allTypes.some(t => t.toLowerCase() === type.toLowerCase().replace(/\s+/g, ''))) {
+          response.help += `\nTest type '${type}' not found. Available types: ${allTypes.join(', ')}`;
+        }
+      }
     }
     
     res.json(response);
@@ -530,5 +834,8 @@ router.post('/run', async (req, res) => {
     }
   });
 });
+
+// Export the test running functions for direct use
+export { runTest, runTests, getTestRunner };
 
 export default router;

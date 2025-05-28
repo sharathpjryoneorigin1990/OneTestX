@@ -10,6 +10,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Badge } from '@/components/ui/Badge';
 import { motion } from 'framer-motion';
 import { useToast } from '@/components/ui/ToastContext';
+import { X } from 'lucide-react';
 
 interface TestCase {
   name: string;
@@ -47,7 +48,7 @@ const extractTagsFromFile = (filePath: string): string[] => {
 
 export default function TestFilesPage() {
   const [tests, setTests] = useState<Test[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [expandedTest, setExpandedTest] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -56,23 +57,13 @@ export default function TestFilesPage() {
   const [runningTests, setRunningTests] = useState<string[]>([]);
   const [testLogs, setTestLogs] = useState<Record<string, string[]>>({});
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [availableTags, setAvailableTags] = useState<string[]>([]);
   
   const { showToast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const categories = [
-    { id: 'all', name: 'All Tests', icon: '📋', count: 0 },
-    { id: 'smoke', name: 'Smoke Tests', icon: '🔥', count: 0 },
-    { id: 'e2e', name: 'E2E Tests', icon: '🔄', count: 0 },
-    { id: 'visual', name: 'Visual Tests', icon: '👁️', count: 0 },
-    { id: 'accessibility', name: 'Accessibility Tests', icon: '♿', count: 0 },
-    { id: 'api', name: 'API Tests', icon: '🔌', count: 0 },
-    { id: 'unit', name: 'Unit Tests', icon: '🧪', count: 0 },
-    { id: 'integration', name: 'Integration Tests', icon: '🔗', count: 0 },
-  ];
-
-  // Process test data from API response
   const processTestData = useCallback((data: any): Test[] => {
     const allTests = data.tests || [];
     return allTests.map((test: any) => {
@@ -103,25 +94,29 @@ export default function TestFilesPage() {
     });
   }, []);
 
-  // Update categories with counts
-  const updateCategories = useCallback((data: any) => {
-    setCategories(prevCategories => 
-      prevCategories.map(category => ({
-        ...category,
-        count: data.testsByCategory?.[category.id]?.length || 0
-      }))
-    );
-  }, []);
+  const updateCategories = (testData: any) => {
+    const uniqueCategories = [...new Set(testData.map((test: any) => test.category as string))];
+    setCategories(uniqueCategories as string[]);
+  };
 
-  // Load tests with retry logic
-  const loadTests = useCallback(async () => {
+  const loadTests = useCallback(async (forceReload: boolean = false) => {
+    if (loading && !forceReload) {
+      return;
+    }
+
+    let isMounted = true;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
     try {
-      setLoading(true);
-      setError(null);
+      if (isMounted) {
+        setLoading(true);
+        setError(null);
+      }
+      
       console.log('Fetching tests from API...');
       
-      // First check if the backend is healthy
-      const healthResponse = await fetch('/api/health');
+      const healthResponse = await fetch('/api/health', { signal: controller.signal });
       if (!healthResponse.ok) {
         throw new Error('Backend service is not available');
       }
@@ -134,7 +129,10 @@ export default function TestFilesPage() {
           'Cache-Control': 'no-cache',
         },
         credentials: 'include',
+        signal: controller.signal,
       });
+      
+      if (!isMounted) return;
       
       console.log('Response status:', response.status, response.statusText);
       
@@ -146,37 +144,55 @@ export default function TestFilesPage() {
       const data = await response.json();
       console.log('API Response received:', data);
       
-      const transformedTests = processTestData(data);
-      setTests(transformedTests);
-      updateCategories(data);
-      setError(null); // Clear any previous errors
+      if (isMounted) {
+        const transformedTests = processTestData(data);
+        setTests(transformedTests);
+        updateCategories(data);
+        setError(null); // Clear any previous errors
+      }
       
     } catch (err) {
-      const error = err as Error;
-      console.error('Error loading tests:', error);
-      setError(`Failed to load tests: ${error.message}`);
-      
-      // Auto-retry up to 3 times with exponential backoff
-      if (retryCount < 3) {
-        const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
-        console.log(`Retrying in ${delay}ms... (Attempt ${retryCount + 1}/3)`);
-        setTimeout(() => {
-          setRetryCount(prev => prev + 1);
-          loadTests();
-        }, delay);
-      } else {
-        showToast({
-          title: 'Error',
-          message: 'Failed to load tests. Please check if the backend server is running.',
-          type: 'error'
-        });
+      if (isMounted) {
+        const error = err as Error;
+        console.error('Error loading tests:', error);
+        setError(`Failed to load tests: ${error.message}`);
+        
+        if (retryCount < 3) {
+          const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+          console.log(`Retrying in ${delay}ms... (Attempt ${retryCount + 1}/3)`);
+          setTimeout(() => {
+            if (isMounted) {
+              setRetryCount(prev => prev + 1);
+              loadTests(true);
+            }
+          }, delay);
+        } else {
+          showToast({
+            title: 'Error',
+            message: 'Failed to load tests. Please check if the backend server is running.',
+            type: 'error'
+          });
+        }
       }
     } finally {
-      setLoading(false);
+      if (isMounted) {
+        setLoading(false);
+        clearTimeout(timeoutId);
+      }
     }
-  }, [processTestData, retryCount, showToast, updateCategories]);
 
-  // Initial load and URL parameter handling
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [loading, tests.length, retryCount, processTestData, showToast, updateCategories]);
+
+  useEffect(() => {
+    const allTags = tests.flatMap((test: Test) => test.tags || []);
+    const uniqueTags = [...new Set(allTags)];
+    setAvailableTags(uniqueTags);
+  }, [tests]);
+
   useEffect(() => {
     const loadInitialData = async () => {
       if (tests.length === 0) {
@@ -207,19 +223,15 @@ export default function TestFilesPage() {
     loadInitialData();
   }, [loadTests, searchParams, tests.length]);
 
-  // Filter tests based on selected category, tags, and search query
-  const filteredTests = tests.filter(test => {
-    // Filter by category
+  const filteredTests = tests.filter((test: Test) => {
     if (selectedCategory !== 'all' && test.category !== selectedCategory) {
       return false;
     }
     
-    // Filter by selected tags
     if (selectedTags.length > 0 && !selectedTags.some(tag => test.tags.includes(tag))) {
       return false;
     }
     
-    // Filter by search query
     if (searchQuery && !test.name.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
@@ -227,16 +239,17 @@ export default function TestFilesPage() {
     return true;
   });
 
-  // Run a specific test
   const runTest = async (testPath: string) => {
-    try {
-      setRunningTests(prev => [...prev, testPath]);
-      setTestLogs(prev => ({
-        ...prev,
-        [testPath]: [`Starting test: ${testPath}...`]
-      }));
+    if (runningTests.includes(testPath)) return;
+    
+    setRunningTests((prev: string[]) => [...prev, testPath]);
+    setTestLogs((prev: Record<string, string[]>) => ({
+      ...prev,
+      [testPath]: ['Starting test execution...']
+    }));
       
-      const response = await fetch('/api/run-test', {
+    try {
+      const response = await fetch('/api/tests/run', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,34 +258,50 @@ export default function TestFilesPage() {
       });
       
       if (!response.ok) {
-        throw new Error(`Failed to run test: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed to run test: ${response.statusText}`);
       }
       
       const result = await response.json();
       
-      setTestLogs(prev => ({
+      const resultLines: string[] = [
+        `Test completed with status: ${result.status}`,
+        `Tests: ${result.passed} passed, ${result.failed} failed, ${result.skipped} skipped`,
+        '',
+        result.reportUrl ? `View detailed report: ${result.reportUrl}` : 'No report URL available',
+        '',
+        ...(result.output || [])
+      ];
+      
+      if (result.results?.length > 0) {
+        resultLines.push('', 'Test Results:');
+        result.results.forEach((test: any) => {
+          resultLines.push(`- ${test.title}: ${test.status.toUpperCase()}${test.error ? ` (${test.error})` : ''}`);
+        });
+      }
+      
+      setTestLogs((prev: Record<string, string[]>) => ({
         ...prev,
         [testPath]: [
           ...(prev[testPath] || []),
-          `Test completed with status: ${result.status}`,
-          ...(result.output || [])
+          ...resultLines
         ]
       }));
       
       showToast({
-        title: 'Test Completed',
-        message: `Test ${result.status === 'passed' ? 'passed' : 'failed'}`,
-        type: result.status === 'passed' ? 'success' : 'error'
+        title: result.success ? 'Test Completed' : 'Test Failed',
+        message: result.success ? `All ${result.passed} tests passed!` : `${result.failed} test(s) failed`,
+        type: result.failed === 0 ? 'success' : 'error',
+        duration: 5000
       });
       
-      // Refresh the test list to show updated status
       await loadTests();
       
     } catch (error) {
       const err = error as Error;
       console.error('Error running test:', err);
       
-      setTestLogs(prev => ({
+      setTestLogs((prev: Record<string, string[]>) => ({
         ...prev,
         [testPath]: [
           ...(prev[testPath] || []),
@@ -286,16 +315,14 @@ export default function TestFilesPage() {
         type: 'error'
       });
     } finally {
-      setRunningTests(prev => prev.filter(path => path !== testPath));
+      setRunningTests((prev: string[]) => prev.filter(path => path !== testPath));
     }
   };
 
-  // Toggle test details
   const toggleTestDetails = (testPath: string) => {
-    setExpandedTest(prev => prev === testPath ? null : testPath);
+    setExpandedTest((prev: string | null) => prev === testPath ? null : testPath);
   };
 
-  // Handle tag selection
   const handleTagClick = (tag: string) => {
     setSelectedTags(prev => 
       prev.includes(tag) 
@@ -320,7 +347,10 @@ export default function TestFilesPage() {
           <span className="block sm:inline">{error}</span>
           <div className="mt-4">
             <button
-              onClick={loadTests}
+              onClick={(e) => {
+                e.preventDefault();
+                loadTests(true);
+              }}
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
               Retry
@@ -339,7 +369,6 @@ export default function TestFilesPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Test Files</h1>
           
-          {/* Search and filter */}
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1">
               <input
@@ -354,38 +383,31 @@ export default function TestFilesPage() {
             <div className="flex gap-2 overflow-x-auto pb-2">
               {categories.map(category => (
                 <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-md whitespace-nowrap ${
-                    selectedCategory === category.id
+                    selectedCategory === category
                       ? 'bg-blue-500 text-white'
                       : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <span className="mr-2">{category.icon}</span>
-                  {category.name}
-                  {category.count > 0 && (
-                    <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full">
-                      {category.count}
-                    </span>
-                  )}
+                  {category}
                 </button>
               ))}
             </div>
           </div>
           
-          {/* Selected tags */}
           {selectedTags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {selectedTags.map(tag => (
-                <Badge 
-                  key={tag} 
-                  variant="outline" 
-                  className="cursor-pointer hover:bg-gray-100"
+                <div 
+                  key={tag}
+                  className="inline-flex items-center ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200"
                   onClick={() => handleTagClick(tag)}
                 >
-                  {tag} ×
-                </Badge>
+                  {tag}
+                  <X className="ml-1 h-3 w-3" />
+                </div>
               ))}
               <button 
                 onClick={() => setSelectedTags([])}
@@ -397,7 +419,6 @@ export default function TestFilesPage() {
           )}
         </div>
         
-        {/* Test list */}
         <div className="space-y-4">
           {filteredTests.length === 0 ? (
             <div className="text-center py-12">
@@ -423,18 +444,17 @@ export default function TestFilesPage() {
                     </h3>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {test.tags.slice(0, 3).map(tag => (
-                        <Badge 
-                          key={tag} 
-                          variant="outline" 
-                          className={`text-xs ${
-                            selectedTags.includes(tag) 
-                              ? 'bg-blue-100 text-blue-800 border-blue-200' 
-                              : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                        <div 
+                          key={tag}
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
+                            selectedTags.includes(tag)
+                              ? 'bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200'
+                              : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'
                           }`}
                           onClick={() => handleTagClick(tag)}
                         >
                           {tag}
-                        </Badge>
+                        </div>
                       ))}
                       {test.tags.length > 3 && (
                         <span className="text-xs text-gray-500">+{test.tags.length - 3} more</span>

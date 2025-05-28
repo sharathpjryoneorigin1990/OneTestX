@@ -286,44 +286,60 @@ export default function SubTestTypePage({ params }: { params: { category: string
   return (
     <>
       <NewNavbar />
-      <main className="min-h-screen bg-gray-900 text-white p-8 pt-24">
-        <div className="max-w-7xl mx-auto">
+      <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 sm:p-8 pt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl font-bold mb-4">{categoryTitles[category]}</h1>
-            <p className="text-gray-400">
+            <motion.h1 
+              className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              {categoryTitles[category]}
+            </motion.h1>
+            <motion.p 
+              className="text-lg text-gray-300 max-w-2xl mx-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               Select the specific type of test you want to run
-            </p>
+            </motion.p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
             {tests.map((test, index) => (
               <motion.div
                 key={test.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className="h-full"
               >
-                <Link href={`/test-files?category=${category}&type=${test.title}`}>
-                  <div className="relative group">
-                    <div className={`${test.color} rounded-md p-3 text-white text-center transition-all duration-300 hover:scale-[1.02] cursor-pointer`}>
-                      <span className="text-xl mr-2">{test.icon}</span>
-                      <span className="font-medium">{test.title}</span>
+                <Link 
+                  href={`/test-files?category=${category}&type=${test.title.toLowerCase().split(' ')[0]}`} 
+                  className="h-full block group"
+                >
+                  <div className="relative h-full flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 transition-all duration-300 hover:border-opacity-50 hover:shadow-xl hover:shadow-cyan-500/10">
+                    <div className={`mb-4 w-12 h-12 rounded-lg ${test.color} flex items-center justify-center text-2xl`}>
+                      {test.icon}
                     </div>
-                    {/* Tooltip */}
-                    <div className="absolute z-10 w-48 p-2 bg-gray-900 text-white text-xs rounded-md shadow-lg
-                      opacity-0 group-hover:opacity-100 invisible group-hover:visible
-                      transition-all duration-200 -translate-y-2 group-hover:translate-y-0
-                      left-1/2 -translate-x-1/2 bottom-full mb-2">
-                      {test.description}
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 transform rotate-45 w-2 h-2 bg-gray-900"></div>
+                    <h3 className="text-xl font-semibold mb-2 text-white">{test.title}</h3>
+                    <p className="text-gray-300 text-sm mb-4 line-clamp-3">{test.description}</p>
+                    <div className="mt-auto pt-2">
+                      <div className="text-sm text-gray-400 group-hover:text-white transition-colors flex items-center">
+                        Configure
+                        <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </div>
                     </div>
+                    <div className={`absolute inset-0 ${test.color} rounded-xl opacity-0 group-hover:opacity-10 transition-opacity -z-10`}></div>
                   </div>
                 </Link>
               </motion.div>
@@ -333,11 +349,17 @@ export default function SubTestTypePage({ params }: { params: { category: string
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.3 }}
             className="text-center"
           >
-            <Link href="/test-type" className="text-blue-400 hover:text-blue-300 transition-colors">
-              ← Back to Test Categories
+            <Link 
+              href="/test-type" 
+              className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors group"
+            >
+              <svg className="w-4 h-4 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Test Categories
             </Link>
           </motion.div>
         </div>
