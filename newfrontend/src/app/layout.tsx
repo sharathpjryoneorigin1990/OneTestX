@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { ToastProvider } from '@/components/ui/ToastContext';
+import { ToastProvider } from '@/components/ui/toast-provider';
 
 export const metadata: Metadata = {
   title: 'OneTest X by OneOrigin',

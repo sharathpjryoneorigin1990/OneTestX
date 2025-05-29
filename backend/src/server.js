@@ -24,6 +24,8 @@ console.log = function(...args) {
 import performanceRoutes from './routes/performance.js';
 import testRoutes from './routes/tests.js';
 import k6TestRoutes from './routes/k6-tests.js';
+import visualTestRoutes from './routes/visualTests.js';
+import imageRoutes from './routes/imageServer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -358,6 +360,20 @@ try {
   console.log('Successfully registered /api/k6-tests route');
 } catch (err) {
   console.error('Failed to register /api/k6-tests route:', err);
+}
+
+try {
+  app.use('/api/visual-tests', visualTestRoutes);
+  console.log('Successfully registered /api/visual-tests route');
+} catch (err) {
+  console.error('Failed to register /api/visual-tests route:', err);
+}
+
+try {
+  app.use('/api', imageRoutes);
+  console.log('Successfully registered image server routes');
+} catch (err) {
+  console.error('Failed to register image server routes:', err);
 }
 
 // Legacy endpoint for backward compatibility

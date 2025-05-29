@@ -11,7 +11,15 @@
     "test:perf:load": "k6 run tests/performance/k6/tests/load-test.js",
     "test:perf:stress": "k6 run tests/performance/k6/tests/stress-test.js",
     "test:perf:soak": "k6 run tests/performance/k6/tests/soak-test.js",
-    "test:perf:all": "node tests/performance/k6/run-all.js"
+    "test:perf:all": "node tests/performance/k6/run-all.js",
+    "test:visual": "cross-env NODE_ENV=test playwright test tests/ui/visual/ --project=chromium",
+    "test:visual:all": "cross-env NODE_ENV=test playwright test tests/ui/visual/ --project=all",
+    "test:visual:chromium": "cross-env NODE_ENV=test playwright test tests/ui/visual/ --project=chromium",
+    "test:visual:firefox": "cross-env NODE_ENV=test playwright test tests/ui/visual/ --project=firefox",
+    "test:visual:webkit": "cross-env NODE_ENV=test playwright test tests/ui/visual/ --project=webkit",
+    "test:visual:setup": "node scripts/setup-visual-tests.js",
+    "test:visual:update": "cross-env NODE_ENV=test UPDATE_BASELINES=true playwright test tests/ui/visual/ --project=chromium --update-snapshots",
+    "test:visual:update:all": "cross-env NODE_ENV=test UPDATE_BASELINES=true playwright test tests/ui/visual/ --project=all --update-snapshots"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +39,11 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0"
+    "@playwright/test": "^1.52.0",
+    "chalk": "^5.4.1",
+    "cross-env": "^7.0.3",
+    "fs-extra": "^11.3.0",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0"
   }
 }
