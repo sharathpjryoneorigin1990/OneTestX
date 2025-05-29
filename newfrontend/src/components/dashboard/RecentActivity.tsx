@@ -20,7 +20,7 @@ export function RecentActivity({ items = [], loading = false }: RecentActivityPr
       id: '1',
       type: 'success',
       title: 'All tests passed',
-      description: 'Test suite completed successfully',
+      description: 'Test suite completed successfully for main branch',
       time: '2 minutes ago',
       user: 'alexj'
     },
@@ -28,14 +28,14 @@ export function RecentActivity({ items = [], loading = false }: RecentActivityPr
       id: '2',
       type: 'deploy',
       title: 'Deployed to production',
-      description: 'Version 2.3.1',
+      description: 'Version 2.3.1 with performance improvements',
       time: '1 hour ago'
     },
     {
       id: '3',
       type: 'error',
       title: '3 tests failed',
-      description: 'In feature/login branch',
+      description: 'In feature/login branch - authentication tests',
       time: '3 hours ago',
       user: 'jamies'
     },
@@ -43,7 +43,7 @@ export function RecentActivity({ items = [], loading = false }: RecentActivityPr
       id: '4',
       type: 'pr',
       title: 'PR #42 merged',
-      description: 'Update test coverage',
+      description: 'Update test coverage and fix flaky tests',
       time: '5 hours ago',
       user: 'taylorw'
     },
@@ -51,9 +51,48 @@ export function RecentActivity({ items = [], loading = false }: RecentActivityPr
       id: '5',
       type: 'warning',
       title: 'Performance warning',
-      description: 'Checkout test exceeded threshold',
+      description: 'Checkout test exceeded threshold by 200ms',
       time: '1 day ago',
       user: 'caseyk'
+    },
+    {
+      id: '6',
+      type: 'success',
+      title: 'E2E tests passed',
+      description: 'All end-to-end tests completed successfully',
+      time: '1 day ago',
+      user: 'alexj'
+    },
+    {
+      id: '7',
+      type: 'deploy',
+      title: 'Staging deployment',
+      description: 'Version 2.3.0-rc.1 deployed to staging',
+      time: '2 days ago',
+      user: 'taylorw'
+    },
+    {
+      id: '8',
+      type: 'pr',
+      title: 'PR #38 merged',
+      description: 'Add integration tests for payment gateway',
+      time: '2 days ago',
+      user: 'jamies'
+    },
+    {
+      id: '9',
+      type: 'error',
+      title: 'Build failed',
+      description: 'TypeScript errors in test files',
+      time: '3 days ago',
+      user: 'caseyk'
+    },
+    {
+      id: '10',
+      type: 'info',
+      title: 'Scheduled maintenance',
+      description: 'Test environment will be down for updates',
+      time: '4 days ago'
     }
   ];
 
@@ -78,8 +117,8 @@ export function RecentActivity({ items = [], loading = false }: RecentActivityPr
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        {[1, 2, 3, 4, 5].map((i) => (
+      <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 -mr-2">
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
           <div key={i} className="flex items-start gap-3">
             <div className="h-4 w-4 rounded-full bg-dark-700 mt-1"></div>
             <div className="flex-1 space-y-2">
@@ -93,7 +132,9 @@ export function RecentActivity({ items = [], loading = false }: RecentActivityPr
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 -mr-2">
+      {/* Scroll shadow indicators */}
+      <div className="sticky top-0 h-6 bg-gradient-to-b from-dark-800 to-transparent -mx-2 -mt-2 mb-2 z-10 pointer-events-none" />
       {displayItems.map((item) => (
         <div key={item.id} className="group flex items-start gap-3 p-2 -mx-2 rounded-lg hover:bg-dark-800/50 transition-colors">
           <div className="mt-1">

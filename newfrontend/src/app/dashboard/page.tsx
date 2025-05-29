@@ -8,7 +8,7 @@ import { StatCard } from '@/components/dashboard/StatCard';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { Button } from '@/components/ui/Button';
-import { CheckCircle, XCircle, Clock, Activity, GitBranch, RefreshCw, BarChart2, Code, Zap, PieChart, BarChart3, LineChart } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Activity, GitBranch, GitPullRequest, RefreshCw, BarChart2, Code, Zap, PieChart, BarChart3, LineChart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface TestMetrics {
@@ -81,6 +81,20 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   
+  // Format date consistently for server and client
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+  };
+
   // Mock metrics data
   const [metrics, setMetrics] = useState<TestMetrics>({
     total: 124,
@@ -258,7 +272,7 @@ export default function DashboardPage() {
                 </motion.span>
               </h1>
               <p className="text-gray-400 text-sm mt-1">
-                Last updated: {new Date(metrics.lastRun).toLocaleString()}
+                Last updated: {formatDate(metrics.lastRun)}
               </p>
             </motion.div>
             <motion.div 
@@ -338,9 +352,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column */}
-            <div className="lg:col-span-2 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Column - Main Content */}
+            <div className="lg:col-span-8 space-y-6">
               {/* Test Execution Overview */}
               <Card className="bg-dark-800/70 backdrop-blur-sm border border-dark-700 rounded-xl">
                 <CardHeader>
@@ -365,60 +379,174 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
+              
               {/* Test Type Distribution */}
-              <Card className="bg-dark-800/70 backdrop-blur-sm border border-dark-700 rounded-xl">
-                <CardHeader>
-                  <CardTitle>Test Type Distribution</CardTitle>
+              <Card className="bg-dark-800/70 backdrop-blur-sm border border-dark-700 rounded-xl overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Test Type Distribution</CardTitle>
                   <CardDescription>Breakdown of tests by type</CardDescription>
                 </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {Object.entries(metrics.testTypes).map(([type, count]) => (
+                      <div key={type} className="flex flex-col items-center p-4 rounded-lg bg-dark-700/50 hover:bg-dark-700/70 transition-colors">
+                        <div className="text-2xl font-bold text-blue-400 mb-1">
+                          {count}
+                        </div>
+                        <div className="text-xs font-medium text-gray-400 capitalize">
+                          {type} Tests
+                        </div>
+                        <div className="mt-1 text-xs text-gray-500">
+                          {Math.round((count / metrics.total) * 100)}%
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-dark-600">
+                    <div className="flex items-center justify-between text-sm text-gray-400">
+                      <span>Total Tests</span>
+                      <span className="font-medium text-white">{metrics.total}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Quick Actions - Mobile View */}
+              <div className="lg:hidden">
+                <QuickActions />
+              </div>
+            </div>
+
+            {/* Right Column - Sidebar */}
+            <div className="lg:col-span-4 space-y-6">
+              {/* Quick Actions - Desktop View */}
+              <div className="hidden lg:block">
+                <QuickActions />
+              </div>
+              
+              {/* Recent Activity */}
+              <Card className="bg-dark-800/70 backdrop-blur-sm border border-dark-700 rounded-xl">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Recent Activity</CardTitle>
+                      <CardDescription>Latest test executions and events</CardDescription>
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-xs">
+                      View All
+                    </Button>
+                  </div>
+                </CardHeader>
                 <CardContent>
-                  <div className="h-64 flex items-center justify-center text-gray-500">
-                    <PieChart className="h-16 w-16 opacity-30" />
-                    <span className="ml-2">Test distribution chart coming soon</span>
+                  <RecentActivity loading={loading} />
+                </CardContent>
+              </Card>
+
+              {/* Team Activity */}
+              <Card className="bg-dark-800/70 backdrop-blur-sm border border-dark-700 rounded-xl">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Team Activity</CardTitle>
+                      <CardDescription>Active team members and their current tasks</CardDescription>
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-xs">
+                      View All
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Team Member 1 */}
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-700/50 transition-colors">
+                    <div className="relative">
+                      <div className="h-10 w-10 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-300 font-medium">
+                        AJ
+                      </div>
+                      <div className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-dark-800"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-medium text-white">Alex Johnson</h4>
+                        <span className="text-xs text-gray-400">5 min ago</span>
+                      </div>
+                      <p className="text-xs text-gray-400 truncate">Working on login flow tests</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-900/30 text-blue-300">
+                          <GitBranch className="h-3 w-3 mr-1" /> feature/login
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Team Member 2 */}
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-700/50 transition-colors">
+                    <div className="relative">
+                      <div className="h-10 w-10 rounded-full bg-purple-900/50 flex items-center justify-center text-purple-300 font-medium">
+                        TS
+                      </div>
+                      <div className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-dark-800"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-medium text-white">Taylor Smith</h4>
+                        <span className="text-xs text-gray-400">15 min ago</span>
+                      </div>
+                      <p className="text-xs text-gray-400 truncate">Fixing payment gateway tests</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-900/30 text-purple-300">
+                          <GitBranch className="h-3 w-3 mr-1" /> fix/payment-tests
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Team Member 3 */}
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-700/50 transition-colors">
+                    <div className="relative">
+                      <div className="h-10 w-10 rounded-full bg-amber-900/50 flex items-center justify-center text-amber-300 font-medium">
+                        CK
+                      </div>
+                      <div className="absolute bottom-0 right-0 h-3 w-3 bg-yellow-500 rounded-full border-2 border-dark-800"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-medium text-white">Casey Kim</h4>
+                        <span className="text-xs text-gray-400">1 hour ago</span>
+                      </div>
+                      <p className="text-xs text-gray-400 truncate">Reviewing PR #42: Test coverage improvements</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-900/30 text-amber-300">
+                          <GitPullRequest className="h-3 w-3 mr-1" /> PR #42
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Team Member 4 */}
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-dark-700/50 transition-colors">
+                    <div className="relative">
+                      <div className="h-10 w-10 rounded-full bg-green-900/50 flex items-center justify-center text-green-300 font-medium">
+                        JR
+                      </div>
+                      <div className="absolute bottom-0 right-0 h-3 w-3 bg-gray-500 rounded-full border-2 border-dark-800"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-medium text-white">Jamie Rivera</h4>
+                        <span className="text-xs text-gray-400">2 hours ago</span>
+                      </div>
+                      <p className="text-xs text-gray-400 truncate">Setting up new E2E test environment</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-900/30 text-green-300">
+                          <GitBranch className="h-3 w-3 mr-1" /> feature/e2e-env
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
-
-          {/* Right Column */}
-          <div className="space-y-6">
-            {/* Recent Activity */}
-            <Card className="bg-dark-800/70 backdrop-blur-sm border border-dark-700 rounded-xl h-full">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Recent Activity</CardTitle>
-                    <CardDescription>Latest test executions and events</CardDescription>
-                  </div>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    View All
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <RecentActivity loading={loading} />
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            <Card className="bg-dark-800/70 backdrop-blur-sm border border-dark-700 rounded-xl">
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Common tasks and operations</CardDescription>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-3">
-                <Button variant="outline" className="flex-col h-24 gap-2 bg-dark-800/50 hover:bg-blue-900/20 border-blue-900/30">
-                  <Zap className="h-5 w-5 text-blue-400" />
-                  <span>Run All Tests</span>
-                </Button>
-                <Button variant="outline" className="flex-col h-24 gap-2 bg-dark-800/50 hover:bg-purple-900/20 border-purple-900/30">
-                  <GitBranch className="h-5 w-5 text-purple-400" />
-                  <span>New Branch</span>
-                </Button>
-              </CardContent>
-            </Card>
           </div>
-        </div>
         </motion.main>
       </AnimatePresence>
     </div>
