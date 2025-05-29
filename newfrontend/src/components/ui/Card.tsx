@@ -90,6 +90,21 @@ export const CardContent = ({
   );
 };
 
+export const CardDescription = ({
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLParagraphElement>) => {
+  return (
+    <p
+      className={cn('text-sm text-gray-400', className)}
+      {...props}
+    >
+      {children}
+    </p>
+  );
+};
+
 export const CardFooter = ({
   className,
   children,

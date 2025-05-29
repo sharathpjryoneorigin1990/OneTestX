@@ -11,3 +11,4 @@ export * from './ToastContext';
 export * from './Tabs';
 export * from './TypewriterText';
 export * from './select';
+export * from './StatCard';

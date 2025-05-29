@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { NewNavbar } from "@/components/layout/NewNavbar";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const subTestTypes = {
   'ai': [
@@ -267,8 +269,33 @@ const subTestTypes = {
   ]
 };
 
-export default function SubTestTypePage({ params }: { params: { category: string } }) {
-  const category = params.category as keyof typeof subTestTypes;
+// This is a client component that handles params properly
+export default function SubTestTypePage({ 
+  params 
+}: { 
+  params: { category: string } 
+}) {
+  const [isClient, setIsClient] = useState(false);
+  const searchParams = useSearchParams();
+  
+  // Get the category from params and validate it
+  const category = (params?.category && params.category in subTestTypes) 
+    ? params.category as keyof typeof subTestTypes 
+    : 'ui';
+    
+  // Get any additional search params
+  const type = searchParams?.get('type');
+  
+  // Set isClient to true after mount to avoid hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  
+  // Don't render anything during SSR to avoid hydration mismatch
+  if (!isClient) {
+    return null;
+  }
+    
   const tests = subTestTypes[category] || [];
   const categoryTitles: Record<string, string> = {
     'ai': 'AI-Powered Tests',

@@ -56,7 +56,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const environmentsCookie = cookies().get('environments')?.value;
+    const cookieStore = await cookies();
+    const environmentsCookie = cookieStore.get('environments')?.value;
     const environments = environmentsCookie ? JSON.parse(environmentsCookie) : [];
     
     return NextResponse.json({ environments });

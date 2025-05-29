@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
-import { Search, Filter, Plus, Play, Trash2 } from 'lucide-react';
+import { Search, Filter, Plus, Play, Trash2, Zap, Clock, RefreshCw, CheckCircle, XCircle, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/ToastContext';
 import { testRunnerApi } from '@/utils/api';
@@ -185,6 +185,8 @@ export const TestDashboard: React.FC = () => {
 
   // Run a single test
   const runTest = async (testPath: string, testType: TestType) => {
+    // If already running, don't start another run
+    if (isRunning) return;
     try {
       setIsRunning(true);
       // Use runTestFile with the required environment parameter
@@ -236,8 +238,61 @@ export const TestDashboard: React.FC = () => {
     });
   };
 
+  // Quick run selected tests
+  const runSelectedTests = async () => {
+    if (selectedTests.size === 0 || isRunning) return;
+    
+    try {
+      setIsRunning(true);
+      const testsToRun = tests.filter(test => selectedTests.has(test.id));
+      
+      // Update all selected tests to running state
+      setTests(prevTests => 
+        prevTests.map(test => 
+          selectedTests.has(test.id)
+            ? { ...test, lastRun: { status: 'running' as const } }
+            : test
+        )
+      );
+      
+      // Show toast notification
+      showToast({
+        title: 'Running Tests',
+        message: `Running ${testsToRun.length} selected test(s)...`,
+        type: 'info',
+        duration: 2000
+      });
+      
+      // Run tests with a small delay between each
+      for (const test of testsToRun) {
+        await runTest(test.path, test.type);
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      
+      // Show completion message
+      showToast({
+        title: 'Tests Completed',
+        message: `Finished running ${testsToRun.length} test(s)`,
+        type: 'success',
+        duration: 3000
+      });
+      
+    } catch (error) {
+      console.error('Error running selected tests:', error);
+      showToast({
+        title: 'Error',
+        message: 'Failed to run selected tests',
+        type: 'error',
+      });
+    } finally {
+      setIsRunning(false);
+    }
+  };
+
   // Run all tests of a specific type
   const runAllTests = async (type: TestType | 'all') => {
+    if (isRunning) return;
+    
     const testsToRun = type === 'all' 
       ? tests 
       : tests.filter(test => test.type === type);
@@ -302,26 +357,66 @@ export const TestDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Search and filter */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search tests..."
-            className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={searchQuery}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-2 border-transparent hover:border-white/20 transition-all duration-300 shadow-lg transform hover:scale-105"
-          >
-            <Filter className="mr-2 h-4 w-4" />
-            Filter
-          </Button>
+      {/* Quick Actions Bar */}
+      <div className="bg-gray-800/50 rounded-xl p-4 mb-6 border border-gray-700/50">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          {/* Search */}
+          <div className="relative flex-1 w-full sm:max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search tests..."
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              value={searchQuery}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          
+          {/* Quick Actions */}
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <Button 
+              variant="outline"
+              size="sm"
+              className="group bg-gray-700/50 hover:bg-gray-600/50 text-gray-200 border-gray-600 hover:border-blue-400/50 transition-all duration-200"
+              onClick={() => fetchTests()}
+              disabled={loading}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+            
+            <Button 
+              variant="outline"
+              size="sm"
+              className="group bg-blue-900/30 hover:bg-blue-800/50 text-blue-300 border-blue-700 hover:border-blue-400/50 transition-all duration-200"
+              onClick={runSelectedTests}
+              disabled={selectedTests.size === 0 || isRunning}
+            >
+              <Zap className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+              Run Selected ({selectedTests.size})
+            </Button>
+            
+            <Button 
+              variant="outline"
+              size="sm"
+              className="group bg-emerald-900/30 hover:bg-emerald-800/50 text-emerald-300 border-emerald-700 hover:border-emerald-400/50 transition-all duration-200"
+              onClick={() => runAllTests(activeTab === 'all' ? 'all' : activeTab)}
+              disabled={filteredTests.length === 0 || isRunning}
+            >
+              <Play className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+              Run {activeTab === 'all' ? 'All' : typeLabels[activeTab as keyof typeof typeLabels] || activeTab}
+            </Button>
+            
+            <Button 
+              variant="outline"
+              size="sm"
+              className="group bg-gray-700/50 hover:bg-gray-600/50 text-gray-200 border-gray-600 hover:border-gray-400/50 transition-all duration-200"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              Filter
+              <MoreVertical className="h-4 w-4 ml-1 opacity-70" />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -390,20 +485,62 @@ export const TestDashboard: React.FC = () => {
                       <p className="text-sm text-gray-400">{test.path}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                      {test.lastRun?.status === 'running' ? (
+                        <div className="h-2 w-2 rounded-full bg-yellow-500 animate-pulse mr-2"></div>
+                      ) : test.lastRun?.status === 'passed' ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-500 mr-2" />
+                      ) : test.lastRun?.status === 'failed' ? (
+                        <XCircle className="h-4 w-4 text-rose-500 mr-2" />
+                      ) : null}
+                      {test.lastRun?.duration && (
+                        <span className="text-xs text-gray-400 mr-2">
+                          {test.lastRun.duration}ms
+                        </span>
+                      )}
+                    </div>
                     <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md">
                       {test.type}
                     </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white border-transparent shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-                      onClick={() => runTest(test.path, test.type)}
-                      disabled={loading}
-                    >
-                      <Play className="h-4 w-4 mr-2" />
-                      {loading ? 'Running...' : 'Run'}
-                    </Button>
+                    <div className="flex items-center gap-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 p-0 bg-gray-700/50 hover:bg-blue-600/50 text-blue-300 border-blue-600/50 hover:border-blue-400/50 transition-all duration-200 group"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          runTest(test.path, test.type);
+                        }}
+                        disabled={isRunning}
+                        title="Run test"
+                      >
+                        {test.lastRun?.status === 'running' ? (
+                          <LoadingSpinner size="sm" />
+                        ) : (
+                          <Play className="h-3.5 w-3.5 group-hover:scale-125 transition-transform" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-gray-400 hover:text-yellow-400 hover:bg-yellow-900/20"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Toggle selection
+                          toggleTestSelection(test.id);
+                        }}
+                        title={selectedTests.has(test.id) ? 'Deselect test' : 'Select test'}
+                      >
+                        {selectedTests.has(test.id) ? (
+                          <div className="h-4 w-4 rounded-full bg-blue-500 flex items-center justify-center">
+                            <CheckCircle className="h-3 w-3 text-white" />
+                          </div>
+                        ) : (
+                          <div className="h-4 w-4 rounded-full border-2 border-gray-500 hover:border-yellow-400" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}

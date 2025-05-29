@@ -269,7 +269,9 @@ router.get('/', (req, res) => {
     path.join(process.cwd(), 'tests'),  // Current directory (backend/tests)
     path.join(process.cwd(), '../tests'), // Parent directory (tests in root)
     path.join(__dirname, '../../tests'),  // Relative to this file
-    path.join(process.cwd(), 'backend/tests') // Explicit backend/tests path
+    path.join(process.cwd(), 'backend/tests'), // Explicit backend/tests path
+    path.join(process.cwd(), 'tests/ui/e2e'), // UI E2E tests
+    path.join(process.cwd(), 'backend/tests/ui/e2e') // Backend UI E2E tests
   ];
   
   let testsDir = null;
@@ -328,9 +330,24 @@ router.get('/', (req, res) => {
     
     console.log(`\n=== Scanning for test files in: ${testsDir} ===`);
     
+    // Function to determine if a file is a test file
+    const isTestFile = (filename) => {
+      const testFilePatterns = [
+        /(\.|_)(test|spec)\.(js|jsx|ts|tsx)$/i,
+        /(test|spec)\.(js|jsx|ts|tsx)$/i,
+        /\.(test|spec)\.(js|jsx|ts|tsx)$/i
+      ];
+      return testFilePatterns.some(pattern => pattern.test(filename));
+    };
+
     // Function to scan a directory for test files
     const scanForTests = (dir, relativePath = '') => {
       try {
+        if (!fs.existsSync(dir)) {
+          console.log(`Directory does not exist: ${dir}`);
+          return;
+        }
+        
         console.log(`\nScanning directory: ${dir}`);
         const entries = fs.readdirSync(dir, { withFileTypes: true });
         console.log(`Found ${entries.length} entries in ${dir}`);
@@ -350,42 +367,28 @@ router.get('/', (req, res) => {
           
           if (entry.isDirectory()) {
             // Recursively scan subdirectories
-            console.log(`Entering subdirectory: ${fullPath}`);
+            console.log(`Entering directory: ${entry.name}`);
             scanForTests(fullPath, normalizedRelPath);
-          } else {
-            const isTestFile = (
-              entry.name.endsWith('.test.js') || 
-              entry.name.endsWith('.spec.js') ||
-              entry.name.endsWith('.test.ts') ||
-              entry.name.endsWith('.spec.ts') ||
-              (entry.name.endsWith('.js') && 
-               !entry.name.includes('config') &&
-               !entry.name.endsWith('.d.ts') &&
-               (entry.name.includes('.test.') || entry.name.includes('.spec.')))
-            );
+          } else if (isTestFile(entry.name)) {
+            // This is a test file, add it to the list
+            console.log(`Found test file: ${entry.name}`);
+            const testType = getTestType(entry.name, normalizedRelPath);
+            const testCategory = normalizedRelPath.split('/')[0] || 'other';
             
-            if (isTestFile) {
-              console.log(`Found test file: ${fullPath}`);
-              const testId = normalizedRelPath.replace(/[\\/]/g, '-').replace(/\.(js|ts)$/, '');
-              const testType = getTestType(entry.name, normalizedRelPath);
-              // Get the first directory as category
-              const category = normalizedRelPath.split('/')[0]?.toLowerCase() || 'other';
-              
-              allTestFiles.push({
-                id: testId,
-                name: entry.name.replace(/\.(js|ts)$/, '').replace(/-/g, ' '),
-                path: `tests/${normalizedRelPath}`,
-                type: testType,
-                category: category,
-                fullPath: fullPath,
-                size: fs.statSync(fullPath).size,
-                modified: fs.statSync(fullPath).mtime
-              });
-              
-              console.log(`Added test file: ${normalizedRelPath} (type: ${testType}, category: ${category})`);
-            } else {
-              console.log(`Skipping non-test file: ${fullPath}`);
-            }
+            allTestFiles.push({
+              id: path.basename(entry.name, path.extname(entry.name)),
+              name: entry.name.replace(/\.(js|ts)$/, '').replace(/-/g, ' '),
+              path: `tests/${normalizedRelPath}`,
+              type: testType,
+              category: testCategory,
+              fullPath: fullPath,
+              size: fs.statSync(fullPath).size,
+              modified: fs.statSync(fullPath).mtime,
+              testCases: [{ name: entry.name, group: null, line: 0 }],
+              tags: [testType, testCategory]
+            });
+            
+            console.log(`Added test file: ${normalizedRelPath} (type: ${testType}, category: ${testCategory})`);
           }
         }
       } catch (error) {
