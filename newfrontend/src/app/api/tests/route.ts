@@ -61,7 +61,8 @@ const TEST_CATEGORIES = {
   'performance/stress': ['performance', 'stress'],
   'ui/accessibility': ['ui', 'accessibility', 'a11y'],
   'ui/e2e': ['ui', 'e2e', 'end-to-end'],
-  'ui/visual': ['ui', 'visual', 'screenshot']
+  'ui/visual': ['ui', 'visual', 'screenshot', 'ai', 'smart'],
+  'ui/smoke': ['ui', 'smoke', 'ai', 'smart']
 };
 
 async function getTestFiles(dir: string, baseDir = ''): Promise<any[]> {

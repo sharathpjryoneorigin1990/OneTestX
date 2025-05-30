@@ -1,0 +1,280 @@
+{
+  "0": {
+    "id": "test-1748608049603",
+    "name": "Test for apply-qa.apps.asu.edu",
+    "description": "Automated test for apply-qa.apps.asu.edu",
+    "type": "visual",
+    "url": "https://apply-qa.apps.asu.edu/dashboard",
+    "status": "passed",
+    "browser": "Chrome",
+    "viewport": "1920x1080",
+    "lastRun": "2025-05-30T12:27:34.468Z",
+    "steps": [
+      {
+        "action": "Navigate to apply-qa.apps.asu.edu",
+        "target": "https://apply-qa.apps.asu.edu/dashboard",
+        "status": "passed",
+        "duration": 216
+      },
+      {
+        "action": "Verify page title exists and is not empty",
+        "target": "title",
+        "status": "passed",
+        "duration": 152
+      },
+      {
+        "action": "Check main content visibility",
+        "target": "main, .main, #main, [role=\"main\"]",
+        "status": "passed",
+        "duration": 166
+      },
+      {
+        "action": "Verify navigation elements are present",
+        "target": "nav, .nav, #nav, [role=\"navigation\"]",
+        "status": "passed",
+        "duration": 136
+      },
+      {
+        "action": "Check for broken images",
+        "target": "img[src]",
+        "status": "passed",
+        "duration": 395
+      },
+      {
+        "action": "Verify all links are valid",
+        "target": "a[href]",
+        "status": "passed",
+        "duration": 284
+      },
+      {
+        "action": "Verify footer exists",
+        "target": "footer, .footer, #footer",
+        "status": "passed",
+        "duration": 227
+      },
+      {
+        "action": "Check for interactive elements",
+        "target": "a, button, [role=\"button\"], [onclick]",
+        "status": "passed",
+        "duration": 215
+      },
+      {
+        "action": "Verify images have alt text",
+        "target": "img:not([alt])",
+        "status": "passed",
+        "duration": 207
+      }
+    ],
+    "duration": 1782
+  },
+  "2025-05-30T12:32:58.402Z": [
+    {
+      "id": "test-1748608049603",
+      "name": "Test for apply-qa.apps.asu.edu",
+      "description": "Automated test for apply-qa.apps.asu.edu",
+      "type": "visual",
+      "url": "https://apply-qa.apps.asu.edu/dashboard",
+      "status": "passed",
+      "browser": "Chrome",
+      "viewport": "1920x1080",
+      "lastRun": "2025-05-30T12:32:58.116Z",
+      "steps": [
+        {
+          "action": "Navigate to apply-qa.apps.asu.edu",
+          "target": "https://apply-qa.apps.asu.edu/dashboard",
+          "status": "passed",
+          "duration": 363
+        },
+        {
+          "action": "Verify page title exists and is not empty",
+          "target": "title",
+          "status": "passed",
+          "duration": 332
+        },
+        {
+          "action": "Check main content visibility",
+          "target": "main, .main, #main, [role=\"main\"]",
+          "status": "passed",
+          "duration": 248
+        },
+        {
+          "action": "Verify navigation elements are present",
+          "target": "nav, .nav, #nav, [role=\"navigation\"]",
+          "status": "passed",
+          "duration": 145
+        },
+        {
+          "action": "Check for broken images",
+          "target": "img[src]",
+          "status": "passed",
+          "duration": 321
+        },
+        {
+          "action": "Verify all links are valid",
+          "target": "a[href]",
+          "status": "passed",
+          "duration": 192
+        },
+        {
+          "action": "Verify footer exists",
+          "target": "footer, .footer, #footer",
+          "status": "passed",
+          "duration": 379
+        },
+        {
+          "action": "Check for interactive elements",
+          "target": "a, button, [role=\"button\"], [onclick]",
+          "status": "passed",
+          "duration": 199
+        },
+        {
+          "action": "Verify images have alt text",
+          "target": "img:not([alt])",
+          "status": "passed",
+          "duration": 285
+        }
+      ],
+      "duration": 1552
+    }
+  ],
+  "2025-05-30T12:32:58.388Z": [
+    {
+      "id": "test-1748608049603",
+      "name": "Test for apply-qa.apps.asu.edu",
+      "description": "Automated test for apply-qa.apps.asu.edu",
+      "type": "visual",
+      "url": "https://apply-qa.apps.asu.edu/dashboard",
+      "status": "passed",
+      "browser": "Chrome",
+      "viewport": "1920x1080",
+      "lastRun": "2025-05-30T12:32:58.110Z",
+      "steps": [
+        {
+          "action": "Navigate to apply-qa.apps.asu.edu",
+          "target": "https://apply-qa.apps.asu.edu/dashboard",
+          "status": "passed",
+          "duration": 377
+        },
+        {
+          "action": "Verify page title exists and is not empty",
+          "target": "title",
+          "status": "passed",
+          "duration": 387
+        },
+        {
+          "action": "Check main content visibility",
+          "target": "main, .main, #main, [role=\"main\"]",
+          "status": "passed",
+          "duration": 275
+        },
+        {
+          "action": "Verify navigation elements are present",
+          "target": "nav, .nav, #nav, [role=\"navigation\"]",
+          "status": "passed",
+          "duration": 266
+        },
+        {
+          "action": "Check for broken images",
+          "target": "img[src]",
+          "status": "passed",
+          "duration": 131
+        },
+        {
+          "action": "Verify all links are valid",
+          "target": "a[href]",
+          "status": "passed",
+          "duration": 137
+        },
+        {
+          "action": "Verify footer exists",
+          "target": "footer, .footer, #footer",
+          "status": "passed",
+          "duration": 265
+        },
+        {
+          "action": "Check for interactive elements",
+          "target": "a, button, [role=\"button\"], [onclick]",
+          "status": "passed",
+          "duration": 184
+        },
+        {
+          "action": "Verify images have alt text",
+          "target": "img:not([alt])",
+          "status": "passed",
+          "duration": 198
+        }
+      ],
+      "duration": 1552
+    }
+  ],
+  "2025-05-30T12:32:58.189Z": [
+    {
+      "id": "test-1748608049603",
+      "name": "Test for apply-qa.apps.asu.edu",
+      "description": "Automated test for apply-qa.apps.asu.edu",
+      "type": "visual",
+      "url": "https://apply-qa.apps.asu.edu/dashboard",
+      "status": "running",
+      "browser": "Chrome",
+      "viewport": "1920x1080",
+      "lastRun": "2025-05-30T12:27:34.470Z",
+      "steps": [
+        {
+          "action": "Navigate to apply-qa.apps.asu.edu",
+          "target": "https://apply-qa.apps.asu.edu/dashboard",
+          "status": "running",
+          "duration": 151
+        },
+        {
+          "action": "Verify page title exists and is not empty",
+          "target": "title",
+          "status": "running",
+          "duration": 264
+        },
+        {
+          "action": "Check main content visibility",
+          "target": "main, .main, #main, [role=\"main\"]",
+          "status": "running",
+          "duration": 159
+        },
+        {
+          "action": "Verify navigation elements are present",
+          "target": "nav, .nav, #nav, [role=\"navigation\"]",
+          "status": "running",
+          "duration": 246
+        },
+        {
+          "action": "Check for broken images",
+          "target": "img[src]",
+          "status": "running",
+          "duration": 205
+        },
+        {
+          "action": "Verify all links are valid",
+          "target": "a[href]",
+          "status": "running",
+          "duration": 170
+        },
+        {
+          "action": "Verify footer exists",
+          "target": "footer, .footer, #footer",
+          "status": "running",
+          "duration": 273
+        },
+        {
+          "action": "Check for interactive elements",
+          "target": "a, button, [role=\"button\"], [onclick]",
+          "status": "running",
+          "duration": 182
+        },
+        {
+          "action": "Verify images have alt text",
+          "target": "img:not([alt])",
+          "status": "running",
+          "duration": 225
+        }
+      ],
+      "duration": 1782
+    }
+  ]
+}
