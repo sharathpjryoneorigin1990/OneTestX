@@ -361,7 +361,9 @@ export default function SubTestTypePage({
                 className="h-full"
               >
                 <Link 
-                  href={`/test-files?category=${category}&type=${test.title.toLowerCase().split(' ')[0]}`} 
+                  href={test.title === 'Content Analysis' 
+                    ? `/test-files/content-analysis?category=${category}&type=content`
+                    : `/test-files?category=${category}&type=${test.title.toLowerCase().split(' ')[0]}`}
                   className="h-full block group"
                 >
                   <div className="relative h-full flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 transition-all duration-300 hover:border-opacity-50 hover:shadow-xl hover:shadow-cyan-500/10">

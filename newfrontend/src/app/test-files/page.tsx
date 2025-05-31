@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { FiFileText, FiImage, FiCpu } from 'react-icons/fi';
+import { FiFileText, FiImage, FiCpu, FiSearch } from 'react-icons/fi';
 import dynamic from 'next/dynamic';
 
 // Dynamically import components with no SSR
@@ -39,7 +39,7 @@ const SmartTestRunner = dynamic(
   }
 );
 
-type TabType = 'test-files' | 'visual' | 'smart';
+type TabType = 'test-files' | 'visual' | 'smart' | 'content-analysis';
 
 export default function TestFilesPage() {
   console.log('TestFilesPage component mounted');
@@ -50,11 +50,17 @@ export default function TestFilesPage() {
   const type = searchParams.get('type')?.toLowerCase() as TabType | null;
   const category = searchParams.get('category')?.toLowerCase() || '';
   // Ensure activeTab is one of the valid tab types
-  const activeTab: TabType = (type && ['test-files', 'visual', 'smart'].includes(type) ? type : 'test-files');
+  const activeTab: TabType = (type && ['test-files', 'visual', 'smart', 'content-analysis'].includes(type) ? type as TabType : 'test-files');
   
   console.log('Active tab:', activeTab, 'Category:', category, 'Type:', type);
 
   const handleTabChange = (value: string) => {
+    if (value === 'content-analysis') {
+      // Navigate to the content analysis page
+      router.push(`/test-files/content-analysis?category=${category || 'ai'}&type=content`);
+      return;
+    }
+
     const params = new URLSearchParams();
     
     if (value !== 'test-files') {
@@ -79,6 +85,12 @@ export default function TestFilesPage() {
         <SmartTestRunner />
       </div>
     );
+  }
+
+  // Show Content Analysis when type is 'content-analysis'
+  if (activeTab === 'content-analysis') {
+    // This will be handled by the content-analysis page route
+    return null;
   }
 
   // Show only Test Files for non-special types
@@ -115,6 +127,14 @@ export default function TestFilesPage() {
           >
             <FiImage className="h-4 w-4" />
             Visual Testing
+          </TabsTrigger>
+          
+          <TabsTrigger 
+            value="content-analysis" 
+            className="flex items-center gap-2"
+          >
+            <FiSearch className="h-4 w-4" />
+            Content Analysis
           </TabsTrigger>
         </TabsList>
 
