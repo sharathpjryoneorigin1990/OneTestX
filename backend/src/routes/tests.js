@@ -271,7 +271,9 @@ router.get('/', (req, res) => {
     path.join(__dirname, '../../tests'),  // Relative to this file
     path.join(process.cwd(), 'backend/tests'), // Explicit backend/tests path
     path.join(process.cwd(), 'tests/ui/e2e'), // UI E2E tests
-    path.join(process.cwd(), 'backend/tests/ui/e2e') // Backend UI E2E tests
+    path.join(process.cwd(), 'backend/tests/ui/e2e'), // Backend UI E2E tests
+    path.join(process.cwd(), 'tests/ui/smoke'), // UI Smoke tests
+    path.join(process.cwd(), 'backend/tests/ui/smoke') // Backend UI Smoke tests
   ];
   
   let testsDir = null;
@@ -332,12 +334,40 @@ router.get('/', (req, res) => {
     
     // Function to determine if a file is a test file
     const isTestFile = (filename) => {
+      console.log(`\n=== Checking if file is a test file: ${filename} ===`);
+      
+      // List of patterns that identify test files
       const testFilePatterns = [
-        /(\.|_)(test|spec)\.(js|jsx|ts|tsx)$/i,
-        /(test|spec)\.(js|jsx|ts|tsx)$/i,
-        /\.(test|spec)\.(js|jsx|ts|tsx)$/i
+        { pattern: /(\.|_)(test|spec)\.(js|jsx|ts|tsx)$/i, desc: 'suffix with .test.js or _test.js' },
+        { pattern: /(test|spec)\.(js|jsx|ts|tsx)$/i, desc: 'filename starts with test or spec' },
+        { pattern: /\.(test|spec)\.(js|jsx|ts|tsx)$/i, desc: 'has .test. or .spec. in name' },
+        { pattern: /(test|spec)\/.*\.(js|jsx|ts|tsx)$/i, desc: 'in test or spec directory' },
+        { pattern: /(smoke|e2e|integration|unit)\/.*\.(js|jsx|ts|tsx)$/i, desc: 'in test type directory' }
       ];
-      return testFilePatterns.some(pattern => pattern.test(filename));
+      
+      // Special case for smoke test files
+      if (filename.toLowerCase().includes('smoke') && filename.endsWith('.js')) {
+        console.log(`  Found smoke test file: ${filename}`);
+        return true;
+      }
+      
+      let isMatch = false;
+      let matchDetails = [];
+      
+      // Check each pattern
+      for (const { pattern, desc } of testFilePatterns) {
+        const match = pattern.test(filename);
+        matchDetails.push(`  Pattern '${desc}' (${pattern}): ${match ? 'MATCH' : 'no match'}`);
+        if (match) {
+          isMatch = true;
+        }
+      }
+      
+      // Log detailed matching information
+      console.log(matchDetails.join('\n'));
+      console.log(`  Final result for ${filename}: ${isMatch ? '✅ IS a test file' : '❌ NOT a test file'}`);
+      
+      return isMatch;
     };
 
     // Function to scan a directory for test files
@@ -348,47 +378,59 @@ router.get('/', (req, res) => {
           return;
         }
         
-        console.log(`\nScanning directory: ${dir}`);
-        const entries = fs.readdirSync(dir, { withFileTypes: true });
-        console.log(`Found ${entries.length} entries in ${dir}`);
+        console.log(`\n=== Scanning directory: ${dir} ===`);
+        const files = fs.readdirSync(dir);
+        console.log(`Found ${files.length} items in directory`);
         
-        for (const entry of entries) {
-          // Skip node_modules and other non-test directories
-          if (['node_modules', '.git', 'coverage', '__snapshots__', '.next', '.vscode'].includes(entry.name)) {
-            console.log(`Skipping directory: ${entry.name}`);
-            continue;
-          }
+        for (const file of files) {
+          const fullPath = path.join(dir, file);
+          const relativePathToFile = relativePath ? path.join(relativePath, file) : file;
+          const normalizedRelPath = normalizePath(relativePathToFile);
           
-          const fullPath = path.join(dir, entry.name);
-          // Normalize path separators to forward slashes for consistent handling
-          const normalizedRelPath = relativePath 
-            ? `${relativePath}${path.sep}${entry.name}`.replace(/\\/g, '/')
-            : entry.name;
-          
-          if (entry.isDirectory()) {
-            // Recursively scan subdirectories
-            console.log(`Entering directory: ${entry.name}`);
-            scanForTests(fullPath, normalizedRelPath);
-          } else if (isTestFile(entry.name)) {
-            // This is a test file, add it to the list
-            console.log(`Found test file: ${entry.name}`);
-            const testType = getTestType(entry.name, normalizedRelPath);
-            const testCategory = normalizedRelPath.split('/')[0] || 'other';
+          try {
+            const stat = fs.statSync(fullPath);
             
-            allTestFiles.push({
-              id: path.basename(entry.name, path.extname(entry.name)),
-              name: entry.name.replace(/\.(js|ts)$/, '').replace(/-/g, ' '),
-              path: `tests/${normalizedRelPath}`,
-              type: testType,
-              category: testCategory,
-              fullPath: fullPath,
-              size: fs.statSync(fullPath).size,
-              modified: fs.statSync(fullPath).mtime,
-              testCases: [{ name: entry.name, group: null, line: 0 }],
-              tags: [testType, testCategory]
-            });
-            
-            console.log(`Added test file: ${normalizedRelPath} (type: ${testType}, category: ${testCategory})`);
+            if (stat.isDirectory()) {
+              console.log(`Found directory: ${file}`);
+              // Skip node_modules and other non-test directories
+              const skipDirs = ['node_modules', '.git', 'coverage', '__snapshots__', '.next', '.vscode'];
+              if (skipDirs.includes(file)) {
+                console.log(`Skipping directory: ${file}`);
+                continue;
+              }
+              console.log(`Entering directory: ${file}`);
+              // Recursively scan subdirectories
+              scanForTests(fullPath, relativePathToFile);
+            } else if (isTestFile(file)) {
+              console.log(`\nProcessing test file: ${file}`);
+              console.log(`Full path: ${fullPath}`);
+              
+              // Determine test type and category based on file path and name
+              const testType = getTestType(file, fullPath);
+              
+              // Get the first directory in the path as the category
+              const pathParts = relativePathToFile.split(path.sep).filter(Boolean);
+              const testCategory = pathParts.length > 0 ? pathParts[0] : 'other';
+              
+              // Add test file to the list
+              allTestFiles.push({
+                id: path.basename(file, path.extname(file)).replace(/-/g, ' '),
+                name: file,
+                path: `tests/${normalizedRelPath}`,
+                fullPath: fullPath,
+                type: testType,
+                category: testCategory.toLowerCase(), // Ensure consistent case
+                lastRun: null,
+                status: 'pending',
+                testCases: []
+              });
+              
+              console.log(`Added test file: ${normalizedRelPath} (type: ${testType}, category: ${testCategory})`);
+            } else {
+              console.log(`Skipping non-test file: ${file}`);
+            }
+          } catch (error) {
+            console.error(`Error processing ${fullPath}:`, error);
           }
         }
       } catch (error) {
@@ -417,37 +459,61 @@ router.get('/', (req, res) => {
       // Check each directory in the path (from specific to general)
       const pathParts = lowerPath.split('/');
       
-      // First, check the immediate parent directory
+      // Debug logging
+      console.log(`\nDetermining type for: ${filePath}`);
+      console.log('Path parts:', pathParts);
+      
+      // First, check the immediate parent directory (most specific)
       if (pathParts.length > 1) {
         const parentDir = pathParts[pathParts.length - 2]; // Get parent directory
+        console.log(`Checking parent dir: ${parentDir}`);
+        
         for (const { type, patterns } of typePatterns) {
           if (patterns.some(pattern => parentDir.includes(pattern))) {
+            console.log(`Matched type '${type}' from parent directory`);
             return type;
           }
         }
       }
       
-      // Then check all directories in the path
+      // Then check all directories in the path for test type indicators
       for (const part of pathParts) {
         for (const { type, patterns } of typePatterns) {
           if (patterns.some(pattern => part.includes(pattern))) {
+            console.log(`Matched type '${type}' from path part: ${part}`);
             return type;
           }
         }
       }
       
-      // Finally, check the filename
+      // Check the filename itself for test type indicators
       for (const { type, patterns } of typePatterns) {
         if (patterns.some(pattern => lowerName.includes(pattern))) {
+          console.log(`Matched type '${type}' from filename: ${filename}`);
           return type;
         }
       }
       
       // Default to 'e2e' for any test file we can't categorize
+      console.log(`No specific type matched, defaulting to 'e2e'`);
       return 'e2e';
     };
     
     // Start scanning from the tests directory and all its subdirectories
+    console.log('\n=== Starting Test Discovery ===');
+    console.log(`Base directory: ${testsDir}`);
+    console.log('Directory exists:', fs.existsSync(testsDir) ? '✅ Yes' : '❌ No');
+    
+    if (fs.existsSync(testsDir)) {
+      console.log('Contents of tests directory:');
+      try {
+        const contents = fs.readdirSync(testsDir);
+        console.log(contents.length > 0 ? contents.join('\n') : 'Directory is empty');
+      } catch (err) {
+        console.error('Error reading tests directory:', err);
+      }
+    }
+    
     scanForTests(testsDir);
     
     console.log('\n=== Test Discovery Summary ===');
@@ -458,12 +524,39 @@ router.get('/', (req, res) => {
       console.log('\nDiscovered test files:');
       allTestFiles.forEach((test, index) => {
         console.log(`${index + 1}. ${test.path} (${test.type})`);
+        console.log(`   Full path: ${test.fullPath}`);
+        console.log(`   Exists: ${fs.existsSync(test.fullPath) ? '✅ Yes' : '❌ No'}`);
       });
     } else {
-      console.log('\nNo test files found. Check the following:');
+      console.log('\n❌ No test files found. Check the following:');
       console.log(`1. Test files should be in: ${testsDir}`);
-      console.log('2. Files should match patterns: *.test.js, *.spec.js, *.test.ts, *.spec.ts');
+      console.log('2. Files should match patterns: *.test.js, *.spec.js, *.test.ts, *.spec.ts, or contain "smoke" in the name');
       console.log('3. Check server logs for any scanning errors');
+      
+      // Try to find any JavaScript files in the tests directory
+      console.log('\nSearching for any JavaScript files in tests directory...');
+      const findAllJsFiles = (dir) => {
+        let results = [];
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+        
+        for (const item of items) {
+          const fullPath = path.join(dir, item.name);
+          if (item.isDirectory()) {
+            results = results.concat(findAllJsFiles(fullPath));
+          } else if (item.name.endsWith('.js')) {
+            results.push(fullPath);
+          }
+        }
+        return results;
+      };
+      
+      try {
+        const jsFiles = findAllJsFiles(testsDir);
+        console.log(`\nFound ${jsFiles.length} JavaScript files in tests directory:`);
+        jsFiles.forEach((file, i) => console.log(`${i + 1}. ${file}`));
+      } catch (err) {
+        console.error('Error searching for JavaScript files:', err);
+      }
     }
     
     // Filter tests by category and type query parameters

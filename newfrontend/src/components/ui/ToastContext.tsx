@@ -3,6 +3,9 @@
 import { createContext, useContext, ReactNode } from 'react';
 import { useToast } from './use-toast';
 
+// Re-export the useToast hook
+export { useToast };
+
 const ToastContext = createContext<ReturnType<typeof useToast> | undefined>(undefined);
 
 export function ToastProvider({ children }: { children: ReactNode }) {

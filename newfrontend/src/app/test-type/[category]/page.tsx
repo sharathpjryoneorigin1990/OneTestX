@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { NewNavbar } from "@/components/layout/NewNavbar";
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const subTestTypes = {
   'ai': [
@@ -269,19 +269,31 @@ const subTestTypes = {
   ]
 };
 
+// Define the type for our params
+type PageParams = {
+  category: keyof typeof subTestTypes;
+};
+
 // This is a client component that handles params properly
 export default function SubTestTypePage({ 
   params 
 }: { 
-  params: { category: string } 
+  params: PageParams;
 }) {
   const [isClient, setIsClient] = useState(false);
+  const [category, setCategory] = useState<keyof typeof subTestTypes>('ui');
   const searchParams = useSearchParams();
   
-  // Get the category from params and validate it
-  const category = (params?.category && params.category in subTestTypes) 
-    ? params.category as keyof typeof subTestTypes 
-    : 'ui';
+  // Handle params safely - in Next.js 13+, params is already available synchronously
+  // We'll use a ref to track if we've processed the params
+  const hasProcessedParams = React.useRef(false);
+  
+  React.useEffect(() => {
+    if (!hasProcessedParams.current && params?.category && params.category in subTestTypes) {
+      setCategory(params.category);
+      hasProcessedParams.current = true;
+    }
+  }, [params]);
     
   // Get any additional search params
   const type = searchParams?.get('type');

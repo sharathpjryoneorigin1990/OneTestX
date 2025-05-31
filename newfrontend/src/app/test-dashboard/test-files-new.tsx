@@ -67,6 +67,8 @@ interface ToastProps {
 }
 
 const TestFilesPage = () => {
+  console.log('TestFilesList component mounted');
+  console.log('Current search params:', new URLSearchParams(window.location.search).toString());
   // State management
   const [tests, setTests] = useState<TestFile[]>([]);
   const [filteredTests, setFilteredTests] = useState<TestFile[]>([]);
@@ -172,10 +174,19 @@ const TestFilesPage = () => {
   
   // Load tests from API
   const loadTests = useCallback(async () => {
-    if (!isMounted.current) return;
+    console.log('loadTests function called');
+    console.log('isMounted:', isMounted.current);
+    
+    if (!isMounted.current) {
+      console.log('loadTests: Component is not mounted, skipping');
+      return;
+    }
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => {
+      console.error('API request timed out after 10 seconds');
+      controller.abort();
+    }, 10000);
     
     try {
       setLoading(true);
@@ -188,17 +199,21 @@ const TestFilesPage = () => {
       console.log('Loading tests with params:', { category, type });
       
       // Build the API URL with query parameters
-      const url = new URL('/api/tests', window.location.origin);
+      const apiUrl = new URL('/api/tests', window.location.origin);
       if (category && category !== 'all') {
-        url.searchParams.set('category', category);
+        apiUrl.searchParams.set('category', category);
       }
       if (type) {
-        url.searchParams.set('type', type);
+        apiUrl.searchParams.set('type', type);
       }
       
-      console.log('Fetching tests from:', url.toString());
+      console.log('Constructed API URL:', apiUrl.toString());
+      console.log('Using search params:', { category, type });
       
-      const response = await fetch(url.toString(), {
+      console.log('Initiating fetch request...');
+      const fetchStartTime = Date.now();
+      
+      const response = await fetch(apiUrl.toString(), {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -256,7 +271,36 @@ const TestFilesPage = () => {
       isMounted.current = false;
       controller.abort();
     };
-  }, [processTestData, showToast, updateCategories]);
+  }, [processTestData, showToast, updateCategories, searchParams]);
+  
+  // Load tests when component mounts or search params change
+  useEffect(() => {
+    console.log('useEffect triggered');
+    console.log('Current search params:', new URLSearchParams(window.location.search).toString());
+    
+    const loadData = async () => {
+      console.log('Calling loadTests...');
+      try {
+        await loadTests();
+        console.log('loadTests completed successfully');
+      } catch (error) {
+        console.error('Error in loadTests:', error);
+      }
+    };
+    
+    loadData();
+    
+    // Cleanup function
+    return () => {
+      console.log('TestFilesList cleanup');
+      isMounted.current = false;
+    };
+  }, [loadTests]);
+  
+  // Log when loadTests changes
+  useEffect(() => {
+    console.log('loadTests function changed');
+  }, [loadTests]);
   
   // Run a test
   const runTest = useCallback(async (testPath: string) => {

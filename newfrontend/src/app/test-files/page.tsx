@@ -42,24 +42,34 @@ const SmartTestRunner = dynamic(
 type TabType = 'test-files' | 'visual' | 'smart';
 
 export default function TestFilesPage() {
+  console.log('TestFilesPage component mounted');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   
-  const type = searchParams.get('type') as TabType | null;
-  const category = searchParams.get('category') || '';
-  const activeTab: TabType = type || 'test-files';
+  const type = searchParams.get('type')?.toLowerCase() as TabType | null;
+  const category = searchParams.get('category')?.toLowerCase() || '';
+  // Ensure activeTab is one of the valid tab types
+  const activeTab: TabType = (type && ['test-files', 'visual', 'smart'].includes(type) ? type : 'test-files');
+  
+  console.log('Active tab:', activeTab, 'Category:', category, 'Type:', type);
 
   const handleTabChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value === 'test-files') {
-      params.delete('type');
-      params.delete('category');
-    } else {
+    const params = new URLSearchParams();
+    
+    if (value !== 'test-files') {
       params.set('type', value);
-      params.set('category', category || 'ai');
+      // Only set category if it's not empty
+      if (category) {
+        params.set('category', category);
+      } else if (value === 'visual') {
+        // Default category for visual tests
+        params.set('category', 'ui');
+      }
     }
-    router.push(`${pathname}?${params.toString()}`);
+    
+    // Only update URL if there are params or if we're switching to test-files tab
+    router.push(params.toString() ? `${pathname}?${params.toString()}` : pathname);
   };
 
   // Show only SmartTestRunner when type is 'smart'
@@ -73,14 +83,15 @@ export default function TestFilesPage() {
 
   // Show only Test Files for non-special types
   if (activeTab === 'test-files') {
+    console.log('Rendering TestFilesList with searchParams:', { category, type });
     return (
       <div className="container mx-auto py-6">
-        <TestFilesList />
+        <TestFilesList key={`${category}-${type}`} />
       </div>
     );
   }
 
-  // For visual type, show tabs with test files and visual testing
+  // For visual type, show visual testing tab
   return (
     <div className="container mx-auto py-6">
       <Tabs 
@@ -107,12 +118,8 @@ export default function TestFilesPage() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="test-files">
-          <TestFilesList />
-        </TabsContent>
-        
         <TabsContent value="visual">
-          {activeTab === 'visual' && <VisualTestRunner />}
+          <VisualTestRunner />
         </TabsContent>
       </Tabs>
     </div>
