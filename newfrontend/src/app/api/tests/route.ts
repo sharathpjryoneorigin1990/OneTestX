@@ -78,11 +78,34 @@ async function getTestFiles(dir: string, baseDir = ''): Promise<any[]> {
       testFiles = testFiles.concat(subFiles);
     } else if (entry.name.endsWith('.test.js') || entry.name.endsWith('.test.ts')) {
       // Get the relative path without the tests directory
-      const testPath = path.relative(TESTS_DIR, fullPath).replace(/\\/g, '/');
+      let testPath = path.relative(TESTS_DIR, fullPath).replace(/\\/g, '/');
+// Remove any leading ../ or .\ segments
+if (testPath.startsWith('../') || testPath.startsWith('..\\')) {
+  const parts = testPath.split(/[\\/]/);
+  // Find the first part that is a known category (e.g., 'ui', 'performance')
+  const knownRoots = ['ui', 'performance'];
+  const idx = parts.findIndex(p => knownRoots.includes(p));
+  if (idx !== -1) {
+    testPath = parts.slice(idx).join('/');
+  }
+}
       
-      // Determine category and tags based on file path
-      const category = Object.keys(TEST_CATEGORIES).find(cat => testPath.startsWith(cat)) || 'other';
-      const tags = TEST_CATEGORIES[category as keyof typeof TEST_CATEGORIES] || [];
+            // Determine category and tags based on file path
+      // Extract category as first two segments of the path if it matches pattern
+      let category = 'other';
+      let tags: string[] = [];
+      const match = testPath.match(/^([\w-]+)\/([\w-]+)/);
+      if (match) {
+        category = `${match[1]}/${match[2]}`;
+        tags = [match[1], match[2]];
+      } else {
+        // fallback to old logic if needed
+        const legacyCategory = Object.keys(TEST_CATEGORIES).find(cat => testPath.startsWith(cat));
+        if (legacyCategory) {
+          category = legacyCategory;
+          tags = TEST_CATEGORIES[legacyCategory as keyof typeof TEST_CATEGORIES] || [];
+        }
+      }
       
       // Read the test file to get test cases
       const content = await fs.readFile(fullPath, 'utf-8');

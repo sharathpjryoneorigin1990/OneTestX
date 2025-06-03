@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { ToastProvider } from '@/components/ui/toast-provider';
+import { MCPClientProvider } from '@/components/mcp/MCPClient';
 
 export const metadata: Metadata = {
   title: 'OneTest X by OneOrigin',
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <ToastProvider>
-          <MainLayout>{children}</MainLayout>
-        </ToastProvider>
+        <MCPClientProvider>
+          <ToastProvider>
+            <MainLayout>{children}</MainLayout>
+          </ToastProvider>
+        </MCPClientProvider>
       </body>
     </html>
   );

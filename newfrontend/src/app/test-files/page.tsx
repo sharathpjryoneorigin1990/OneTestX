@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { FiFileText, FiImage, FiCpu, FiSearch } from 'react-icons/fi';
+import { FiFileText, FiImage, FiCpu, FiSearch, FiActivity } from 'react-icons/fi';
 import dynamic from 'next/dynamic';
 
 // Dynamically import components with no SSR
@@ -39,7 +39,38 @@ const SmartTestRunner = dynamic(
   }
 );
 
-type TabType = 'test-files' | 'visual' | 'smart' | 'content-analysis';
+const BehaviorDashboard = dynamic(
+  () => import('@/components/behavior-analysis/BehaviorDashboard'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-64">
+        <p>Loading behavior analysis...</p>
+      </div>
+    ),
+  }
+);
+
+const TestBuilderComponent = dynamic(
+  () => import('@/components/mcp/TestBuilder'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-64">
+        <p>Loading test builder...</p>
+      </div>
+    ),
+  }
+);
+
+const MCPClientProvider = dynamic(
+  () => import('@/components/mcp/MCPClient').then(mod => ({ default: mod.default })),
+  { 
+    ssr: false,
+  }
+);
+
+type TabType = 'test-files' | 'visual' | 'smart' | 'content-analysis' | 'behavior' | 'test-builder';
 
 export default function TestFilesPage() {
   console.log('TestFilesPage component mounted');
@@ -50,7 +81,7 @@ export default function TestFilesPage() {
   const type = searchParams.get('type')?.toLowerCase() as TabType | null;
   const category = searchParams.get('category')?.toLowerCase() || '';
   // Ensure activeTab is one of the valid tab types
-  const activeTab: TabType = (type && ['test-files', 'visual', 'smart', 'content-analysis'].includes(type) ? type as TabType : 'test-files');
+  const activeTab: TabType = (type && ['test-files', 'visual', 'smart', 'content-analysis', 'behavior', 'test-builder'].includes(type) ? type as TabType : 'test-files');
   
   console.log('Active tab:', activeTab, 'Category:', category, 'Type:', type);
 
@@ -83,6 +114,34 @@ export default function TestFilesPage() {
     return (
       <div className="container mx-auto py-6">
         <SmartTestRunner />
+      </div>
+    );
+  }
+  
+  // Show TestBuilder when type is 'test-builder'
+  if (activeTab === 'test-builder') {
+    return (
+      <div className="container mx-auto py-6">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+            Build Your Test
+          </h1>
+          <p className="text-gray-300">
+            Create and record automated UI tests using the Model-Client-Protocol (MCP)
+          </p>
+        </div>
+        <MCPClientProvider>
+          <TestBuilderComponent />
+        </MCPClientProvider>
+      </div>
+    );
+  }
+  
+  // Show Behavior Analysis when type is 'behavior'
+  if (activeTab === 'behavior') {
+    return (
+      <div className="container mx-auto py-6">
+        <BehaviorDashboard />
       </div>
     );
   }
@@ -133,13 +192,23 @@ export default function TestFilesPage() {
             value="content-analysis" 
             className="flex items-center gap-2"
           >
-            <FiSearch className="h-4 w-4" />
+            <FiSearch className="w-4 h-4" />
             Content Analysis
+          </TabsTrigger>
+          <TabsTrigger 
+            value="behavior" 
+            className="flex items-center gap-2"
+          >
+            <FiActivity className="w-4 h-4" />
+            Behavior Analysis
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="visual">
           <VisualTestRunner />
+        </TabsContent>
+        <TabsContent value="behavior">
+          <BehaviorDashboard />
         </TabsContent>
       </Tabs>
     </div>

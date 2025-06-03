@@ -129,9 +129,26 @@ export const testRunnerApi = {
         });
         return response.data;
       } else {
+        // Normalize the test path to the format expected by the test runner
+        let normalizedPath = testFilePath;
+        
+        // If path contains backend/tests, extract just the relative path from there
+        const pathMatch = testFilePath.match(/.*?(?:backend\/tests|tests)\/(.*)/i);
+        if (pathMatch && pathMatch[1]) {
+          normalizedPath = `tests/${pathMatch[1]}`;
+        } else {
+          // If path starts with ui/ or similar, make sure it has tests/ prefix
+          const categoryMatch = testFilePath.match(/^([\w-]+\/[\w-]+\/.*)/i);
+          if (categoryMatch) {
+            normalizedPath = `tests/${categoryMatch[1]}`;
+          }
+        }
+        
+        console.log(`Normalized test path: ${normalizedPath} (from ${testFilePath})`);
+        
         // Use the regular test runner for other tests
         const response = await api.post('/api/tests/run', { 
-          testPath: testFilePath, 
+          testPath: normalizedPath, 
           env 
         });
         return response.data;

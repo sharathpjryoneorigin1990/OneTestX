@@ -26,6 +26,7 @@ import testRoutes from './routes/tests.js';
 import k6TestRoutes from './routes/k6-tests.js';
 import visualTestRoutes from './routes/visualTests.js';
 import imageRoutes from './routes/imageServer.js';
+import behaviorAnalysisRoutes from './routes/behaviorAnalysis.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -349,6 +350,8 @@ async function getTestFiles(dir) {
 // Use the test routes
 console.log('Registering test routes...');
 try {
+  // Add behavior analysis routes
+  app.use('/api', behaviorAnalysisRoutes);
   app.use('/api/tests', testRoutes);
   console.log('Successfully registered /api/tests route');
 } catch (err) {
