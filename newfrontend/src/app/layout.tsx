@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { ToastProvider } from '@/components/ui/toast-provider';
+import { ToastProvider } from '@/components/ui/ToastProvider';
 import { MCPClientProvider } from '@/components/mcp/MCPClient';
 
 export const metadata: Metadata = {

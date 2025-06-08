@@ -65,12 +65,23 @@ const TestBuilderComponent = dynamic(
 
 const MCPClientProvider = dynamic(
   () => import('@/components/mcp/MCPClient').then(mod => ({ default: mod.default })),
+  { ssr: false }
+);
+
+// Dynamically import ProjectDashboard
+const ProjectDashboard = dynamic(
+  () => import('../project-management/ProjectDashboard'),
   { 
     ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-64">
+        <p>Loading project dashboard...</p>
+      </div>
+    ),
   }
 );
 
-type TabType = 'test-files' | 'visual' | 'smart' | 'content-analysis' | 'behavior' | 'test-builder';
+type TabType = 'test-files' | 'visual' | 'smart' | 'content-analysis' | 'behavior' | 'test-builder' | 'project-management';
 
 export default function TestFilesPage() {
   console.log('TestFilesPage component mounted');
@@ -81,7 +92,9 @@ export default function TestFilesPage() {
   const type = searchParams.get('type')?.toLowerCase() as TabType | null;
   const category = searchParams.get('category')?.toLowerCase() || '';
   // Ensure activeTab is one of the valid tab types
-  const activeTab: TabType = (type && ['test-files', 'visual', 'smart', 'content-analysis', 'behavior', 'test-builder'].includes(type) ? type as TabType : 'test-files');
+  const activeTab: TabType = (type && ['test-files', 'visual', 'smart', 'content-analysis', 'behavior', 'test-builder', 'project-management'].includes(type) 
+    ? type as TabType 
+    : 'test-files');
   
   console.log('Active tab:', activeTab, 'Category:', category, 'Type:', type);
 
@@ -114,6 +127,15 @@ export default function TestFilesPage() {
     return (
       <div className="container mx-auto py-6">
         <SmartTestRunner />
+      </div>
+    );
+  }
+
+  // Show Project Dashboard when type is 'project-management'
+  if (activeTab === 'project-management') {
+    return (
+      <div className="container mx-auto py-6 px-4">
+        <ProjectDashboard />
       </div>
     );
   }

@@ -5,8 +5,93 @@ import { FiArrowUp, FiPlay, FiCheck } from 'react-icons/fi';
 // Components
 import { NewNavbar } from '@/components/layout/NewNavbar';
 import { useSearchParams } from 'next/navigation';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
 
-const TestFilesPage: React.FC = () => {
+// Helper function for rendering a test card
+function renderTestCard(
+  test: any,
+  selectedTests: string[],
+  toggleTestSelection: (id: string) => void,
+  runningTests: string[],
+  runTest: (path: string) => void
+) {
+  return (
+    <>
+      <div className="flex items-start mb-3">
+        <input
+          type="checkbox"
+          id={`test-${test.id}`}
+          className="mr-3 h-4 w-4 mt-1"
+          checked={selectedTests.includes(test.id)}
+          onChange={() => toggleTestSelection(test.id)}
+        />
+        <div className="flex-1">
+          <h3 className="text-lg font-medium mb-1">{test.name}</h3>
+          <p className="text-sm text-gray-400 mb-1">Path: {test.path}</p>
+          {test.tags && test.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mb-1">
+              {test.tags.map((tag: string, i: number) => (
+                <span key={i} className="text-xs bg-gray-700 px-2 py-1 rounded">{tag}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      {test.testCases && test.testCases.length > 0 && (
+        <div className="mb-3">
+          <p className="text-sm font-medium mb-1">Test Cases:</p>
+          <ul className="text-sm text-gray-400 list-disc list-inside">
+            {test.testCases.slice(0, 3).map((tc: any, i: number) => (
+              <li key={i}>{tc.name}</li>
+            ))}
+            {test.testCases.length > 3 && (
+              <li>...and {test.testCases.length - 3} more</li>
+            )}
+          </ul>
+        </div>
+      )}
+      {test.summary && (
+        <div className="mb-3">
+          <div className="flex flex-wrap gap-2 text-xs">
+            <span>Total:</span>
+            <span>{test.summary.totalTests}</span>
+            <span>Passed:</span>
+            <span className="text-green-400">{test.summary.passedTests}</span>
+            <span>Failed:</span>
+            <span className="text-red-400">{test.summary.failedTests}</span>
+            <span>Duration:</span>
+            <span>{((test.summary.duration / 1000) || 0).toFixed(2)}s</span>
+          </div>
+        </div>
+      )}
+      <div className="flex justify-end">
+        <button
+          className={`px-3 py-1 rounded text-sm transition-colors flex items-center gap-1 ${
+            runningTests.includes(test.path)
+              ? 'bg-gray-700 cursor-wait'
+              : 'bg-cyan-600 hover:bg-cyan-500'
+          }`}
+          onClick={() => runTest(test.path)}
+          disabled={runningTests.includes(test.path)}
+        >
+          {runningTests.includes(test.path) ? (
+            <>
+              <div className="h-3 w-3 rounded-full border-2 border-t-transparent border-white animate-spin mr-1"></div>
+              Running...
+            </>
+          ) : (
+            <>
+              <FiPlay className="h-3 w-3" />
+              Run Test
+            </>
+          )}
+        </button>
+      </div>
+    </>
+  );
+}
+
+function TestFilesPage() {
   const [tests, setTests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
@@ -200,152 +285,103 @@ const TestFilesPage: React.FC = () => {
             No test files found for this category/type.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tests.map((test: any) => (
-              <motion.div
-                key={test.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="bg-gray-800 rounded-lg p-4 border border-gray-700"
-              >
-                <div className="flex items-start mb-3">
-                  <input
-                    type="checkbox"
-                    id={`test-${test.id}`}
-                    className="mr-3 h-4 w-4 mt-1"
-                    checked={selectedTests.includes(test.id)}
-                    onChange={() => toggleTestSelection(test.id)}
-                  />
-                  <div className="flex-1">
-                    <h3 className="text-lg font-medium mb-1">{test.name}</h3>
-                    <p className="text-sm text-gray-400 mb-1">Path: {test.path}</p>
-                    {test.tags && test.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-1">
-                        {test.tags.map((tag: string, i: number) => (
-                          <span key={i} className="text-xs bg-gray-700 px-2 py-1 rounded">{tag}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                {test.testCases && test.testCases.length > 0 && (
-                  <div className="mb-3">
-                    <p className="text-sm font-medium mb-1">Test Cases:</p>
-                    <ul className="text-sm text-gray-400 list-disc list-inside">
-                      {test.testCases.slice(0, 3).map((tc: any, i: number) => (
-                        <li key={i}>{tc.name}</li>
+          <>
+            {/* Grouped and ordered test cards for project-management/ai */}
+            {type === 'project-management' && category === 'ai' ? (
+              <Tabs defaultValue="sprint-planning" className="w-full">
+                <TabsList className="mb-4 bg-gray-800 border border-gray-700 rounded-md p-1 flex-wrap">
+                  <TabsTrigger value="sprint-planning">Sprint Planning & Stand-Up</TabsTrigger>
+                  <TabsTrigger value="risk-blockers">Risk & Blockers</TabsTrigger>
+                  <TabsTrigger value="team-health">Team Health</TabsTrigger>
+                  <TabsTrigger value="insights-querying">Insights & Querying</TabsTrigger>
+                  <TabsTrigger value="other-tests">Other Tests</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="sprint-planning">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {tests
+                      .filter((test: any) =>
+                        /sprintplanning|standup|predictivesprint/i.test(test.name)
+                      )
+                      .map((test: any) => (
+                        <motion.div key={test.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          {renderTestCard(test, selectedTests, toggleTestSelection, runningTests, runTest)}
+                        </motion.div>
                       ))}
-                      {test.testCases.length > 3 && (
-                        <li className="text-gray-500">+{test.testCases.length - 3} more</li>
-                      )}
-                    </ul>
                   </div>
-                )}
-                
-                {/* Check for results by both ID and path */}
-                {(testResults[test.path] || testResults[test.id]) && (
-                  <div className="mb-3 p-2 bg-gray-900 rounded">
-                    <div className="flex items-center gap-2 mb-2">
-                      <p className="text-sm font-medium">Results:</p>
-                      {/* Get results from either path or ID */}
-                      {(testResults[test.path] || testResults[test.id])?.success ? (
-                        <span className="text-xs px-2 py-0.5 bg-green-800 text-green-200 rounded">PASSED</span>
-                      ) : (
-                        <span className="text-xs px-2 py-0.5 bg-red-800 text-red-200 rounded">FAILED</span>
-                      )}
-                      {(testResults[test.path] || testResults[test.id])?.timestamp && (
-                        <span className="text-xs text-gray-400 ml-auto">
-                          {new Date((testResults[test.path] || testResults[test.id])?.timestamp).toLocaleTimeString()}
-                        </span>
-                      )}
-                    </div>
-                    
-                    {/* Playwright specific results */}
-                    {/* Get Playwright results */}
-                    {(testResults[test.path] || testResults[test.id])?.runner === 'playwright' && (testResults[test.path] || testResults[test.id])?.summary && (
-                      <div className="mb-2">
-                        <div className="text-xs text-gray-300">
-                          <div className="grid grid-cols-2 gap-1">
-                            <span>Total tests:</span>
-                            <span>{(testResults[test.path] || testResults[test.id])?.summary?.totalTests}</span>
-                            
-                            <span>Passed:</span>
-                            <span className="text-green-400">{(testResults[test.path] || testResults[test.id])?.summary?.passedTests}</span>
-                            
-                            <span>Failed:</span>
-                            <span className="text-red-400">{(testResults[test.path] || testResults[test.id])?.summary?.failedTests}</span>
-                            
-                            <span>Duration:</span>
-                            <span>{((testResults[test.path] || testResults[test.id])?.summary?.duration / 1000).toFixed(2)}s</span>
-                          </div>
-                        </div>
-                        
-                        {/* Test output */}
-                        {(testResults[test.path] || testResults[test.id])?.details?.suites?.map((suite: any, suiteIndex: number) => (
-                          <div key={suiteIndex} className="mt-2">
-                            {suite.specs?.map((spec: any, specIndex: number) => (
-                              <div key={specIndex} className="mt-1 border-l-2 border-gray-700 pl-2">
-                                <div className="flex items-center gap-1">
-                                  <span className={`h-2 w-2 rounded-full ${spec.ok ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                                  <span className="text-xs font-medium">{spec.title}</span>
-                                </div>
-                                
-                                {/* Test output logs */}
-                                {spec.tests?.[0]?.results?.[0]?.stdout?.length > 0 && (
-                                  <div className="mt-1 bg-gray-800 p-1 rounded text-xs font-mono">
-                                    {spec.tests[0].results[0].stdout.map((log: any, logIndex: number) => (
-                                      <div key={logIndex} className="text-gray-300">{log.text}</div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Jest or other test runners */}
-                    {(!(testResults[test.path] || testResults[test.id])?.runner || (testResults[test.path] || testResults[test.id])?.runner !== 'playwright') && (
-                      <pre className="text-xs text-gray-400 overflow-x-auto">
-                        {JSON.stringify(testResults[test.path] || testResults[test.id], null, 2)}
-                      </pre>
-                    )}
+                </TabsContent>
+
+                <TabsContent value="risk-blockers">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {tests
+                      .filter((test: any) =>
+                        /risk|blocker/i.test(test.name)
+                      )
+                      .map((test: any) => (
+                        <motion.div key={test.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          {renderTestCard(test, selectedTests, toggleTestSelection, runningTests, runTest)}
+                        </motion.div>
+                      ))}
                   </div>
-                )}
-                
-                <div className="flex justify-end">
-                  <button 
-                    className={`px-3 py-1 rounded text-sm transition-colors flex items-center gap-1 ${
-                      runningTests.includes(test.path)
-                        ? 'bg-gray-700 cursor-wait'
-                        : 'bg-cyan-600 hover:bg-cyan-500'
-                    }`}
-                    onClick={() => runTest(test.path)}
-                    disabled={runningTests.includes(test.path)}
-                  >
-                    {runningTests.includes(test.path) ? (
-                      <>
-                        <div className="h-3 w-3 rounded-full border-2 border-t-transparent border-white animate-spin mr-1"></div>
-                        Running...
-                      </>
-                    ) : (
-                      <>
-                        <FiPlay className="h-3 w-3" />
-                        Run Test
-                      </>
-                    )}
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </TabsContent>
+
+                <TabsContent value="team-health">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {tests
+                      .filter((test: any) =>
+                        /sentiment|resource/i.test(test.name)
+                      )
+                      .map((test: any) => (
+                        <motion.div key={test.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          {renderTestCard(test, selectedTests, toggleTestSelection, runningTests, runTest)}
+                        </motion.div>
+                      ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="insights-querying">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {tests
+                      .filter((test: any) =>
+                        /query|deadline|upcoming/i.test(test.name)
+                      )
+                      .map((test: any) => (
+                        <motion.div key={test.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          {renderTestCard(test, selectedTests, toggleTestSelection, runningTests, runTest)}
+                        </motion.div>
+                      ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="other-tests">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {tests
+                      .filter((test: any) =>
+                        !/sprintplanning|standup|predictivesprint|risk|blocker|sentiment|resource|query|deadline|upcoming/i.test(test.name)
+                      )
+                      .map((test: any) => (
+                        <motion.div key={test.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          {renderTestCard(test, selectedTests, toggleTestSelection, runningTests, runTest)}
+                        </motion.div>
+                      ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            ) : (
+              // Generic test rendering for other categories/types
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {tests.map((test: any) => (
+                  <motion.div key={test.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                    {renderTestCard(test, selectedTests, toggleTestSelection, runningTests, runTest)}
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>
   );
-};
+}
 
 export default TestFilesPage;

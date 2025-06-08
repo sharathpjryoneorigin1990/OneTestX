@@ -308,6 +308,15 @@ export default function DashboardPage() {
                 <Activity className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
                 Go to Test Dashboard
               </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="bg-indigo-900/20 border-indigo-800/50 hover:bg-indigo-800/30 transition-all duration-300 group hover:scale-[1.02] active:scale-[0.98]"
+                onClick={() => window.location.href = '/project-management'}
+              >
+                <PieChart className="h-4 w-4 mr-2 group-hover:rotate-12 transition-transform" />
+                Go to Project Management
+              </Button>
             </motion.div>
           </motion.div>
 

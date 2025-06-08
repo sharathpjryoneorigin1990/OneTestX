@@ -20,7 +20,7 @@ export const Card = ({
   const baseClasses = 'rounded-xl overflow-hidden';
   
   const variants = {
-    default: 'bg-dark-800 shadow-lg',
+    default: 'bg-dark-800 shadow-md',
     glass: 'glass-card',
     bordered: 'bg-dark-800 border border-primary-500/50 shadow-lg',
     gradient: 'bg-gradient-to-br from-dark-800 to-dark-900 shadow-lg',
@@ -52,7 +52,7 @@ export const CardHeader = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div
-      className={cn('px-6 py-5 border-b border-dark-700', className)}
+      className={cn('px-5 py-4 border-b border-dark-750', className)}
       {...props}
     >
       {children}
@@ -67,7 +67,7 @@ export const CardTitle = ({
 }: HTMLAttributes<HTMLHeadingElement>) => {
   return (
     <h3
-      className={cn('text-xl font-semibold', className)}
+      className={cn('text-lg font-semibold', className)}
       {...props}
     >
       {children}
@@ -82,7 +82,7 @@ export const CardContent = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div
-      className={cn('px-6 py-5', className)}
+      className={cn('px-5 py-4', className)}
       {...props}
     >
       {children}

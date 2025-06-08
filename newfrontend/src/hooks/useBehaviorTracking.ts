@@ -1,8 +1,8 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { BehaviorEvent } from '@/types/behavior';
 
-const MAX_EVENTS = 1000; // Prevent memory issues
-const SEND_INTERVAL = 30000; // 30 seconds
+const MAX_EVENTS = 1000;
+const SEND_INTERVAL = 30000;
 
 interface Session {
   id: string;
@@ -26,11 +26,12 @@ export function useBehaviorTracking(): UseBehaviorTrackingReturn {
   const [sessions, setSessions] = useState<Record<string, Session>>({});
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const events = useRef<BehaviorEvent[]>([]);
-  const sessionStart = useRef(Date.now());
-  const lastSentTime = useRef(0);
-  const pageLoadTime = useRef(performance.now());
+  const sessionStart = useRef<number>(Date.now());
+  const lastSentTime = useRef<number>(0);
+  const pageLoadTime = useRef<number>(performance.now());
   const lastPage = useRef<string>('');
   const pageVisits = useRef<Record<string, { start: number; end?: number }>>({});
+  const currentSessionIdRef = useRef<string | null>(null);
 
   // Generate a unique session ID
   const generateSessionId = useCallback(() => {
@@ -54,10 +55,13 @@ export function useBehaviorTracking(): UseBehaviorTrackingReturn {
     }));
     
     setCurrentSessionId(sessionId);
+    currentSessionIdRef.current = sessionId;
+    sessionStart.current = Date.now();
+    
     return sessionId;
   }, [generateSessionId]);
 
-  // End a tracking session
+  // End the current session
   const endSession = useCallback((sessionId: string) => {
     setSessions(prev => {
       const session = prev[sessionId];
@@ -74,10 +78,11 @@ export function useBehaviorTracking(): UseBehaviorTrackingReturn {
     
     if (currentSessionId === sessionId) {
       setCurrentSessionId(null);
+      currentSessionIdRef.current = null;
     }
   }, [currentSessionId]);
 
-  // Get events for a session
+  // Get events for a specific session
   const getSessionEvents = useCallback((sessionId: string): BehaviorEvent[] => {
     return sessions[sessionId]?.events || [];
   }, [sessions]);
@@ -87,64 +92,126 @@ export function useBehaviorTracking(): UseBehaviorTrackingReturn {
     return Object.values(sessions);
   }, [sessions]);
 
+  // Track a page view
+  const trackPageView = useCallback(() => {
+    const now = Date.now();
+    const currentUrl = window.location.href;
+    
+    // End previous page visit
+    if (lastPage.current) {
+      const prevPage = pageVisits.current[lastPage.current];
+      if (prevPage && !prevPage.end) {
+        pageVisits.current[lastPage.current] = {
+          ...prevPage,
+          end: now
+        };
+      }
+    }
+    
+    // Start new page visit
+    lastPage.current = currentUrl;
+    pageVisits.current[currentUrl] = {
+      start: now,
+      end: now
+    };
+    
+    // Track the page view event
+    events.current.push({
+      type: 'page_view',
+      timestamp: now,
+      url: currentUrl,
+      metadata: {
+        referrer: document.referrer,
+        title: document.title
+      }
+    });
+    
+    // Ensure we don't exceed max events
+    if (events.current.length > MAX_EVENTS) {
+      events.current = events.current.slice(-MAX_EVENTS);
+    }
+  }, []);
+
   // Track an event
   const trackEvent = useCallback((type: string, data: Partial<BehaviorEvent> = {}) => {
-    if (events.current.length >= MAX_EVENTS) {
-      console.warn('Maximum event limit reached. Some events may be lost.');
-      return;
-    }
-
     const event: BehaviorEvent = {
       type,
       timestamp: Date.now(),
-      url: window.location.href,
-      pageTitle: document.title,
-      sessionId: currentSessionId || 'unknown',
       ...data,
-    };
-
-    events.current.push(event);
-
-    // Add to current session if it exists
-    if (currentSessionId && sessions[currentSessionId]) {
-      setSessions(prev => ({
-        ...prev,
-        [currentSessionId]: {
-          ...prev[currentSessionId],
-          events: [...prev[currentSessionId].events, event]
+      metadata: {
+        ...data.metadata,
+        viewport: {
+          width: window.innerWidth,
+          height: window.innerHeight
         }
-      }));
+      }
+    };
+    
+    events.current.push(event);
+    
+    // Update current session if it exists
+    if (currentSessionId) {
+      setSessions(prev => {
+        const session = prev[currentSessionId];
+        if (!session) return prev;
+        
+        return {
+          ...prev,
+          [currentSessionId]: {
+            ...session,
+            events: [...session.events, event]
+          }
+        };
+      });
     }
+    
+    // Ensure we don't exceed max events
+    if (events.current.length > MAX_EVENTS) {
+      events.current = events.current.slice(-MAX_EVENTS);
+    }
+    
+    return event;
+  }, [currentSessionId]);
 
-    // Throttle sending data
+  // Send behavior data to server
+  const sendBehaviorData = useCallback(async (customEvents?: BehaviorEvent[], sessionId?: string): Promise<boolean> => {
     const now = Date.now();
-    if (now - lastSentTime.current > SEND_INTERVAL) {
-      sendBehaviorData();
+    
+    // Don't send too frequently
+    if (now - lastSentTime.current < 5000) {
+      return false;
     }
-  }, [currentSessionId, sessions]);
-
-  // Send batched events to the server
-  const sendBehaviorData = useCallback(async (customEvents?: BehaviorEvent[], sessionId?: string) => {
+    
     const eventsToSend = customEvents || [...events.current];
-    
-    if (eventsToSend.length === 0) return true;
-    
-    if (!customEvents) {
-      events.current = []; // Clear the events after sending if not using custom events
+    if (eventsToSend.length === 0) {
+      return false;
     }
     
-    lastSentTime.current = Date.now();
-
+    // Clear events if not using custom events
+    if (!customEvents) {
+      events.current = [];
+    }
+    
+    lastSentTime.current = now;
+    
     try {
-      const response = await fetch('/api/behavior-analysis', {
+      const response = await fetch('/api/behavior/track', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           events: eventsToSend,
-          sessionId: sessionId || currentSessionId || 'default-session',
+          sessionId: sessionId || currentSessionIdRef.current,
           timestamp: new Date().toISOString(),
+          pageVisits: pageVisits.current,
+          sessionStart: sessionStart.current,
+          currentUrl: window.location.href,
+          userAgent: navigator.userAgent,
+          viewport: {
+            width: window.innerWidth,
+            height: window.innerHeight
+          }
         }),
       });
 
@@ -165,213 +232,20 @@ export function useBehaviorTracking(): UseBehaviorTrackingReturn {
       }
       return false;
     }
-  }, [currentSessionId]);
-
-  // Get a CSS selector for an element
-  const getSelector = useCallback((element: HTMLElement | null): string => {
-    if (!element) return 'unknown';
-    
-    // Try to get ID first
-    if (element.id) {
-      return `#${element.id}`;
-    }
-    
-    // Then try class names
-    if (element.className && typeof element.className === 'string') {
-      const classes = element.className.split(/\s+/).filter(c => c.length > 0);
-      if (classes.length > 0) {
-        return `${element.tagName.toLowerCase()}.${classes.join('.')}`;
-      }
-    }
-    
-    // Try to find a parent with an ID
-    let parent = element.parentElement;
-    let path = [element.tagName.toLowerCase()];
-    
-    while (parent && parent !== document.body) {
-      if (parent.id) {
-        return `${parent.id} > ${path.join(' > ')}`;
-      }
-      path.unshift(parent.tagName.toLowerCase());
-      parent = parent.parentElement;
-    }
-    
-    return element.tagName.toLowerCase();
   }, []);
-
-  // Track an event
-  const trackEvent = useCallback((type: string, data: Partial<BehaviorEvent> = {}) => {
-    if (events.current.length >= MAX_EVENTS) {
-      console.warn('Maximum event limit reached. Some events may be lost.');
-      return;
-    }
-
-    const event: BehaviorEvent = {
-      type,
-      timestamp: Date.now(),
-      url: window.location.href,
-      viewport: {
-        width: window.innerWidth,
-        height: window.innerHeight
-      },
-      ...data
-    };
-
-    events.current.push(event);
-    
-    // If we have a lot of events, send them immediately
-    if (events.current.length >= MAX_EVENTS * 0.8) {
-      sendBehaviorData();
-    }
-  }, []);
-
-  // Track page view
-  const trackPageView = useCallback(() => {
-    const now = Date.now();
-    const currentUrl = window.location.href.split('?')[0]; // Remove query params
-    
-    // Record time spent on previous page
-    if (lastPage.current && pageVisits.current[lastPage.current]) {
-      pageVisits.current[lastPage.current].end = now - 100; // Small adjustment for navigation time
-    }
-    
-    // Record new page view
-    if (!pageVisits.current[currentUrl]) {
-      pageVisits.current[currentUrl] = { start: now };
-    } else {
-      // If we've been here before, update the start time
-      pageVisits.current[currentUrl].start = now;
-    }
-    
-    lastPage.current = currentUrl;
-    trackEvent('pageview', { url: currentUrl });
-    
-    // Track scroll after page load
-    setTimeout(() => {
-      const scrollDepth = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-      trackEvent('scroll', { scrollDepth });
-    }, 1000);
-  }, [trackEvent]);
-
-  // Handle click events
-  const handleClick = useCallback((e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    trackEvent('click', {
-      element: target.tagName,
-      selector: getSelector(target),
-      position: { x: e.clientX, y: e.clientY }
-    });
-  }, [getSelector, trackEvent]);
-
-  // Handle scroll events with debounce
-  const handleScroll = useCallback(() => {
-    const now = Date.now();
-    const scrollDepth = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    
-    // Only track if user scrolled at least 5% or 30 seconds have passed since last scroll event
-    const lastScrollEvent = events.current
-      .filter(e => e.type === 'scroll')
-      .pop();
-      
-    const lastScrollDepth = lastScrollEvent?.scrollDepth || 0;
-    const timeSinceLastScroll = lastScrollEvent ? now - lastScrollEvent.timestamp : Infinity;
-    
-    if (Math.abs(scrollDepth - lastScrollDepth) > 5 || timeSinceLastScroll > 30000) {
-      trackEvent('scroll', { scrollDepth });
-    }
-  }, [trackEvent]);
-
-  // Handle form interactions
-  const handleFormInteraction = useCallback((e: Event) => {
-    const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') {
-      trackEvent('form_interaction', {
-        element: target.tagName,
-        selector: getSelector(target as HTMLElement),
-        value: target.value,
-        name: target.name || target.id || 'unnamed'
-      });
-    }
-  }, [getSelector, trackEvent]);
-
-  // Send behavior data to server
-  const sendBehaviorData = useCallback(async (): Promise<void> => {
-    if (events.current.length === 0) return;
-    
-    const now = Date.now();
-    
-    // Don't send too frequently
-    if (now - lastSentTime.current < 5000) {
-      return;
-    }
-    
-    const eventsToSend = [...events.current];
-    events.current = [];
-    lastSentTime.current = now;
-    
-    try {
-      const sessionData: SessionData = {
-        userAgent: navigator.userAgent,
-        viewport: {
-          width: window.innerWidth,
-          height: window.innerHeight
-        },
-        sessionStart: sessionStart.current,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          events: eventsToSend,
-          sessionData: getSessionData(),
-          sessionId: sessionId || currentSessionId.current,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-
-      if (!response.ok) {
-        console.error('Failed to send behavior data');
-        // Re-add events if sending failed and they're not custom events
-        if (!customEvents) {
-          events.current = [...eventsToSend, ...events.current];
-        }
-      }
-      
-      return response.ok;
-    } catch (error) {
-      console.error('Error sending behavior data:', error);
-      if (!customEvents) {
-        events.current = [...eventsToSend, ...events.current];
-      }
-      return false;
-    }
-  }, [getSessionData, currentSessionId]);
 
   // Set up event listeners
   useEffect(() => {
-    // Initial page view
+    // Initialize session
+    const sessionId = startNewSession(window.location.href);
     trackPageView();
     
-    // Set up event listeners
-    window.addEventListener('click', handleClick, { capture: true });
-    window.addEventListener('popstate', trackPageView);
-    window.addEventListener('pushstate', trackPageView);
-    window.addEventListener('replacestate', trackPageView);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Set up periodic sending
+    const intervalId = setInterval(() => {
+      sendBehaviorData().catch(console.error);
+    }, SEND_INTERVAL);
     
-    // Form interactions
-    document.addEventListener('input', handleFormInteraction);
-    document.addEventListener('change', handleFormInteraction);
-    document.addEventListener('submit', (e) => {
-      const target = e.target as HTMLFormElement;
-      trackEvent('form_submit', {
-        formId: target.id || target.name || 'unnamed',
-        formAction: target.action || 'unknown',
-        formMethod: target.method || 'get'
-      });
-    });
-    
-    // Track page visibility changes
+    // Set up visibility change handler
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         trackEvent('page_visible');
@@ -382,29 +256,104 @@ export function useBehaviorTracking(): UseBehaviorTrackingReturn {
       }
     };
     
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    // Set up event listeners
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      trackEvent('click', {
+        element: target.tagName,
+        selector: getSelector(target),
+        position: { x: event.clientX, y: event.clientY }
+      });
+    };
     
-    // Set up periodic sending
-    const intervalId = setInterval(sendBehaviorData, SEND_INTERVAL);
+    const handleScroll = () => {
+      const scrollDepth = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      trackEvent('scroll', {
+        scrollDepth,
+        position: { x: window.scrollX, y: window.scrollY }
+      });
+    };
+    
+    const handleFormInteraction = (event: Event) => {
+      const target = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+      trackEvent('form_interaction', {
+        element: target.tagName,
+        type: event.type,
+        name: target.name || target.id || 'unnamed',
+        value: target.value,
+        selector: getSelector(target)
+      });
+    };
+    
+    // Add event listeners
+    window.addEventListener('click', handleClick, { capture: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('input', handleFormInteraction);
+    document.addEventListener('change', handleFormInteraction);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     // Clean up
     return () => {
+      clearInterval(intervalId);
       window.removeEventListener('click', handleClick, { capture: true });
-      window.removeEventListener('popstate', trackPageView);
-      window.removeEventListener('pushstate', trackPageView);
-      window.removeEventListener('replacestate', trackPageView);
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('input', handleFormInteraction);
       document.removeEventListener('change', handleFormInteraction);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      clearInterval(intervalId);
       
-      // Send any remaining events
-      if (events.current.length > 0) {
-        sendBehaviorData().catch(console.error);
+      // End session on unmount
+      if (sessionId) {
+        endSession(sessionId);
       }
     };
-  }, [handleClick, handleFormInteraction, handleScroll, sendBehaviorData, trackPageView]);
+  }, [endSession, sendBehaviorData, startNewSession, trackEvent, trackPageView]);
+  
+  // Helper function to generate CSS selector for an element
+  const getSelector = (element: HTMLElement): string => {
+    const parts: string[] = [];
+    
+    while (element && element.nodeType === Node.ELEMENT_NODE) {
+      let selector = element.nodeName.toLowerCase();
+      
+      if (element.id) {
+        selector += `#${element.id}`;
+        parts.unshift(selector);
+        break;
+      } else {
+        let sibling = element.previousElementSibling;
+        let siblingCount = 1;
+        
+        while (sibling) {
+          if (sibling.nodeName === element.nodeName) {
+            siblingCount++;
+          }
+          sibling = sibling.previousElementSibling;
+        }
+        
+        if (siblingCount !== 1) {
+          selector += `:nth-of-type(${siblingCount})`;
+        }
+      }
+      
+      parts.unshift(selector);
+      
+      if (element.parentElement) {
+        element = element.parentElement;
+      } else {
+        break;
+      }
+    }
+    
+    return parts.join(' > ');
+  };
 
-  return { trackEvent, sendBehaviorData };
+  return {
+    trackEvent,
+    sendBehaviorData,
+    startNewSession,
+    endSession,
+    getSessionEvents,
+    getAllSessions,
+    currentSessionId
+  };
 }

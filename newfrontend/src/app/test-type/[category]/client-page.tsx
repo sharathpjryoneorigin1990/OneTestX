@@ -6,14 +6,24 @@ import { NewNavbar } from "@/components/layout/NewNavbar";
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-const subTestTypes = {
+interface SubTestType {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  isSpecial: boolean;
+  href?: string;
+}
+
+const subTestTypes: Record<string, SubTestType[]> = {
   'ai': [
     {
       title: 'Build Your Test',
       description: 'Create custom tests using MCP concept',
       icon: '🛠️',
       color: 'bg-gradient-to-r from-yellow-500 to-orange-500',
-      isSpecial: true
+      isSpecial: true,
+      href: '/test-files?category=ai&type=test-builder'
     },
     {
       title: 'Visual AI Tests',
@@ -136,11 +146,11 @@ const subTestTypes = {
   ],
   'api': [
     {
-      title: 'REST API Tests',
-      description: 'Test RESTful API endpoints',
+      title: 'API Testing Suite',
+      description: 'Comprehensive API testing with Swagger/Postman import',
       icon: '🌐',
-      color: 'bg-blue-500',
-      isSpecial: false
+      color: 'bg-gradient-to-r from-blue-500 to-cyan-500',
+      isSpecial: true
     },
     {
       title: 'GraphQL Tests',
@@ -352,8 +362,8 @@ export default function ClientSubTestTypePage({ category }: { category: string }
                 className="h-full"
               >
                 {test.isSpecial ? (
-                  <Link href="/test-files?category=ai&type=test-builder" className="h-full block group">
-                    <div className="relative h-full flex flex-col bg-gradient-to-br from-yellow-900/50 to-orange-900/50 backdrop-blur-sm rounded-xl p-6 border border-yellow-700/50 transition-all duration-300 hover:border-yellow-500/50 hover:shadow-xl hover:shadow-orange-500/10 overflow-hidden">
+                  <Link href={test.href || "/test-files?category=ai&type=test-builder"} className="h-full block group">
+                    <div className="relative h-full flex flex-col bg-gradient-to-br from-blue-900/50 to-indigo-900/50 backdrop-blur-sm rounded-xl p-6 border border-blue-700/50 transition-all duration-300 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 overflow-hidden">
                       <div className="flex items-center mb-4">
                         <div className={`w-12 h-12 rounded-lg ${test.color} flex items-center justify-center text-2xl mr-4`}>
                           {test.icon}
@@ -376,9 +386,19 @@ export default function ClientSubTestTypePage({ category }: { category: string }
                   </Link>
                 ) : (
                   <Link 
-                    href={test.title === 'Content Analysis' 
-                      ? `/test-files/content-analysis?category=${currentCategory}&type=content`
-                      : `/test-files?category=${currentCategory}&type=${test.title.toLowerCase().split(' ')[0]}`}
+                    href={test.href || (() => {
+                      if (test.title === 'Content Analysis') {
+                        return `/test-files/content-analysis?category=${currentCategory}&type=content`;
+                      } else if (test.title === 'API Testing Suite') {
+                        return `/test-type/api`;
+                      } else if (test.title === 'Screen Reader Tests') {
+                        return '/test-files/accessibility';
+                      } else if (test.href) {
+                        return test.href;
+                      } else {
+                        return `/test-files?category=${currentCategory}&type=${test.title.toLowerCase().split(' ')[0]}`;
+                      }
+                    })()}
                     className="h-full block group"
                   >
                     <div className="relative h-full flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 transition-all duration-300 hover:border-opacity-50 hover:shadow-xl hover:shadow-cyan-500/10">

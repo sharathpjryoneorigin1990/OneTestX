@@ -1,0 +1,865 @@
+[2025-06-04T08:13:31.433Z] Starting server script...
+[2025-06-04T08:13:31.437Z] Registering test routes...
+[2025-06-04T08:13:31.437Z] Successfully registered /api/tests route
+[2025-06-04T08:13:31.437Z] Successfully registered /api/k6-tests route
+[2025-06-04T08:13:31.437Z] Successfully registered /api/visual-tests route
+[2025-06-04T08:13:31.438Z] Successfully registered image server routes
+[2025-06-04T08:13:31.439Z] Script end
+[2025-06-04T08:13:31.443Z] Server listening on port 3005
+[2025-06-04T08:13:31.444Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-04T08:13:31.448Z] Loaded 1 flows
+[2025-06-04T08:48:34.152Z] Starting server script...
+[2025-06-04T08:48:34.158Z] Registering test routes...
+[2025-06-04T08:48:34.158Z] Successfully registered /api/tests route
+[2025-06-04T08:48:34.158Z] Successfully registered /api/k6-tests route
+[2025-06-04T08:48:34.158Z] Successfully registered /api/visual-tests route
+[2025-06-04T08:48:34.158Z] Successfully registered image server routes
+[2025-06-04T08:48:34.160Z] Script end
+[2025-06-04T08:48:34.161Z] Server listening on port 3005
+[2025-06-04T08:48:34.161Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-04T08:48:34.166Z] Loaded 1 flows
+[2025-06-04T08:59:15.629Z] 
+[2025-06-04T08:59:15.629Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D; environments=%5B%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D%5D",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-04T08:59:15.640Z] [2025-06-04T08:59:15.629Z] Response sent: {
+  "statusCode": 200,
+  "duration": "11ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-04T08:59:15.660Z] 
+[2025-06-04T08:59:15.660Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D; environments=%5B%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D%5D",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-04T08:59:15.664Z] [2025-06-04T08:59:15.660Z] Response sent: {
+  "statusCode": 200,
+  "duration": "4ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-04T12:15:25.108Z] Starting server script...
+[2025-06-04T12:15:25.112Z] Registering test routes...
+[2025-06-04T12:15:25.113Z] Successfully registered /api/tests route
+[2025-06-04T12:15:25.113Z] Successfully registered /api/k6-tests route
+[2025-06-04T12:15:25.114Z] Successfully registered /api/visual-tests route
+[2025-06-04T12:15:25.114Z] Successfully registered image server routes
+[2025-06-04T12:15:25.116Z] Script end
+[2025-06-04T12:15:25.125Z] Server listening on port 3005
+[2025-06-04T12:15:25.125Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-04T12:15:25.132Z] Loaded 1 flows
+[2025-06-04T12:36:41.567Z] 
+[2025-06-04T12:36:41.567Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D; environments=%5B%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D%5D; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%221971b2ad3163f-0a70cb6534bec1-26011f51-1474560-1971b2ad31754d%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_search_keyword%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_referrer%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTk3MWIyYWQzMTYzZi0wYTcwY2I2NTM0YmVjMS0yNjAxMWY1MS0xNDc0NTYwLTE5NzFiMmFkMzE3NTRkIn0%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%22%2C%22value%22%3A%22%22%7D%2C%22%24device_id%22%3A%221971b2e9f8934-06251547d93b35-26011f51-1474560-1971b2e9f8abfa%22%7D; __next_hmr_refresh_hash__=c45349557bada8cfa64abe4aa56aa6aa27c265782950894a",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-04T12:36:41.578Z] [2025-06-04T12:36:41.567Z] Response sent: {
+  "statusCode": 200,
+  "duration": "11ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-04T12:36:41.595Z] 
+[2025-06-04T12:36:41.595Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D; environments=%5B%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D%5D; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%221971b2ad3163f-0a70cb6534bec1-26011f51-1474560-1971b2ad31754d%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_search_keyword%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_referrer%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTk3MWIyYWQzMTYzZi0wYTcwY2I2NTM0YmVjMS0yNjAxMWY1MS0xNDc0NTYwLTE5NzFiMmFkMzE3NTRkIn0%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%22%2C%22value%22%3A%22%22%7D%2C%22%24device_id%22%3A%221971b2e9f8934-06251547d93b35-26011f51-1474560-1971b2e9f8abfa%22%7D; __next_hmr_refresh_hash__=c45349557bada8cfa64abe4aa56aa6aa27c265782950894a",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-04T12:36:41.598Z] [2025-06-04T12:36:41.595Z] Response sent: {
+  "statusCode": 200,
+  "duration": "3ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-04T17:24:20.118Z] Starting server script...
+[2025-06-04T17:24:20.121Z] Registering test routes...
+[2025-06-04T17:24:20.121Z] Successfully registered /api/tests route
+[2025-06-04T17:24:20.122Z] Successfully registered /api/k6-tests route
+[2025-06-04T17:24:20.122Z] Successfully registered /api/visual-tests route
+[2025-06-04T17:24:20.122Z] Successfully registered image server routes
+[2025-06-04T17:24:20.123Z] Script end
+[2025-06-04T17:24:20.125Z] Server listening on port 3005
+[2025-06-04T17:24:20.125Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-04T17:24:20.131Z] Loaded 1 flows
+[2025-06-04T17:37:58.829Z] 
+[2025-06-04T17:37:58.829Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/execute-step",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D; environments=%5B%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D%5D; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%221971b2ad3163f-0a70cb6534bec1-26011f51-1474560-1971b2ad31754d%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_search_keyword%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_referrer%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTk3MWIyYWQzMTYzZi0wYTcwY2I2NTM0YmVjMS0yNjAxMWY1MS0xNDc0NTYwLTE5NzFiMmFkMzE3NTRkIn0%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%22%2C%22value%22%3A%22%22%7D%2C%22%24device_id%22%3A%221971b2e9f8934-06251547d93b35-26011f51-1474560-1971b2e9f8abfa%22%7D; __next_hmr_refresh_hash__=b2623a323446bd9cb2a4082078586a2527c265782950894a",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=test-builder",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "origin": "http://localhost:3000",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "content-type": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "content-length": "215",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-04T17:38:21.148Z] 
+[2025-06-04T17:38:21.148Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/execute-step",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D; environments=%5B%7B%22name%22%3A%22QA%22%2C%22url%22%3A%22https%3A%2F%2Fwww.google.com%22%2C%22type%22%3A%22qa%22%2C%22testType%22%3A%22smoke%22%2C%22apiKey%22%3A%22admin%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22QA%20environment%20for%20smoke%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20admin%22%7D%2C%22createdAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%2C%22updatedAt%22%3A%222025-05-26T10%3A45%3A13.263Z%22%7D%5D; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%221971b2ad3163f-0a70cb6534bec1-26011f51-1474560-1971b2ad31754d%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_search_keyword%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%2C%22%24latest_referrer%22%3A%22url%E7%9A%84domain%E8%A7%A3%E6%9E%90%E5%A4%B1%E8%B4%A5%22%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTk3MWIyYWQzMTYzZi0wYTcwY2I2NTM0YmVjMS0yNjAxMWY1MS0xNDc0NTYwLTE5NzFiMmFkMzE3NTRkIn0%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%22%2C%22value%22%3A%22%22%7D%2C%22%24device_id%22%3A%221971b2e9f8934-06251547d93b35-26011f51-1474560-1971b2e9f8abfa%22%7D; __next_hmr_refresh_hash__=b2623a323446bd9cb2a4082078586a2527c265782950894a",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=test-builder",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "origin": "http://localhost:3000",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "content-type": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "content-length": "237",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-04T18:08:48.220Z] Starting server script...
+[2025-06-04T18:08:48.223Z] Registering test routes...
+[2025-06-04T18:08:48.223Z] Successfully registered /api/tests route
+[2025-06-04T18:08:48.223Z] Successfully registered /api/k6-tests route
+[2025-06-04T18:08:48.224Z] Successfully registered /api/visual-tests route
+[2025-06-04T18:08:48.224Z] Successfully registered image server routes
+[2025-06-04T18:08:48.225Z] Script end
+[2025-06-04T18:08:48.226Z] Server listening on port 3005
+[2025-06-04T18:08:48.226Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-04T18:08:48.234Z] Loaded 1 flows
+[2025-06-04T18:48:18.648Z] Starting server script...
+[2025-06-04T18:48:18.656Z] Registering test routes...
+[2025-06-04T18:48:18.656Z] Successfully registered /api/tests route
+[2025-06-04T18:48:18.657Z] Successfully registered /api/k6-tests route
+[2025-06-04T18:48:18.657Z] Successfully registered /api/visual-tests route
+[2025-06-04T18:48:18.658Z] Successfully registered image server routes
+[2025-06-04T18:48:18.661Z] Script end
+[2025-06-04T18:48:18.664Z] Server listening on port 3005
+[2025-06-04T18:48:18.664Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-04T18:48:18.683Z] Loaded 1 flows
+[2025-06-05T07:21:16.756Z] Starting server script...
+[2025-06-05T07:21:16.771Z] Registering test routes...
+[2025-06-05T07:21:16.771Z] Successfully registered /api/tests route
+[2025-06-05T07:21:16.773Z] Successfully registered /api/k6-tests route
+[2025-06-05T07:21:16.773Z] Successfully registered /api/visual-tests route
+[2025-06-05T07:21:16.773Z] Successfully registered image server routes
+[2025-06-05T07:21:16.777Z] Script end
+[2025-06-05T07:21:16.783Z] Server listening on port 3005
+[2025-06-05T07:21:16.783Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T07:21:16.800Z] Loaded 1 flows
+[2025-06-05T07:22:27.940Z] Starting server script...
+[2025-06-05T07:22:27.947Z] Registering test routes...
+[2025-06-05T07:22:27.948Z] Successfully registered /api/tests route
+[2025-06-05T07:22:27.951Z] Successfully registered /api/k6-tests route
+[2025-06-05T07:22:27.952Z] Successfully registered /api/visual-tests route
+[2025-06-05T07:22:27.952Z] Successfully registered image server routes
+[2025-06-05T07:22:27.954Z] Script end
+[2025-06-05T07:22:27.955Z] Server listening on port 3005
+[2025-06-05T07:22:27.956Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T07:22:27.973Z] Loaded 1 flows
+[2025-06-05T08:58:39.844Z] Starting server script...
+[2025-06-05T08:58:39.850Z] Registering test routes...
+[2025-06-05T08:58:39.850Z] Successfully registered /api/tests route
+[2025-06-05T08:58:39.851Z] Successfully registered /api/k6-tests route
+[2025-06-05T08:58:39.851Z] Successfully registered /api/visual-tests route
+[2025-06-05T08:58:39.851Z] Successfully registered image server routes
+[2025-06-05T08:58:39.856Z] Script end
+[2025-06-05T08:58:39.869Z] Server listening on port 3005
+[2025-06-05T08:58:39.869Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T08:58:39.886Z] Loaded 1 flows
+[2025-06-05T09:04:56.644Z] Starting server script...
+[2025-06-05T09:04:56.650Z] Registering test routes...
+[2025-06-05T09:04:56.651Z] Successfully registered /api/tests route
+[2025-06-05T09:04:56.651Z] Successfully registered /api/k6-tests route
+[2025-06-05T09:04:56.651Z] Successfully registered /api/visual-tests route
+[2025-06-05T09:04:56.651Z] Successfully registered image server routes
+[2025-06-05T09:04:56.654Z] Script end
+[2025-06-05T09:04:56.656Z] Server listening on port 3005
+[2025-06-05T09:04:56.656Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T09:04:56.685Z] Loaded 1 flows
+[2025-06-05T09:27:03.953Z] Starting server script...
+[2025-06-05T09:27:03.959Z] Registering test routes...
+[2025-06-05T09:27:03.960Z] Successfully registered /api/tests route
+[2025-06-05T09:27:03.960Z] Successfully registered /api/k6-tests route
+[2025-06-05T09:27:03.960Z] Successfully registered /api/visual-tests route
+[2025-06-05T09:27:03.961Z] Successfully registered image server routes
+[2025-06-05T09:27:03.963Z] Script end
+[2025-06-05T09:27:03.965Z] Server listening on port 3005
+[2025-06-05T09:27:03.966Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T09:27:03.988Z] Loaded 1 flows
+[2025-06-05T11:06:43.341Z] Starting server script...
+[2025-06-05T11:06:43.346Z] Registering test routes...
+[2025-06-05T11:06:43.346Z] Successfully registered /api/tests route
+[2025-06-05T11:06:43.346Z] Successfully registered /api/k6-tests route
+[2025-06-05T11:06:43.347Z] Successfully registered /api/visual-tests route
+[2025-06-05T11:06:43.347Z] Successfully registered image server routes
+[2025-06-05T11:06:43.348Z] Script end
+[2025-06-05T11:06:43.350Z] Server listening on port 3005
+[2025-06-05T11:06:43.350Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T11:06:43.359Z] Loaded 1 flows
+[2025-06-05T11:22:34.613Z] Starting server script...
+[2025-06-05T11:22:34.617Z] Registering test routes...
+[2025-06-05T11:22:34.617Z] Successfully registered /api/tests route
+[2025-06-05T11:22:34.617Z] Successfully registered /api/k6-tests route
+[2025-06-05T11:22:34.618Z] Successfully registered /api/visual-tests route
+[2025-06-05T11:22:34.618Z] Successfully registered image server routes
+[2025-06-05T11:22:34.619Z] Script end
+[2025-06-05T11:22:34.621Z] Server listening on port 3005
+[2025-06-05T11:22:34.621Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T11:22:34.625Z] Loaded 1 flows
+[2025-06-05T11:36:24.679Z] Starting server script...
+[2025-06-05T11:36:24.683Z] Registering test routes...
+[2025-06-05T11:36:24.683Z] Successfully registered /api/tests route
+[2025-06-05T11:36:24.683Z] Successfully registered /api/k6-tests route
+[2025-06-05T11:36:24.683Z] Successfully registered /api/visual-tests route
+[2025-06-05T11:36:24.683Z] Successfully registered image server routes
+[2025-06-05T11:36:24.685Z] Script end
+[2025-06-05T11:36:24.686Z] Server listening on port 3005
+[2025-06-05T11:36:24.686Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T11:36:24.690Z] Loaded 1 flows
+[2025-06-05T15:31:12.075Z] Starting server script...
+[2025-06-05T15:31:12.081Z] Registering test routes...
+[2025-06-05T15:31:12.082Z] Successfully registered /api/tests route
+[2025-06-05T15:31:12.082Z] Successfully registered /api/k6-tests route
+[2025-06-05T15:31:12.082Z] Successfully registered /api/visual-tests route
+[2025-06-05T15:31:12.083Z] Successfully registered image server routes
+[2025-06-05T15:31:12.085Z] Script end
+[2025-06-05T15:31:12.086Z] Server listening on port 3005
+[2025-06-05T15:31:12.087Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T15:31:12.092Z] Loaded 1 flows
+[2025-06-05T16:44:06.704Z] Starting server script...
+[2025-06-05T16:44:06.708Z] Registering test routes...
+[2025-06-05T16:44:06.708Z] Successfully registered /api/tests route
+[2025-06-05T16:44:06.708Z] Successfully registered /api/k6-tests route
+[2025-06-05T16:44:06.709Z] Successfully registered /api/visual-tests route
+[2025-06-05T16:44:06.709Z] Successfully registered image server routes
+[2025-06-05T16:44:06.710Z] Script end
+[2025-06-05T16:44:06.711Z] Server listening on port 3005
+[2025-06-05T16:44:06.711Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-05T16:44:06.713Z] Loaded 1 flows
+[2025-06-06T07:59:52.252Z] Starting server script...
+[2025-06-06T07:59:52.256Z] Registering test routes...
+[2025-06-06T07:59:52.257Z] Successfully registered /api/tests route
+[2025-06-06T07:59:52.257Z] Successfully registered /api/k6-tests route
+[2025-06-06T07:59:52.258Z] Successfully registered /api/visual-tests route
+[2025-06-06T07:59:52.258Z] Successfully registered image server routes
+[2025-06-06T07:59:52.259Z] Script end
+[2025-06-06T07:59:52.262Z] Server listening on port 3005
+[2025-06-06T07:59:52.262Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T07:59:52.272Z] Loaded 1 flows
+[2025-06-06T09:11:44.052Z] Starting server script...
+[2025-06-06T09:11:44.057Z] Registering test routes...
+[2025-06-06T09:11:44.058Z] Successfully registered /api/tests route
+[2025-06-06T09:11:44.058Z] Successfully registered /api/k6-tests route
+[2025-06-06T09:11:44.058Z] Successfully registered /api/visual-tests route
+[2025-06-06T09:11:44.058Z] Successfully registered image server routes
+[2025-06-06T09:11:44.060Z] Script end
+[2025-06-06T09:11:44.063Z] Server listening on port 3005
+[2025-06-06T09:11:44.065Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T09:11:44.075Z] Loaded 1 flows
+[2025-06-06T10:54:46.337Z] Starting server script...
+[2025-06-06T10:54:46.341Z] Registering test routes...
+[2025-06-06T10:54:46.341Z] Successfully registered /api/tests route
+[2025-06-06T10:54:46.341Z] Successfully registered /api/k6-tests route
+[2025-06-06T10:54:46.341Z] Successfully registered /api/visual-tests route
+[2025-06-06T10:54:46.342Z] Successfully registered image server routes
+[2025-06-06T10:54:46.345Z] Script end
+[2025-06-06T10:54:46.349Z] Server listening on port 3005
+[2025-06-06T10:54:46.349Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T10:54:46.358Z] Loaded 1 flows
+[2025-06-06T12:41:00.366Z] Starting server script...
+[2025-06-06T12:41:00.370Z] Registering test routes...
+[2025-06-06T12:41:00.370Z] Successfully registered /api/tests route
+[2025-06-06T12:41:00.371Z] Successfully registered /api/k6-tests route
+[2025-06-06T12:41:00.371Z] Successfully registered /api/visual-tests route
+[2025-06-06T12:41:00.371Z] Successfully registered image server routes
+[2025-06-06T12:41:00.373Z] Script end
+[2025-06-06T12:41:00.374Z] Server listening on port 3005
+[2025-06-06T12:41:00.374Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T12:41:00.381Z] Loaded 1 flows
+[2025-06-06T16:20:39.035Z] Starting server script...
+[2025-06-06T16:20:39.042Z] Registering test routes...
+[2025-06-06T16:20:39.042Z] Successfully registered /api/tests route
+[2025-06-06T16:20:39.042Z] Successfully registered /api/k6-tests route
+[2025-06-06T16:20:39.043Z] Successfully registered /api/visual-tests route
+[2025-06-06T16:20:39.043Z] Successfully registered image server routes
+[2025-06-06T16:20:39.047Z] Script end
+[2025-06-06T16:20:39.052Z] Server listening on port 3005
+[2025-06-06T16:20:39.052Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T16:20:39.066Z] Loaded 1 flows
+[2025-06-06T16:39:14.129Z] Starting server script...
+[2025-06-06T16:39:14.134Z] Registering test routes...
+[2025-06-06T16:39:14.134Z] Successfully registered /api/tests route
+[2025-06-06T16:39:14.134Z] Successfully registered /api/k6-tests route
+[2025-06-06T16:39:14.134Z] Successfully registered /api/visual-tests route
+[2025-06-06T16:39:14.134Z] Successfully registered image server routes
+[2025-06-06T16:39:14.136Z] Script end
+[2025-06-06T16:39:14.139Z] Server listening on port 3005
+[2025-06-06T16:39:14.139Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T16:39:14.150Z] Loaded 1 flows
+[2025-06-06T17:02:55.284Z] Starting server script...
+[2025-06-06T17:02:55.288Z] Registering test routes...
+[2025-06-06T17:02:55.290Z] Successfully registered /api/tests route
+[2025-06-06T17:02:55.290Z] Successfully registered /api/k6-tests route
+[2025-06-06T17:02:55.290Z] Successfully registered /api/visual-tests route
+[2025-06-06T17:02:55.290Z] Successfully registered image server routes
+[2025-06-06T17:02:55.292Z] Script end
+[2025-06-06T17:02:55.293Z] Server listening on port 3005
+[2025-06-06T17:02:55.293Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T17:02:55.296Z] Loaded 1 flows
+[2025-06-06T17:05:18.351Z] 
+[2025-06-06T17:05:18.351Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "cookie": "__next_hmr_refresh_hash__=c3daac68aafdc7a3a6a330328c03ac2727c265782950894a; _dd_s=logs=1&id=44deb83e-84a7-430d-9db6-96eb51e1a8d3&created=1749226806303&expire=1749230417784",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-06T17:05:18.390Z] [2025-06-06T17:05:18.351Z] Response sent: {
+  "statusCode": 200,
+  "duration": "39ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-06T17:05:18.425Z] 
+[2025-06-06T17:05:18.425Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "__next_hmr_refresh_hash__=c3daac68aafdc7a3a6a330328c03ac2727c265782950894a; _dd_s=logs=1&id=44deb83e-84a7-430d-9db6-96eb51e1a8d3&created=1749226806303&expire=1749230417784",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-06T17:05:18.431Z] [2025-06-06T17:05:18.425Z] Response sent: {
+  "statusCode": 200,
+  "duration": "6ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-06T18:44:33.912Z] Starting server script...
+[2025-06-06T18:44:33.917Z] Registering test routes...
+[2025-06-06T18:44:33.917Z] Successfully registered /api/tests route
+[2025-06-06T18:44:33.918Z] Successfully registered /api/k6-tests route
+[2025-06-06T18:44:33.918Z] Successfully registered /api/visual-tests route
+[2025-06-06T18:44:33.918Z] Successfully registered image server routes
+[2025-06-06T18:44:33.919Z] Script end
+[2025-06-06T18:44:33.921Z] Server listening on port 3005
+[2025-06-06T18:44:33.921Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T18:44:33.923Z] Loaded 1 flows
+[2025-06-06T19:18:10.016Z] Starting server script...
+[2025-06-06T19:18:10.020Z] Registering test routes...
+[2025-06-06T19:18:10.020Z] Successfully registered /api/tests route
+[2025-06-06T19:18:10.020Z] Successfully registered /api/k6-tests route
+[2025-06-06T19:18:10.021Z] Successfully registered /api/visual-tests route
+[2025-06-06T19:18:10.021Z] Successfully registered image server routes
+[2025-06-06T19:18:10.022Z] Script end
+[2025-06-06T19:18:10.023Z] Server listening on port 3005
+[2025-06-06T19:18:10.023Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-06T19:18:10.032Z] Loaded 1 flows
+[2025-06-07T05:34:41.367Z] Starting server script...
+[2025-06-07T05:34:41.374Z] Registering test routes...
+[2025-06-07T05:34:41.374Z] Successfully registered /api/tests route
+[2025-06-07T05:34:41.374Z] Successfully registered /api/k6-tests route
+[2025-06-07T05:34:41.375Z] Successfully registered /api/visual-tests route
+[2025-06-07T05:34:41.375Z] Successfully registered image server routes
+[2025-06-07T05:34:41.383Z] Script end
+[2025-06-07T05:34:41.391Z] Server listening on port 3005
+[2025-06-07T05:34:41.392Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T05:34:41.394Z] Loaded 1 flows
+[2025-06-07T09:13:01.315Z] Starting server script...
+[2025-06-07T09:13:01.320Z] Registering test routes...
+[2025-06-07T09:13:01.320Z] Successfully registered /api route
+[2025-06-07T09:13:01.320Z] Successfully registered /api/tests route
+[2025-06-07T09:13:01.320Z] Successfully registered /api/k6-tests route
+[2025-06-07T09:13:01.321Z] Successfully registered /api/visual-tests route
+[2025-06-07T09:13:01.321Z] Successfully registered image server routes
+[2025-06-07T09:13:01.323Z] Script end
+[2025-06-07T09:13:01.324Z] Server listening on port 3005
+[2025-06-07T09:13:01.324Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T09:13:01.336Z] Loaded 1 flows
+[2025-06-07T09:58:31.707Z] 
+[2025-06-07T09:58:31.707Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/accessibility/run",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "cookie": "__next_hmr_refresh_hash__=79a91e2577bc8b41943ca1ae38ea4eeb8edfc255fb659e9e; _dd_s=logs=1&id=091e1950-5e7a-41ad-8aa3-c5c1df30051b&created=1749287553189&expire=1749291203659",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files/accessibility?category=accessibility&type=screen&url=https://example.com&name=homepage",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "origin": "http://localhost:3000",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "content-type": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "content-length": "74",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-07T09:58:31.908Z] Running screen reader test for homepage at https://example.com
+[2025-06-07T09:59:10.186Z] [2025-06-07T09:58:31.707Z] Response sent: {
+  "statusCode": 500,
+  "duration": "38479ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-07T11:30:14.825Z] Starting server script...
+[2025-06-07T11:30:14.828Z] Registering test routes...
+[2025-06-07T11:30:14.828Z] Successfully registered /api route
+[2025-06-07T11:30:14.829Z] Successfully registered /api/tests route
+[2025-06-07T11:30:14.829Z] Successfully registered /api/k6-tests route
+[2025-06-07T11:30:14.829Z] Successfully registered /api/visual-tests route
+[2025-06-07T11:30:14.829Z] Successfully registered image server routes
+[2025-06-07T11:30:14.830Z] Script end
+[2025-06-07T11:30:14.831Z] Server listening on port 3005
+[2025-06-07T11:30:14.831Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T11:30:14.832Z] Loaded 1 flows
+[2025-06-07T13:15:41.102Z] Starting server script...
+[2025-06-07T13:15:41.105Z] Registering test routes...
+[2025-06-07T13:15:41.105Z] Successfully registered /api route
+[2025-06-07T13:15:41.105Z] Successfully registered /api/tests route
+[2025-06-07T13:15:41.105Z] Successfully registered /api/k6-tests route
+[2025-06-07T13:15:41.105Z] Successfully registered /api/visual-tests route
+[2025-06-07T13:15:41.106Z] Successfully registered image server routes
+[2025-06-07T13:15:41.107Z] Script end
+[2025-06-07T13:15:41.107Z] Server listening on port 3005
+[2025-06-07T13:15:41.108Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T13:15:41.109Z] Loaded 1 flows
+[2025-06-07T14:44:20.317Z] Starting server script...
+[2025-06-07T14:44:20.320Z] Registering test routes...
+[2025-06-07T14:44:20.320Z] Successfully registered /api route
+[2025-06-07T14:44:20.320Z] Successfully registered /api/tests route
+[2025-06-07T14:44:20.320Z] Successfully registered /api/k6-tests route
+[2025-06-07T14:44:20.320Z] Successfully registered /api/visual-tests route
+[2025-06-07T14:44:20.321Z] Successfully registered image server routes
+[2025-06-07T14:44:20.322Z] Script end
+[2025-06-07T14:44:20.323Z] Server listening on port 3005
+[2025-06-07T14:44:20.323Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T14:44:20.324Z] Loaded 1 flows
+[2025-06-07T15:52:21.038Z] Starting server script...
+[2025-06-07T15:52:21.041Z] No existing flows file found, starting fresh
+[2025-06-07T15:52:21.042Z] Registering test routes...
+[2025-06-07T15:52:21.042Z] Successfully registered /api route
+[2025-06-07T15:52:21.042Z] Successfully registered /api/tests route
+[2025-06-07T15:52:21.042Z] Successfully registered /api/k6-tests route
+[2025-06-07T15:52:21.042Z] Successfully registered /api/visual-tests route
+[2025-06-07T15:52:21.042Z] Successfully registered image server routes
+[2025-06-07T15:52:21.043Z] Script end
+[2025-06-07T15:52:21.044Z] Server listening on port 3005
+[2025-06-07T15:52:21.044Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T16:30:49.027Z] Starting server script...
+[2025-06-07T16:30:49.030Z] Registering test routes...
+[2025-06-07T16:30:49.031Z] Successfully registered /api route
+[2025-06-07T16:30:49.031Z] Successfully registered /api/tests route
+[2025-06-07T16:30:49.031Z] Successfully registered /api/k6-tests route
+[2025-06-07T16:30:49.031Z] Successfully registered /api/visual-tests route
+[2025-06-07T16:30:49.031Z] Successfully registered image server routes
+[2025-06-07T16:30:49.032Z] Script end
+[2025-06-07T16:30:49.033Z] Server listening on port 3005
+[2025-06-07T16:30:49.033Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T16:30:49.034Z] Loaded 1 flows
+[2025-06-07T16:41:39.674Z] Starting server script...
+[2025-06-07T16:41:39.677Z] Registering test routes...
+[2025-06-07T16:41:39.677Z] Successfully registered /api route
+[2025-06-07T16:41:39.677Z] Successfully registered /api/tests route
+[2025-06-07T16:41:39.678Z] Successfully registered /api/k6-tests route
+[2025-06-07T16:41:39.678Z] Successfully registered /api/visual-tests route
+[2025-06-07T16:41:39.678Z] Successfully registered image server routes
+[2025-06-07T16:41:39.679Z] Script end
+[2025-06-07T16:41:39.680Z] Server listening on port 3005
+[2025-06-07T16:41:39.680Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T16:41:39.681Z] Loaded 1 flows
+[2025-06-07T16:47:23.936Z] 
+[2025-06-07T16:47:23.936Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "__next_hmr_refresh_hash__=0382dba5dba9bb1bc04440b0dff127158edfc255fb659e9e; _dd_s=logs=1&id=8b6839ed-c7f2-4de7-b0b4-676929dee701&created=1749302019683&expire=1749315743512",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-07T16:47:23.948Z] [2025-06-07T16:47:23.936Z] Response sent: {
+  "statusCode": 200,
+  "duration": "11ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-07T16:47:23.964Z] 
+[2025-06-07T16:47:23.964Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "__next_hmr_refresh_hash__=0382dba5dba9bb1bc04440b0dff127158edfc255fb659e9e; _dd_s=logs=1&id=8b6839ed-c7f2-4de7-b0b4-676929dee701&created=1749302019683&expire=1749315743512",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-07T16:47:23.966Z] [2025-06-07T16:47:23.964Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-07T16:51:32.594Z] 
+[2025-06-07T16:51:32.594Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/accessibility/test",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D; environments=%5B%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D%5D",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files/accessibility",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "origin": "http://localhost:3000",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "content-type": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "content-length": "50",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-07T16:53:47.336Z] 
+[2025-06-07T16:53:47.336Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/accessibility/test",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "cookie": "has_configured_environments=true; env_configured=true; initial_setup_seen=true; activeEnvironment=%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D; environments=%5B%7B%22name%22%3A%22Production%22%2C%22url%22%3A%22https%3A%2F%2Fapi.production.example.com%22%2C%22type%22%3A%22production%22%2C%22testType%22%3A%22regression%22%2C%22apiKey%22%3A%22prod_1234567890abcdef1234567890abcdef%22%2C%22isActive%22%3Atrue%2C%22description%22%3A%22Production%20environment%20for%20regression%20testing%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20prod_1234567890abcdef1234567890abcdef%22%7D%2C%22createdAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%2C%22updatedAt%22%3A%222025-05-25T21%3A16%3A31.177Z%22%7D%5D",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files/accessibility",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "origin": "http://localhost:3000",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "content-type": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "content-length": "50",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-07T17:15:04.691Z] Starting server script...
+[2025-06-07T17:15:04.694Z] Registering test routes...
+[2025-06-07T17:15:04.695Z] Successfully registered /api route
+[2025-06-07T17:15:04.695Z] Successfully registered /api/tests route
+[2025-06-07T17:15:04.695Z] Successfully registered /api/k6-tests route
+[2025-06-07T17:15:04.695Z] Successfully registered /api/visual-tests route
+[2025-06-07T17:15:04.695Z] Successfully registered image server routes
+[2025-06-07T17:15:04.696Z] Script end
+[2025-06-07T17:15:04.697Z] Server listening on port 3005
+[2025-06-07T17:15:04.698Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-07T17:15:04.699Z] Loaded 1 flows
+[2025-06-08T04:11:11.478Z] Starting server script...
+[2025-06-08T04:11:11.487Z] Registering test routes...
+[2025-06-08T04:11:11.488Z] Successfully registered /api route
+[2025-06-08T04:11:11.488Z] Successfully registered /api/tests route
+[2025-06-08T04:11:11.488Z] Successfully registered /api/k6-tests route
+[2025-06-08T04:11:11.489Z] Successfully registered /api/visual-tests route
+[2025-06-08T04:11:11.489Z] Successfully registered image server routes
+[2025-06-08T04:11:11.492Z] Script end
+[2025-06-08T04:11:11.494Z] Server listening on port 3005
+[2025-06-08T04:11:11.494Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T04:11:11.500Z] Loaded 1 flows
+[2025-06-08T05:53:16.846Z] Starting server script...
+[2025-06-08T05:53:16.854Z] Registering test routes...
+[2025-06-08T05:53:16.854Z] Successfully registered /api route
+[2025-06-08T05:53:16.855Z] Successfully registered /api/tests route
+[2025-06-08T05:53:16.855Z] Successfully registered /api/k6-tests route
+[2025-06-08T05:53:16.855Z] Successfully registered /api/visual-tests route
+[2025-06-08T05:53:16.855Z] Successfully registered image server routes
+[2025-06-08T05:53:16.859Z] Script end
+[2025-06-08T05:53:16.863Z] Server listening on port 3005
+[2025-06-08T05:53:16.864Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T05:53:16.866Z] Loaded 1 flows

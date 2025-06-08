@@ -1,0 +1,38 @@
+'use client';
+
+import React from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the TestTypesDashboard component with SSR disabled
+const TestTypesDashboard = dynamic(
+  () => import('./test-types-dashboard'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
+);
+
+/**
+ * Main test dashboard page that displays test types and their statuses.
+ * Uses dynamic imports for better performance and code splitting.
+ */
+const TestDashboardPage = () => {
+  return (
+    <div className="container mx-auto p-4 md:p-6">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Test Dashboard</h1>
+        <p className="text-muted-foreground">
+          Monitor and manage your test suites and their execution
+        </p>
+      </header>
+      
+      <TestTypesDashboard />
+    </div>
+  );
+};
+
+export default TestDashboardPage;

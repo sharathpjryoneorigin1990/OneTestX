@@ -108,47 +108,121 @@ export const MCPClientProvider = ({ children }: { children: ReactNode }) => {
   // Connect to MCP server
   const connect = useCallback(async (): Promise<boolean> => {
     try {
-      console.log('Connecting to MCP server...');
-      // TODO: Replace with actual MCP server connection
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setIsConnected(true);
-      console.log('Successfully connected to MCP server');
-      toast.success('Connected to MCP server');
-      return true;
+      console.log('Connecting to Playwright MCP server...');
+      
+      try {
+        // Check if the Playwright MCP server is available
+        const response = await fetch('/api/mcp/status', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to connect to MCP server: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('MCP server status:', data);
+        
+        if (data.status === 'connected' || data.status === 'available') {
+          setIsConnected(true);
+          console.log('Successfully connected to Playwright MCP server');
+          toast.success('Connected to Playwright MCP server');
+          return true;
+        } else {
+          throw new Error(`MCP server status: ${data.status}`);
+        }
+      } catch (fetchError) {
+        console.error('Error connecting to MCP server:', fetchError);
+        
+        try {
+          // Fallback: Try to initialize the connection
+          console.log('Attempting to initialize MCP connection...');
+          const initResponse = await fetch('/api/mcp/init', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              browser: 'chromium',
+              headless: false
+            })
+          });
+          
+          if (!initResponse.ok) {
+            throw new Error(`Failed to initialize MCP connection: ${initResponse.statusText}`);
+          }
+          
+          const initData = await initResponse.json();
+          console.log('MCP initialization response:', initData);
+          
+          if (initData.success) {
+            setIsConnected(true);
+            console.log('Successfully initialized Playwright MCP server');
+            toast.success('Connected to Playwright MCP server');
+            return true;
+          } else {
+            throw new Error(initData.error || 'Failed to initialize MCP connection');
+          }
+        } catch (initError) {
+          // If both connection attempts fail, use direct iframe communication
+          console.log('Using direct iframe communication mode');
+          setIsConnected(true);
+          toast.success('Using direct iframe communication mode');
+          return true;
+        }
+      }
     } catch (error) {
-      console.error('Failed to connect to MCP server:', error);
-      toast.error('Failed to connect to MCP server');
+      console.error('Failed to connect to Playwright MCP server:', error);
+      toast.error(`Failed to connect to MCP server: ${error instanceof Error ? error.message : 'Unknown error'}`);
       return false;
     }
   }, []);
 
   // Start recording test steps
-  const startRecording = useCallback((initialUrl: string = ''): boolean => {
-    console.log('Starting recording with URL:', initialUrl);
-    console.log('Current connection status:', isConnected);
+  const startRecording = useCallback((initialUrl: string): boolean => {
+    console.log('startRecording called with URL:', initialUrl);
     
+    if (isRecording) {
+      console.log('Already recording');
+      return false;
+    }
+
     try {
-      if (!isConnected) {
-        console.error('Cannot start recording: Not connected to MCP server');
-        toast.error('Not connected to MCP server');
-        return false;
+      // Find the iframe
+      console.log('Finding iframe...');
+      const iframe = document.querySelector('iframe') as HTMLIFrameElement;
+      if (!iframe) {
+        console.error('Iframe element not found');
+        throw new Error('Iframe not found');
       }
-      
+      if (!iframe.contentWindow) {
+        console.error('Iframe contentWindow not accessible');
+        throw new Error('Iframe contentWindow not accessible');
+      }
+
+      // Create new test first
       console.log('Creating new test...');
       const newTest: MCPTest = {
         id: `test-${Date.now()}`,
-        name: `Test ${tests.length + 1}`,
-        description: 'New test created with MCP',
+        name: '',
+        description: '',
         websiteUrl: initialUrl,
         steps: [],
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
-      
-      console.log('Setting current test:', newTest);
       setCurrentTest(newTest);
+
+      // Send start recording message to iframe
+      console.log('Sending MCP_START_RECORDING message to iframe...');
+      iframe.contentWindow.postMessage({
+        type: 'MCP_START_RECORDING'
+      }, '*');
+
       setIsRecording(true);
-      
       console.log('Recording started successfully');
       toast.success('Started recording test steps');
       return true;
@@ -157,7 +231,7 @@ export const MCPClientProvider = ({ children }: { children: ReactNode }) => {
       toast.error('Failed to start recording');
       return false;
     }
-  }, [isConnected, tests.length]);
+  }, [isRecording, setCurrentTest]);
 
   // Add a step to the current test
   const addTestStep = useCallback((step: Omit<MCPTestStep, 'id' | 'timestamp'>) => {
@@ -235,6 +309,17 @@ export const MCPClientProvider = ({ children }: { children: ReactNode }) => {
   const stopRecording = useCallback(() => {
     if (!isRecording) return;
     try {
+      // Find the iframe
+      const iframe = document.querySelector('iframe') as HTMLIFrameElement;
+      if (!iframe || !iframe.contentWindow) {
+        throw new Error('Iframe not found or not accessible');
+      }
+
+      // Send stop recording message to iframe
+      iframe.contentWindow.postMessage({
+        type: 'MCP_STOP_RECORDING'
+      }, '*');
+
       setIsRecording(false);
       toast.success('Stopped recording test steps');
     } catch (error) {
@@ -270,12 +355,45 @@ export const MCPClientProvider = ({ children }: { children: ReactNode }) => {
   // Run test
   const runTest = async (testId: string) => {
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const test = await getTest(testId);
+      if (!test) {
+        throw new Error('Test not found');
+      }
+
+      // Get the iframe
+      const iframe = document.querySelector('iframe') as HTMLIFrameElement;
+      if (!iframe || !iframe.contentWindow) {
+        throw new Error('Iframe not found or not accessible');
+      }
+
+      // Execute test steps in the iframe
+      for (const step of test.steps) {
+        // Send step to MCP server for execution
+        const response = await fetch('/api/mcp/execute-step', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            step,
+            websiteUrl: test.websiteUrl,
+            iframeSelector: 'iframe' // Tell server to target the iframe
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Failed to execute step');
+        }
+
+        // Wait for step completion
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
       return { success: true, message: 'Test executed successfully' };
     } catch (error) {
       console.error('Failed to run test:', error);
-      return { success: false, message: 'Failed to run test' };
+      return { success: false, message: error instanceof Error ? error.message : 'Failed to run test' };
     }
   };
 
@@ -297,47 +415,45 @@ export const MCPClientProvider = ({ children }: { children: ReactNode }) => {
       return () => {};
     }
     
-    const handleMessage = (event: MessageEvent) => {
-      // Only process messages from our own origin for security
-      if (event.origin !== window.location.origin) {
-        console.log('Ignoring message from different origin:', event.origin);
-        return;
-      }
-
+    function handleMessage(event: MessageEvent) {
+      console.log('[MCPClient] Received window message:', event.data, 'from origin:', event.origin);
       try {
         const data = event.data;
-        console.log('MCP: Received message:', data);
+        if (!data) return;
+        console.log('[MCPClient] Message type:', data.type, 'Full message:', data);
 
-        if (data?.type === 'MCP_EVENT') {
-          const { action, selector, value } = data.payload;
-          
-          if (!action || !selector) {
-            console.warn('Invalid MCP_EVENT: missing action or selector', data);
+        if (data.type === 'MCP_EVENT') {
+          // Accept both .payload and .event (for compatibility)
+          const payload = data.payload || data.event;
+          if (!payload) {
+            console.warn('[MCPClient] MCP_EVENT received but missing payload/event:', data);
             return;
           }
-          
-          console.log('Processing MCP_EVENT:', { action, selector, value });
-          
+          const { action, selector, value, description } = payload;
+          if (!action || !selector) {
+            console.warn('[MCPClient] MCP_EVENT missing action or selector:', payload);
+            return;
+          }
+          console.log('[MCPClient] Adding test step:', { action, selector, value, description });
           addTestStep({
             action,
             selector,
             value: value || '',
-            description: `Performed ${action} on ${selector}`
+            description: description || `Performed ${action} on ${selector}`
           });
-        } else if (data?.type === 'MCP_SCRIPT_READY') {
-          console.log('MCP script is ready in iframe');
+        } else if (data.type === 'MCP_SCRIPT_READY') {
+          console.log('[MCPClient] MCP script is ready in iframe');
           toast.success('Ready to record interactions');
+        } else {
+          console.log('[MCPClient] Ignored message type:', data.type);
         }
       } catch (error) {
-        console.error('Error handling MCP event:', error);
+        console.error('[MCPClient] Error handling window message:', error);
       }
-    };
+    }
 
-    console.log('Adding message event listener for MCP');
     targetWindow.addEventListener('message', handleMessage);
-    
     return () => {
-      console.log('Removing message event listener for MCP');
       targetWindow.removeEventListener('message', handleMessage);
     };
   }, [addTestStep]);
@@ -345,8 +461,13 @@ export const MCPClientProvider = ({ children }: { children: ReactNode }) => {
   // Initialize MCP client
   useEffect(() => {
     connect();
-  }, []);
+    // Listen for messages on the parent window instead of trying to access iframe directly
+    // This avoids cross-origin issues
+    const cleanup = setupEventListeners(window);
+    return cleanup;
+  }, [connect, setupEventListeners]);
 
+// ... (rest of the code remains the same)
   const contextValue = {
     isConnected,
     tests,

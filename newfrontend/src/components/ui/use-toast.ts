@@ -1,6 +1,6 @@
 'use client';
 
-import { type ToastType, type ToastProps } from './toast';
+import { type ToastType, type ToastProps } from './Toast';
 import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
