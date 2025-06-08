@@ -1,0 +1,30 @@
+{
+  "id": "arrow-navigation-1749366992618",
+  "testId": "arrow-navigation",
+  "testName": "Arrow Key Navigation",
+  "url": "https://example.com",
+  "timestamp": "2025-06-08T07:16:32.618Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Successfully completed Arrow Key Navigation test",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com",
+      "timestamp": "2025-06-08T07:16:33.525Z"
+    },
+    {
+      "action": "start_test",
+      "testId": "arrow-navigation",
+      "timestamp": "2025-06-08T07:16:34.430Z"
+    },
+    {
+      "action": "arrow_navigation",
+      "timestamp": "2025-06-08T07:16:34.430Z",
+      "note": "Arrow key navigation test would be implemented here based on specific UI components"
+    }
+  ],
+  "screenshots": [
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\arrow-navigation-1749366992618-initial-2025-06-08T07-16-34-319Z.png"
+  ]
+}

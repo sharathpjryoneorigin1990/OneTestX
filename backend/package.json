@@ -38,6 +38,7 @@
     "get-port": "^7.1.0",
     "jira-client": "^8.2.2",
     "node-fetch": "^2.7.0",
+    "playwright": "^1.52.0",
     "socket.io": "^4.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",

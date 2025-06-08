@@ -393,6 +393,8 @@ export default function ClientSubTestTypePage({ category }: { category: string }
                         return `/test-type/api`;
                       } else if (test.title === 'Screen Reader Tests') {
                         return '/test-files/accessibility';
+                      } else if (test.title === 'Keyboard Tests') {
+                        return '/test-files/keyboard';
                       } else if (test.href) {
                         return test.href;
                       } else {

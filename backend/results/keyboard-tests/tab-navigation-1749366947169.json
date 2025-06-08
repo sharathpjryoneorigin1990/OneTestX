@@ -1,0 +1,45 @@
+{
+  "id": "tab-navigation-1749366947169",
+  "testId": "tab-navigation",
+  "testName": "Tab Navigation",
+  "url": "https://example.com",
+  "timestamp": "2025-06-08T07:15:47.169Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Successfully completed Tab Navigation test",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com",
+      "timestamp": "2025-06-08T07:15:49.190Z"
+    },
+    {
+      "action": "start_test",
+      "testId": "tab-navigation",
+      "timestamp": "2025-06-08T07:15:50.063Z"
+    },
+    {
+      "action": "tab_navigation",
+      "elementsCount": 1,
+      "timestamp": "2025-06-08T07:15:50.080Z"
+    }
+  ],
+  "screenshots": [
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\tab-navigation-1749366947169-initial-2025-06-08T07-15-49-927Z.png",
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\tab-navigation-1749366947169-tab-focus-2025-06-08T07-15-50-089Z.png"
+  ],
+  "focusedElement": {
+    "tagName": "A",
+    "id": "",
+    "className": "",
+    "hasFocusVisible": true,
+    "hasFocus": true,
+    "computedStyle": {
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "outlineStyle": "auto",
+      "outlineWidth": "1px",
+      "boxShadow": "none"
+    },
+    "isVisible": true
+  }
+}

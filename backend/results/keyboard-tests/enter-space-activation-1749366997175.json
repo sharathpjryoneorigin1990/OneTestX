@@ -1,0 +1,26 @@
+{
+  "id": "enter-space-activation-1749366997175",
+  "testId": "enter-space-activation",
+  "testName": "Enter/Space Activation",
+  "url": "https://example.com",
+  "timestamp": "2025-06-08T07:16:37.175Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Successfully completed Enter/Space Activation test",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com",
+      "timestamp": "2025-06-08T07:16:38.210Z"
+    },
+    {
+      "action": "start_test",
+      "testId": "enter-space-activation",
+      "timestamp": "2025-06-08T07:16:39.234Z"
+    }
+  ],
+  "screenshots": [
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\enter-space-activation-1749366997175-initial-2025-06-08T07-16-39-090Z.png",
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\enter-space-activation-1749366997175-enter-space-test-2025-06-08T07-16-39-243Z.png"
+  ]
+}

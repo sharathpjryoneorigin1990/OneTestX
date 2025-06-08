@@ -1,0 +1,33 @@
+{
+  "id": "skip-links-1749367002179",
+  "testId": "skip-links",
+  "testName": "Skip Links",
+  "url": "https://example.com",
+  "timestamp": "2025-06-08T07:16:42.179Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Successfully completed Skip Links test",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com",
+      "timestamp": "2025-06-08T07:16:43.186Z"
+    },
+    {
+      "action": "start_test",
+      "testId": "skip-links",
+      "timestamp": "2025-06-08T07:16:44.160Z"
+    },
+    {
+      "action": "check_skip_links",
+      "skipLinksCount": 0,
+      "timestamp": "2025-06-08T07:16:44.168Z"
+    }
+  ],
+  "screenshots": [
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\skip-links-1749367002179-initial-2025-06-08T07-16-44-026Z.png"
+  ],
+  "warnings": [
+    "No skip links found on the page"
+  ]
+}

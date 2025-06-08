@@ -863,3 +863,482 @@
 [2025-06-08T05:53:16.863Z] Server listening on port 3005
 [2025-06-08T05:53:16.864Z] Performance testing API available at http://localhost:3005/api/performance
 [2025-06-08T05:53:16.866Z] Loaded 1 flows
+[2025-06-08T06:57:28.874Z] Starting server script...
+[2025-06-08T06:57:28.881Z] Registering test routes...
+[2025-06-08T06:57:28.881Z] Successfully registered /api route
+[2025-06-08T06:57:28.881Z] Successfully registered /api/tests route
+[2025-06-08T06:57:28.882Z] Successfully registered /api/k6-tests route
+[2025-06-08T06:57:28.882Z] Successfully registered /api/visual-tests route
+[2025-06-08T06:57:28.883Z] Successfully registered image server routes
+[2025-06-08T06:57:28.885Z] Script end
+[2025-06-08T06:57:28.886Z] Server listening on port 3005
+[2025-06-08T06:57:28.888Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T06:57:28.890Z] Loaded 1 flows
+[2025-06-08T07:01:02.717Z] 
+[2025-06-08T07:01:02.717Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749366062710",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "96",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749366062710"
+  }
+}
+[2025-06-08T07:05:21.292Z] 
+[2025-06-08T07:05:21.292Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run",
+  "headers": {
+    "content-type": "application/json",
+    "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.4202",
+    "host": "localhost:3005",
+    "content-length": "55",
+    "connection": "Keep-Alive"
+  },
+  "query": {}
+}
+[2025-06-08T07:05:32.820Z] 
+[2025-06-08T07:05:32.820Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.4202",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-08T07:12:08.585Z] Starting server script...
+[2025-06-08T07:12:08.591Z] Registering test routes...
+[2025-06-08T07:12:08.591Z] Successfully registered /api route
+[2025-06-08T07:12:08.591Z] Successfully registered /api/tests route
+[2025-06-08T07:12:08.591Z] Successfully registered /api/k6-tests route
+[2025-06-08T07:12:08.591Z] Successfully registered /api/visual-tests route
+[2025-06-08T07:12:08.591Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T07:12:08.591Z] Successfully registered image server routes
+[2025-06-08T07:12:08.593Z] Script end
+[2025-06-08T07:12:08.594Z] Server listening on port 3005
+[2025-06-08T07:12:08.595Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T07:12:08.598Z] Loaded 1 flows
+[2025-06-08T07:13:42.718Z] 
+[2025-06-08T07:13:42.718Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749366822694",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "94",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749366822694"
+  }
+}
+[2025-06-08T07:13:42.748Z] Starting keyboard test tab-navigation for URL: https://example.com
+[2025-06-08T07:13:50.054Z] [2025-06-08T07:13:42.718Z] Response sent: {
+  "statusCode": 200,
+  "duration": "7335ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:15:47.166Z] 
+[2025-06-08T07:15:47.166Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run",
+  "headers": {
+    "content-type": "application/json",
+    "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell/5.1.26100.4202",
+    "host": "localhost:3005",
+    "content-length": "73",
+    "connection": "Keep-Alive"
+  },
+  "query": {}
+}
+[2025-06-08T07:15:47.169Z] Starting keyboard test tab-navigation for URL: https://example.com
+[2025-06-08T07:15:50.922Z] [2025-06-08T07:15:47.166Z] Response sent: {
+  "statusCode": 200,
+  "duration": "3756ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:16:07.802Z] 
+[2025-06-08T07:16:07.802Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749366967796",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "94",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749366967796"
+  }
+}
+[2025-06-08T07:16:07.805Z] Starting keyboard test tab-navigation for URL: https://example.com
+[2025-06-08T07:16:11.552Z] [2025-06-08T07:16:07.802Z] Response sent: {
+  "statusCode": 200,
+  "duration": "3750ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:16:26.781Z] 
+[2025-06-08T07:16:26.781Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749366986772",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "94",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749366986772"
+  }
+}
+[2025-06-08T07:16:26.783Z] Starting keyboard test tab-navigation for URL: https://example.com
+[2025-06-08T07:16:30.605Z] [2025-06-08T07:16:26.781Z] Response sent: {
+  "statusCode": 200,
+  "duration": "3824ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:16:32.616Z] 
+[2025-06-08T07:16:32.616Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749366992611",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "96",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749366992611"
+  }
+}
+[2025-06-08T07:16:32.618Z] Starting keyboard test arrow-navigation for URL: https://example.com
+[2025-06-08T07:16:35.150Z] [2025-06-08T07:16:32.616Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2534ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:16:37.172Z] 
+[2025-06-08T07:16:37.172Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749366997164",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "102",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749366997164"
+  }
+}
+[2025-06-08T07:16:37.175Z] Starting keyboard test enter-space-activation for URL: https://example.com
+[2025-06-08T07:16:40.143Z] [2025-06-08T07:16:37.172Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2971ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:16:42.164Z] 
+[2025-06-08T07:16:42.164Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749367002158",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "90",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749367002158"
+  }
+}
+[2025-06-08T07:16:42.179Z] Starting keyboard test skip-links for URL: https://example.com
+[2025-06-08T07:16:44.946Z] [2025-06-08T07:16:42.164Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2782ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:16:46.961Z] 
+[2025-06-08T07:16:46.960Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749367006954",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "94",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749367006954"
+  }
+}
+[2025-06-08T07:16:46.963Z] Starting keyboard test keyboard-traps for URL: https://example.com
+[2025-06-08T07:16:49.895Z] [2025-06-08T07:16:46.960Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2935ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:16:51.925Z] 
+[2025-06-08T07:16:51.925Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749367011919",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "93",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749367011919"
+  }
+}
+[2025-06-08T07:16:51.931Z] Starting keyboard test focus-visible for URL: https://example.com
+[2025-06-08T07:16:54.707Z] [2025-06-08T07:16:51.925Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2782ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T07:22:33.480Z] 
+[2025-06-08T07:22:33.480Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749367353477",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "94",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749367353477"
+  }
+}
+[2025-06-08T07:22:33.482Z] Starting keyboard test tab-navigation for URL: https://example.com
+[2025-06-08T07:22:37.178Z] [2025-06-08T07:22:33.480Z] Response sent: {
+  "statusCode": 200,
+  "duration": "3698ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}

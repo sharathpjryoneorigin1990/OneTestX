@@ -26,6 +26,7 @@ import testRoutes from './routes/tests.js';
 import k6TestRoutes from './routes/k6-tests.js';
 import visualTestRoutes from './routes/visualTests.js';
 import accessibilityTestRoutes from './routes/accessibilityTests.js';
+import keyboardTestRoutes from './routes/keyboardTests.js';
 import imageRoutes from './routes/imageServer.js';
 import behaviorAnalysisRoutes from './routes/behaviorAnalysis.js';
 import jiraRoutes from './routes/jira.js';
@@ -382,6 +383,13 @@ try {
   console.log('Successfully registered /api/visual-tests route');
 } catch (err) {
   console.error('Failed to register /api/visual-tests route:', err);
+}
+
+try {
+  app.use('/api/keyboard-tests', keyboardTestRoutes);
+  console.log('Successfully registered /api/keyboard-tests route');
+} catch (err) {
+  console.error('Failed to register /api/keyboard-tests route:', err);
 }
 
 try {

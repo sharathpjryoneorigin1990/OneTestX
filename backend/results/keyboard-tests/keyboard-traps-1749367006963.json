@@ -1,0 +1,30 @@
+{
+  "id": "keyboard-traps-1749367006963",
+  "testId": "keyboard-traps",
+  "testName": "No Keyboard Traps",
+  "url": "https://example.com",
+  "timestamp": "2025-06-08T07:16:46.963Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Successfully completed No Keyboard Traps test",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com",
+      "timestamp": "2025-06-08T07:16:48.010Z"
+    },
+    {
+      "action": "start_test",
+      "testId": "keyboard-traps",
+      "timestamp": "2025-06-08T07:16:49.062Z"
+    },
+    {
+      "action": "check_keyboard_traps",
+      "modalsCount": 0,
+      "timestamp": "2025-06-08T07:16:49.093Z"
+    }
+  ],
+  "screenshots": [
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\keyboard-traps-1749367006963-initial-2025-06-08T07-16-48-834Z.png"
+  ]
+}
