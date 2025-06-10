@@ -3,6 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { v4 as uuidv4 } from 'uuid';
 
 const execAsync = promisify(exec);
 
@@ -21,7 +22,13 @@ export async function POST(request: NextRequest) {
     
     // Normalize the test path if needed
     let normalizedPath = testPath;
-    if (!normalizedPath.startsWith('tests/')) {
+    
+    // Clean up the test path - remove any ID formatting that might have been passed
+    normalizedPath = normalizedPath.replace(/^test-/, '');
+    normalizedPath = normalizedPath.replace(/-/g, '/');
+    
+    // Make sure it starts with tests/ if it's not already a full path
+    if (!normalizedPath.startsWith('tests/') && !normalizedPath.startsWith('ui/')) {
       normalizedPath = `tests/${normalizedPath}`;
     }
     
@@ -34,9 +41,13 @@ export async function POST(request: NextRequest) {
     // Try multiple possible locations for the test file
     const possibleTestPaths = [
       fullTestPath,
-      path.join(process.cwd(), '..', 'backend', 'tests', testPath.replace(/^tests\//, '')),
-      path.join(process.cwd(), '..', testPath),
-      path.join(process.cwd(), '..', 'backend', testPath)
+      path.join(process.cwd(), '..', 'backend', 'tests', normalizedPath.replace(/^tests\//, '')),
+      path.join(process.cwd(), '..', normalizedPath),
+      path.join(process.cwd(), '..', 'backend', normalizedPath),
+      // Direct paths to the backend test files
+      path.join('H:', 'ASU projects', 'new cursor', 'backend', 'tests', normalizedPath.replace(/^tests\//, '')),
+      // Try with original path as well
+      path.join('H:', 'ASU projects', 'new cursor', 'backend', 'tests', testPath.replace(/^tests\//, ''))
     ];
     
     console.log('Checking possible test paths:', possibleTestPaths);
@@ -67,88 +78,183 @@ export async function POST(request: NextRequest) {
     // Determine the test runner based on the file content
     const fileContent = await fs.readFile(actualTestPath, 'utf-8');
     const isPlaywrightTest = fileContent.includes('@playwright/test');
-    
-    // Use the appropriate test runner
-    let testCommand;
-    if (isPlaywrightTest) {
-      testCommand = `cd "${path.dirname(actualTestPath)}" && npx playwright test "${path.basename(actualTestPath)}" --reporter=json`;
-    } else {
-      testCommand = `cd "${path.dirname(actualTestPath)}" && npx jest "${path.basename(actualTestPath)}" --json`;
-    }
-    
-    // Store the environment in the results
-    console.log(`Executing command: ${testCommand}`);
-    
-    const { stdout, stderr } = await execAsync(testCommand);
-    console.log('Test execution completed');
-    
-    // Parse the test results
+    const isK6Test = actualTestPath.includes(path.join('performance')) && actualTestPath.endsWith('.js');
+
     let results;
-    try {
-      // Try to parse the output as JSON
-      results = JSON.parse(stdout);
+    let playwrightReportUrl: string | undefined = undefined;
+
+    if (isK6Test) {
+      console.log(`Identified k6 test: ${actualTestPath}`);
+      const runId = uuidv4();
+      const tempDir = path.join(process.cwd(), 'tmp'); // Temp directory in newfrontend/tmp
+      const k6OutputDir = path.join(tempDir, 'k6-output', runId);
+      await fs.mkdir(k6OutputDir, { recursive: true });
+
+      const jsonSummaryFileName = 'summary.json';
+      const jsonSummaryPath = path.join(k6OutputDir, jsonSummaryFileName);
+      const htmlReportFileName = 'report.html';
+      const k6HtmlReportPath = path.join(k6OutputDir, htmlReportFileName); // Path where k6-reporter will save the HTML
+
+      // k6 command now only outputs JSON summary directly
+      const k6TestCommand = `k6 run "${actualTestPath}" --summary-export="${jsonSummaryPath}"`;
+      const commandToExecute = `cd "${path.dirname(actualTestPath)}" && ${k6TestCommand}`;
       
-      // Format the results based on the test runner
-      if (isPlaywrightTest) {
-        // Playwright JSON reporter format
-        // Check if all specs are ok and all tests have passed status
-        const success = results.stats?.unexpected === 0 && 
-                      results.suites?.every((s: any) => 
-                        s.specs?.every((spec: any) => 
-                          spec.ok === true && 
-                          spec.tests?.every((t: any) => 
-                            t.results?.every((r: any) => r.status === 'passed')
-                          )
-                        )
-                      ) || false;
-        
+      console.log(`Executing k6 command: ${commandToExecute}`);
+      
+      try {
+        const { stdout: k6Stdout, stderr: k6Stderr } = await execAsync(commandToExecute);
+        console.log('k6 execution stdout:', k6Stdout);
+        if (k6Stderr && !k6Stderr.includes('some thresholds have failed')) { // Log stderr unless it's just a threshold failure
+            console.error('k6 execution stderr:', k6Stderr);
+        }
+        console.log('k6 execution completed. Generating HTML report from summary...');
+
+        // Generate HTML report using k6-reporter
+        // Ensure k6-reporter is installed: npm install k6-reporter
+        const k6ReporterCommand = `npx k6-reporter --json "${jsonSummaryPath}" --html "${k6HtmlReportPath}"`;
+        console.log(`Executing k6-reporter command: ${k6ReporterCommand}`);
+        try {
+            await execAsync(k6ReporterCommand);
+            console.log(`k6-reporter HTML report generated at: ${k6HtmlReportPath}`);
+
+            // Copy HTML report to public directory
+            const publicReportDir = path.join(process.cwd(), 'public', 'performance-reports', runId);
+            await fs.mkdir(publicReportDir, { recursive: true });
+            const publicHtmlReportPathForServing = path.join(publicReportDir, htmlReportFileName);
+            await fs.copyFile(k6HtmlReportPath, publicHtmlReportPathForServing);
+            playwrightReportUrl = `/performance-reports/${runId}/${htmlReportFileName}`;
+            console.log(`k6 HTML report available for serving at: ${playwrightReportUrl}`);
+        } catch (reporterError: any) {
+            console.error('Error generating k6 HTML report with k6-reporter:', reporterError);
+            // Proceed without HTML report if reporter fails, but log it
+            playwrightReportUrl = undefined;
+        }
+
+        // Parse k6 summary JSON
+        const summaryContent = await fs.readFile(jsonSummaryPath, 'utf-8');
+        const k6Summary = JSON.parse(summaryContent);
+
+        const metrics = k6Summary.metrics;
+        const checksPassed = metrics.checks?.values?.passes || 0;
+        const checksFailed = metrics.checks?.values?.fails || 0;
+        const totalChecks = checksPassed + checksFailed;
+        // Check for threshold failures in k6Stderr or in the summary itself if available
+        const thresholdsFailed = k6Stderr.includes('some thresholds have failed') || 
+                                 (k6Summary.metrics.hasOwnProperty('thresholds') && 
+                                  Object.values(k6Summary.metrics.thresholds.values).some((val: any) => val.fails > 0));
+        const allThresholdsPassed = !thresholdsFailed;
+
         results = {
+          success: allThresholdsPassed && checksFailed === 0,
+          testPath: normalizedPath,
+          runner: 'k6',
+          summary: {
+            passed: allThresholdsPassed && checksFailed === 0,
+            duration: metrics.iteration_duration?.values?.avg || metrics.vus?.values?.duration_ms || 0,
+            vusMax: metrics.vus_max?.values?.value || metrics.vus?.values?.max || 0,
+            rps: metrics.http_reqs?.values?.rate || 0,
+            p95ResponseTime: metrics.http_req_duration?.values?.['p(95)'] || 0, // Optional chaining for p(95) access
+            errorRate: metrics.http_req_failed?.values?.rate || 0,
+            totalTests: totalChecks,
+            passedTests: checksPassed,
+            failedTests: checksFailed,
+            startTime: k6Summary.root_group?.start_time || new Date().toISOString(), // k6 summary might not have this directly
+          },
+          details: k6Summary,
+          playwrightReportUrl: playwrightReportUrl
+        };
+
+      } catch (k6Error: any) {
+        console.error('Error running k6 test:', k6Error);
+        results = {
+          success: false,
+          testPath: normalizedPath,
+          runner: 'k6',
+          rawOutput: k6Error.stdout,
+          rawError: k6Error.stderr || k6Error.message,
+          errorDetails: k6Error.message,
+          stack: k6Error.stack
+        };
+      } finally {
+        // Cleanup temp k6 output directory
+        await fs.rm(k6OutputDir, { recursive: true, force: true }).catch(err => console.error('Failed to cleanup k6 temp dir:', err));
+      }
+    } else {
+      // Existing Playwright or Jest logic
+      let testCommand;
+      if (isPlaywrightTest) {
+        testCommand = `cd "${path.dirname(actualTestPath)}" && npx playwright test "${path.basename(actualTestPath)}" --reporter=json`;
+      } else { // Assuming Jest if not Playwright and not k6
+        testCommand = `cd "${path.dirname(actualTestPath)}" && npx jest "${path.basename(actualTestPath)}" --json`;
+      }
+      console.log(`Executing command: ${testCommand}`);
+      const { stdout, stderr } = await execAsync(testCommand);
+      console.log('Test execution completed');
+
+      try {
+        let parsedOutput = JSON.parse(stdout); // Parse into a new variable
+
+        if (isPlaywrightTest) {
+          // Playwright JSON reporter format
+          const success = parsedOutput.stats?.unexpected === 0 &&
+                        parsedOutput.suites?.every((s: any) =>
+                          s.specs?.every((spec: any) =>
+                            spec.ok === true &&
+                            spec.tests?.every((t: any) =>
+                              t.results?.every((r: any) => r.status === 'passed')
+                            )
+                          )
+                        ) || false;
+
+          results = { // Assign to the outer 'results' variable
+            success,
+            testPath: normalizedPath,
+            runner: 'playwright',
+            details: parsedOutput, // Use parsedOutput
+            summary: {
+              passed: success,
+              duration: parsedOutput.stats?.duration || 0,
+              tests: parsedOutput.suites?.flatMap((s: any) => s.specs) || [],
+              startTime: parsedOutput.stats?.startTime,
+              totalTests: parsedOutput.stats?.expected || 0,
+              passedTests: success ? (parsedOutput.stats?.expected || 0) : 0,
+              failedTests: parsedOutput.stats?.unexpected || 0
+            },
+            playwrightReportUrl: undefined // Ensure this field exists for Playwright tests
+          };
+        } else {
+          // Jest format
+          results = { // Assign to the outer 'results' variable
+            ...parsedOutput, // Spread the parsed Jest output
+            success: parsedOutput.success || parsedOutput.numPassedTests === parsedOutput.numTotalTests,
+            testPath: normalizedPath,
+            runner: 'jest',
+            playwrightReportUrl: undefined // Ensure this field exists for Jest tests
+          };
+        }
+      } catch (error) {
+        console.warn('Failed to parse test results as JSON, returning raw output');
+        const success = !stderr &&
+                      (stdout.includes('PASS') ||
+                       stdout.includes('All tests passed') ||
+                       !stdout.includes('FAIL'));
+
+        results = { // Assign to the outer 'results' variable
+          rawOutput: stdout,
+          rawError: stderr,
+          timestamp: new Date().toISOString(), // This will be overwritten by the final response object's timestamp
           success,
           testPath: normalizedPath,
-          runner: 'playwright',
-          details: results,
-          summary: {
-            passed: success,
-            duration: results.stats?.duration || 0,
-            tests: results.suites?.flatMap((s: any) => s.specs) || [],
-            startTime: results.stats?.startTime,
-            totalTests: results.stats?.expected || 0,
-            passedTests: success ? (results.stats?.expected || 0) : 0,
-            failedTests: results.stats?.unexpected || 0
-          }
-        };
-      } else {
-        // Jest format
-        results = {
-          ...results,
-          success: results.success || results.numPassedTests === results.numTotalTests,
-          testPath: normalizedPath,
-          runner: 'jest'
+          runner: isPlaywrightTest ? 'playwright' : 'jest',
+          playwrightReportUrl: undefined
         };
       }
-    } catch (error) {
-      console.warn('Failed to parse test results as JSON, returning raw output');
-      // Determine success based on output content
-      const success = !stderr && 
-                    (stdout.includes('PASS') || 
-                     stdout.includes('All tests passed') || 
-                     !stdout.includes('FAIL'));
-      
-      results = {
-        rawOutput: stdout,
-        rawError: stderr,
-        timestamp: new Date().toISOString(),
-        success,
-        testPath: normalizedPath,
-        runner: isPlaywrightTest ? 'playwright' : 'jest'
-      };
-    }
+    } // Closes the 'else' block for Playwright/Jest tests
     
     // Add timestamp to the results
     const response = {
-      ...results,
-      timestamp: new Date().toISOString(),
-      testPath: normalizedPath
+      ...results, // results already contains runner, testPath, and potentially playwrightReportUrl
+      timestamp: new Date().toISOString()
     };
     
     return NextResponse.json(response);

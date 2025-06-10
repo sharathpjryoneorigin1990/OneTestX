@@ -1,0 +1,25 @@
+{
+  "id": "focus-visible-1749374157150",
+  "testId": "focus-visible",
+  "testName": "Focus Visible",
+  "url": "apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T09:16:04.768Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Test completed successfully.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-08T09:16:04.768Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test passed",
+      "timestamp": "2025-06-08T09:16:06.870Z",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null
+}

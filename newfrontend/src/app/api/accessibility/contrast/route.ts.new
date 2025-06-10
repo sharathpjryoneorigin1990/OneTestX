@@ -1,0 +1,5 @@
+import { NextResponse } from 'next/server';
+import { chromium } from 'playwright';
+import type { Browser, BrowserContext, Page } from 'playwright';
+
+// Rest of the file remains the same...

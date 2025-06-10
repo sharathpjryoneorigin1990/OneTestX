@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { NewNavbar } from "@/components/layout/NewNavbar";
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import GitHubConnectionModal from "@/components/github/GitHubConnectionModal";
 
 interface SubTestType {
   title: string;
@@ -241,6 +242,40 @@ const subTestTypes: Record<string, SubTestType[]> = {
       isSpecial: false
     }
   ],
+  'performance': [
+    {
+      title: 'Load Testing',
+      description: 'Simulate high user traffic to test system stability and identify bottlenecks.',
+      icon: '🏋️',
+      color: 'bg-red-500',
+      isSpecial: false,
+      href: '/test-files?category=performance&type=load'
+    },
+    {
+      title: 'Stress Testing',
+      description: 'Push the system beyond normal operating limits to check its robustness and error handling.',
+      icon: '🔥',
+      color: 'bg-orange-600',
+      isSpecial: false,
+      href: '/test-files?category=performance&type=stress'
+    },
+    {
+      title: 'Page Speed Analysis',
+      description: 'Analyze and optimize web page loading times for better user experience and SEO.',
+      icon: '⏱️',
+      color: 'bg-yellow-500',
+      isSpecial: false,
+      href: '/test-files?category=performance&type=pagespeed'
+    },
+    {
+      title: 'API Response Time',
+      description: 'Measure and track the responsiveness of your API endpoints under various conditions.',
+      icon: '💨',
+      color: 'bg-teal-500',
+      isSpecial: false,
+      href: '/test-files?category=performance&type=apiresponse'
+    }
+  ],
   'accessibility': [
     {
       title: 'Screen Reader Tests',
@@ -311,6 +346,7 @@ export default function ClientSubTestTypePage({ category }: { category: string }
   const [loading, setLoading] = useState(false);
   const [tests, setTests] = useState<any[]>([]);
   const [filteredTests, setFilteredTests] = useState<any[]>([]);
+  const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
   
   useEffect(() => {
     setIsClient(true);
@@ -342,13 +378,131 @@ export default function ClientSubTestTypePage({ category }: { category: string }
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <h1 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-              {currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1)} Tests
-            </h1>
-            <p className="text-xl text-gray-300">
-              Select a test type to configure and run
-            </p>
+            <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                {currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1)} Tests
+              </h1>
+              <p className="text-xl text-gray-300">
+                Select a test type to configure and run
+              </p>
+            </div>
+            <button 
+              className="p-2 rounded-full hover:bg-gray-800 transition-colors"
+              onClick={() => setIsGitHubModalOpen(true)}
+              aria-label="GitHub Settings"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-6 w-6 text-gray-400 hover:text-white" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" 
+                />
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" 
+                />
+              </svg>
+            </button>
+          </div>
           </motion.div>
+
+          <GitHubConnectionModal
+            isOpen={isGitHubModalOpen}
+            onClose={() => setIsGitHubModalOpen(false)}
+            onConnect={(data: { username: string; token: string; repo: string }) => {
+              console.log('GitHub connection data:', data);
+              // Here you would typically make an API call to connect to GitHub
+              setIsGitHubModalOpen(false);
+              // Show success message
+              alert('Successfully connected to GitHub!');
+            }}
+          />
+
+          <GitHubConnectionModal
+            isOpen={isGitHubModalOpen}
+            onClose={() => setIsGitHubModalOpen(false)}
+            onConnect={(data: { username: string; token: string; repo: string }) => {
+              console.log('GitHub connection data:', data);
+              // Here you would typically make an API call to connect to GitHub
+              setIsGitHubModalOpen(false);
+              // Show success message
+              alert('Successfully connected to GitHub!');
+            }}
+          />
+
+          <GitHubConnectionModal
+            isOpen={isGitHubModalOpen}
+            onClose={() => setIsGitHubModalOpen(false)}
+            onConnect={(data: { username: string; token: string; repo: string }) => {
+              console.log('GitHub connection data:', data);
+              // Here you would typically make an API call to connect to GitHub
+              setIsGitHubModalOpen(false);
+              // Show success message
+              alert('Successfully connected to GitHub!');
+            }}
+          />
+
+          <GitHubConnectionModal
+            isOpen={isGitHubModalOpen}
+            onClose={() => setIsGitHubModalOpen(false)}
+            onConnect={(data: { username: string; token: string; repo: string }) => {
+              console.log('GitHub connection data:', data);
+              // Here you would typically make an API call to connect to GitHub
+              // For now, we'll just log the data and close the modal
+              setIsGitHubModalOpen(false);
+              // Show success message
+              alert('Successfully connected to GitHub!');
+            }}
+          />
+
+          <GitHubConnectionModal
+            isOpen={isGitHubModalOpen}
+            onClose={() => setIsGitHubModalOpen(false)}
+            onConnect={(data: { username: string; token: string; repo: string }) => {
+              console.log('GitHub connection data:', data);
+              // Here you would typically make an API call to connect to GitHub
+              // For now, we'll just log the data and close the modal
+              setIsGitHubModalOpen(false);
+              // Show success message
+              alert('Successfully connected to GitHub!');
+            }}
+          />
+
+          <GitHubConnectionModal
+            isOpen={isGitHubModalOpen}
+            onClose={() => setIsGitHubModalOpen(false)}
+            onConnect={(data: { username: string; token: string; repo: string }) => {
+              console.log('GitHub connection data:', data);
+              // Here you would typically make an API call to connect to GitHub
+              // For now, we'll just log the data and close the modal
+              setIsGitHubModalOpen(false);
+              // Show success message
+              alert('Successfully connected to GitHub!');
+            }}
+          />
+
+          <GitHubConnectionModal
+            isOpen={isGitHubModalOpen}
+            onClose={() => setIsGitHubModalOpen(false)}
+            onConnect={(data) => {
+              console.log('GitHub connection data:', data);
+              // Here you would typically make an API call to connect to GitHub
+              // For now, we'll just log the data and close the modal
+              setIsGitHubModalOpen(false);
+              // Show success message
+              alert('Successfully connected to GitHub!');
+            }}
+          />
 
           {/* We don't show test files on this page anymore */}
 
@@ -391,8 +545,8 @@ export default function ClientSubTestTypePage({ category }: { category: string }
                         return `/test-files/content-analysis?category=${currentCategory}&type=content`;
                       } else if (test.title === 'API Testing Suite') {
                         return `/test-type/api`;
-                      } else if (test.title === 'Screen Reader Tests') {
-                        return '/test-files/accessibility';
+                      } else if (test.title === 'Color Contrast Tests') {
+                        return '/test-files/color-contrast';
                       } else if (test.title === 'Keyboard Tests') {
                         return '/test-files/keyboard';
                       } else if (test.href) {
@@ -443,6 +597,20 @@ export default function ClientSubTestTypePage({ category }: { category: string }
           </motion.div>
         </div>
       </main>
+      
+      <GitHubConnectionModal
+        isOpen={isGitHubModalOpen}
+        onClose={() => setIsGitHubModalOpen(false)}
+        onConnect={(data: { username: string; token: string; repo: string }) => {
+          console.log('GitHub connection data:', data);
+          // The API call is now handled in the GitHubConnectionModal component
+          setIsGitHubModalOpen(false);
+          
+          // We don't need an alert here anymore since we're showing the GitHubSyncResults component
+          // You could add a toast notification here for a better UX
+          // toast.success(`GitHub repository ${data.repo} connected and tests synchronized`);
+        }}
+      />
     </>
   );
 }

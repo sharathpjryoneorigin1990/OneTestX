@@ -1,0 +1,25 @@
+{
+  "id": "arrow-navigation-1749454480421",
+  "testId": "arrow-navigation",
+  "testName": "Arrow Key Navigation",
+  "url": "https://apply.apps.asu.edu/",
+  "timestamp": "2025-06-09T07:34:42.439Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Test completed successfully.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-09T07:34:42.439Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test passed",
+      "timestamp": "2025-06-09T07:34:44.540Z",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null
+}

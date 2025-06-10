@@ -1,0 +1,25 @@
+{
+  "id": "tab-navigation-1749372407597",
+  "testId": "tab-navigation",
+  "testName": "Tab Navigation",
+  "url": "apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T08:46:47.597Z",
+  "status": "completed",
+  "passed": false,
+  "details": "Test failed. Some keyboard navigation issues were found.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-08T08:46:47.597Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test failed",
+      "timestamp": "2025-06-08T08:46:50.090Z",
+      "status": "failed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null
+}

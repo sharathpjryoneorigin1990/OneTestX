@@ -1,0 +1,25 @@
+{
+  "id": "keyboard-trap-1749454492891",
+  "testId": "keyboard-trap",
+  "testName": "Keyboard Trap",
+  "url": "https://apply.apps.asu.edu/",
+  "timestamp": "2025-06-09T07:34:54.896Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Test completed successfully.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-09T07:34:54.896Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test passed",
+      "timestamp": "2025-06-09T07:34:56.969Z",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null
+}

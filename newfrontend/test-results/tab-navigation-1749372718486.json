@@ -1,0 +1,25 @@
+{
+  "id": "tab-navigation-1749372718486",
+  "testId": "tab-navigation",
+  "testName": "Tab Navigation",
+  "url": "N/A",
+  "timestamp": "2025-06-08T08:51:58.486Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Test completed successfully.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-08T08:51:58.486Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test passed",
+      "timestamp": "2025-06-08T08:52:01.692Z",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null
+}

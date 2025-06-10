@@ -1,0 +1,25 @@
+{
+  "id": "keyboard-trap-1749373218819",
+  "testId": "keyboard-trap",
+  "testName": "Keyboard Trap",
+  "url": "apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T09:00:18.819Z",
+  "status": "completed",
+  "passed": false,
+  "details": "Test failed. Some keyboard navigation issues were found.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-08T09:00:18.819Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test failed",
+      "timestamp": "2025-06-08T09:00:20.869Z",
+      "status": "failed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null
+}

@@ -1342,3 +1342,2268 @@
     "content-type": "application/json; charset=utf-8"
   }
 }
+[2025-06-08T07:33:59.102Z] 
+[2025-06-08T07:33:59.102Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "98",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "accept": "*/*",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-08T07:33:59.104Z] Starting keyboard test tab-navigation for URL: https://example.com
+[2025-06-08T07:34:05.621Z] [2025-06-08T07:33:59.102Z] Response sent: {
+  "statusCode": 200,
+  "duration": "6519ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T08:11:18.902Z] Starting server script...
+[2025-06-08T08:11:18.909Z] Registering test routes...
+[2025-06-08T08:11:18.911Z] Successfully registered /api route
+[2025-06-08T08:11:18.912Z] Successfully registered /api/tests route
+[2025-06-08T08:11:18.912Z] Successfully registered /api/k6-tests route
+[2025-06-08T08:11:18.913Z] Successfully registered /api/visual-tests route
+[2025-06-08T08:11:18.914Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T08:11:18.914Z] Successfully registered image server routes
+[2025-06-08T08:11:18.917Z] Script end
+[2025-06-08T08:11:18.924Z] Server listening on port 3005
+[2025-06-08T08:11:18.924Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T08:11:18.928Z] Loaded 1 flows
+[2025-06-08T08:14:44.530Z] 
+[2025-06-08T08:14:44.530Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/keyboard-tests/run?t=1749370484515",
+  "headers": {
+    "host": "localhost:3005",
+    "connection": "keep-alive",
+    "content-length": "116",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {
+    "t": "1749370484515"
+  }
+}
+[2025-06-08T08:14:44.549Z] Starting keyboard test arrow-navigation for URL: https://apply-qa.apps.asu.edu/dashboard
+[2025-06-08T08:14:59.662Z] [2025-06-08T08:14:44.530Z] Response sent: {
+  "statusCode": 200,
+  "duration": "15131ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-08T09:39:02.709Z] Starting server script...
+[2025-06-08T09:39:02.716Z] Registering test routes...
+[2025-06-08T09:39:02.716Z] Successfully registered /api route
+[2025-06-08T09:39:02.716Z] Successfully registered /api/tests route
+[2025-06-08T09:39:02.717Z] Successfully registered /api/k6-tests route
+[2025-06-08T09:39:02.717Z] Successfully registered /api/visual-tests route
+[2025-06-08T09:39:02.718Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T09:39:02.718Z] Successfully registered image server routes
+[2025-06-08T09:39:02.720Z] Script end
+[2025-06-08T09:39:02.721Z] Server listening on port 3005
+[2025-06-08T09:39:02.722Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T09:39:02.735Z] Loaded 1 flows
+[2025-06-08T11:28:28.365Z] Starting server script...
+[2025-06-08T11:28:28.369Z] Registering test routes...
+[2025-06-08T11:28:28.369Z] Successfully registered /api route
+[2025-06-08T11:28:28.369Z] Successfully registered /api/tests route
+[2025-06-08T11:28:28.369Z] Successfully registered /api/k6-tests route
+[2025-06-08T11:28:28.369Z] Successfully registered /api/visual-tests route
+[2025-06-08T11:28:28.370Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T11:28:28.370Z] Successfully registered image server routes
+[2025-06-08T11:28:28.371Z] Script end
+[2025-06-08T11:28:28.372Z] Server listening on port 3005
+[2025-06-08T11:28:28.372Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T11:28:28.373Z] Loaded 1 flows
+[2025-06-08T14:14:11.751Z] Starting server script...
+[2025-06-08T14:14:11.754Z] Registering test routes...
+[2025-06-08T14:14:11.754Z] Successfully registered /api route
+[2025-06-08T14:14:11.754Z] Successfully registered /api/tests route
+[2025-06-08T14:14:11.754Z] Successfully registered /api/k6-tests route
+[2025-06-08T14:14:11.754Z] Successfully registered /api/visual-tests route
+[2025-06-08T14:14:11.755Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T14:14:11.755Z] Successfully registered image server routes
+[2025-06-08T14:14:11.756Z] Script end
+[2025-06-08T14:14:11.757Z] Server listening on port 3005
+[2025-06-08T14:14:11.757Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T14:14:11.759Z] Loaded 1 flows
+[2025-06-08T16:05:06.525Z] Starting server script...
+[2025-06-08T16:05:06.531Z] Registering test routes...
+[2025-06-08T16:05:06.532Z] Successfully registered /api route
+[2025-06-08T16:05:06.532Z] Successfully registered /api/tests route
+[2025-06-08T16:05:06.533Z] Successfully registered /api/k6-tests route
+[2025-06-08T16:05:06.533Z] Successfully registered /api/visual-tests route
+[2025-06-08T16:05:06.534Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T16:05:06.534Z] Successfully registered image server routes
+[2025-06-08T16:05:06.536Z] Script end
+[2025-06-08T16:05:06.537Z] Server listening on port 3005
+[2025-06-08T16:05:06.537Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T16:05:06.553Z] Loaded 1 flows
+[2025-06-08T16:15:27.290Z] Starting server script...
+[2025-06-08T16:15:27.293Z] Registering test routes...
+[2025-06-08T16:15:27.293Z] Successfully registered /api route
+[2025-06-08T16:15:27.294Z] Successfully registered /api/tests route
+[2025-06-08T16:15:27.294Z] Successfully registered /api/k6-tests route
+[2025-06-08T16:15:27.294Z] Successfully registered /api/visual-tests route
+[2025-06-08T16:15:27.294Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T16:15:27.294Z] Successfully registered image server routes
+[2025-06-08T16:15:27.295Z] Script end
+[2025-06-08T16:15:27.297Z] Server listening on port 3005
+[2025-06-08T16:15:27.297Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T16:15:27.300Z] Loaded 1 flows
+[2025-06-08T16:52:35.892Z] Starting server script...
+[2025-06-08T16:52:35.895Z] Registering test routes...
+[2025-06-08T16:52:35.896Z] Successfully registered /api route
+[2025-06-08T16:52:35.896Z] Successfully registered /api/tests route
+[2025-06-08T16:52:35.896Z] Successfully registered /api/k6-tests route
+[2025-06-08T16:52:35.896Z] Successfully registered /api/visual-tests route
+[2025-06-08T16:52:35.896Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T16:52:35.897Z] Successfully registered image server routes
+[2025-06-08T16:52:35.898Z] Script end
+[2025-06-08T16:52:35.899Z] Server listening on port 3005
+[2025-06-08T16:52:35.899Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T16:52:35.902Z] Loaded 1 flows
+[2025-06-08T18:00:10.566Z] Starting server script...
+[2025-06-08T18:00:10.569Z] Registering test routes...
+[2025-06-08T18:00:10.569Z] Successfully registered /api route
+[2025-06-08T18:00:10.569Z] Successfully registered /api/tests route
+[2025-06-08T18:00:10.569Z] Successfully registered /api/k6-tests route
+[2025-06-08T18:00:10.570Z] Successfully registered /api/visual-tests route
+[2025-06-08T18:00:10.570Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T18:00:10.570Z] Successfully registered image server routes
+[2025-06-08T18:00:10.571Z] Script end
+[2025-06-08T18:00:10.572Z] Server listening on port 3005
+[2025-06-08T18:00:10.572Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T18:00:10.574Z] Loaded 1 flows
+[2025-06-08T18:05:30.509Z] Starting server script...
+[2025-06-08T18:05:30.513Z] Registering test routes...
+[2025-06-08T18:05:30.513Z] Successfully registered /api route
+[2025-06-08T18:05:30.513Z] Successfully registered /api/tests route
+[2025-06-08T18:05:30.513Z] Successfully registered /api/k6-tests route
+[2025-06-08T18:05:30.514Z] Successfully registered /api/visual-tests route
+[2025-06-08T18:05:30.514Z] Successfully registered /api/keyboard-tests route
+[2025-06-08T18:05:30.514Z] Successfully registered image server routes
+[2025-06-08T18:05:30.515Z] Script end
+[2025-06-08T18:05:30.517Z] Server listening on port 3005
+[2025-06-08T18:05:30.517Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-08T18:05:30.520Z] Loaded 1 flows
+[2025-06-08T18:06:00.883Z] 
+[2025-06-08T18:06:00.883Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:01.395Z] 
+[2025-06-08T18:06:01.395Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:01.898Z] 
+[2025-06-08T18:06:01.898Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:02.402Z] 
+[2025-06-08T18:06:02.402Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:02.905Z] 
+[2025-06-08T18:06:02.905Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:03.407Z] 
+[2025-06-08T18:06:03.407Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:03.908Z] 
+[2025-06-08T18:06:03.908Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:04.411Z] 
+[2025-06-08T18:06:04.411Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:04.914Z] 
+[2025-06-08T18:06:04.914Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:05.417Z] 
+[2025-06-08T18:06:05.417Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:05.920Z] 
+[2025-06-08T18:06:05.920Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:06.424Z] 
+[2025-06-08T18:06:06.424Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:06.927Z] 
+[2025-06-08T18:06:06.927Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:07.429Z] 
+[2025-06-08T18:06:07.429Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:07.933Z] 
+[2025-06-08T18:06:07.932Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:08.435Z] 
+[2025-06-08T18:06:08.435Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:08.939Z] 
+[2025-06-08T18:06:08.939Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:09.443Z] 
+[2025-06-08T18:06:09.443Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:09.948Z] 
+[2025-06-08T18:06:09.948Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:06:10.452Z] 
+[2025-06-08T18:06:10.452Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:46.281Z] 
+[2025-06-08T18:07:46.281Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:46.783Z] 
+[2025-06-08T18:07:46.783Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:47.283Z] 
+[2025-06-08T18:07:47.283Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:47.786Z] 
+[2025-06-08T18:07:47.786Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:48.289Z] 
+[2025-06-08T18:07:48.289Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:48.791Z] 
+[2025-06-08T18:07:48.791Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:49.293Z] 
+[2025-06-08T18:07:49.293Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:49.795Z] 
+[2025-06-08T18:07:49.795Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:50.297Z] 
+[2025-06-08T18:07:50.297Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:50.800Z] 
+[2025-06-08T18:07:50.800Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:51.302Z] 
+[2025-06-08T18:07:51.302Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:51.804Z] 
+[2025-06-08T18:07:51.804Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:52.306Z] 
+[2025-06-08T18:07:52.306Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:52.808Z] 
+[2025-06-08T18:07:52.808Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:53.312Z] 
+[2025-06-08T18:07:53.312Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:53.817Z] 
+[2025-06-08T18:07:53.817Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:54.321Z] 
+[2025-06-08T18:07:54.321Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:54.824Z] 
+[2025-06-08T18:07:54.824Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:55.327Z] 
+[2025-06-08T18:07:55.327Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-08T18:07:55.831Z] 
+[2025-06-08T18:07:55.831Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T05:37:28.435Z] Starting server script...
+[2025-06-09T05:37:28.439Z] Registering test routes...
+[2025-06-09T05:37:28.440Z] Successfully registered /api route
+[2025-06-09T05:37:28.440Z] Successfully registered /api/tests route
+[2025-06-09T05:37:28.440Z] Successfully registered /api/k6-tests route
+[2025-06-09T05:37:28.440Z] Successfully registered /api/visual-tests route
+[2025-06-09T05:37:28.441Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T05:37:28.441Z] Successfully registered image server routes
+[2025-06-09T05:37:28.443Z] Script end
+[2025-06-09T05:37:28.445Z] Server listening on port 3005
+[2025-06-09T05:37:28.445Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-09T05:37:28.449Z] Loaded 1 flows
+[2025-06-09T07:12:16.191Z] Starting server script...
+[2025-06-09T07:12:16.201Z] Registering test routes...
+[2025-06-09T07:12:16.201Z] Successfully registered /api route
+[2025-06-09T07:12:16.202Z] Successfully registered /api/tests route
+[2025-06-09T07:12:16.202Z] Successfully registered /api/k6-tests route
+[2025-06-09T07:12:16.202Z] Successfully registered /api/visual-tests route
+[2025-06-09T07:12:16.203Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T07:12:16.203Z] Successfully registered image server routes
+[2025-06-09T07:12:16.209Z] Script end
+[2025-06-09T07:12:16.212Z] Server listening on port 3005
+[2025-06-09T07:12:16.213Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-09T07:12:16.221Z] Loaded 1 flows
+[2025-06-09T07:31:00.358Z] 
+[2025-06-09T07:31:00.358Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:00.872Z] 
+[2025-06-09T07:31:00.872Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:01.378Z] 
+[2025-06-09T07:31:01.378Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:01.884Z] 
+[2025-06-09T07:31:01.884Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:02.393Z] 
+[2025-06-09T07:31:02.393Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:02.898Z] 
+[2025-06-09T07:31:02.898Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:03.406Z] 
+[2025-06-09T07:31:03.405Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:03.910Z] 
+[2025-06-09T07:31:03.910Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:04.417Z] 
+[2025-06-09T07:31:04.416Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:04.924Z] 
+[2025-06-09T07:31:04.924Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:05.429Z] 
+[2025-06-09T07:31:05.429Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:05.935Z] 
+[2025-06-09T07:31:05.935Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:06.441Z] 
+[2025-06-09T07:31:06.441Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:06.947Z] 
+[2025-06-09T07:31:06.947Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:07.457Z] 
+[2025-06-09T07:31:07.457Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:07.962Z] 
+[2025-06-09T07:31:07.962Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:08.468Z] 
+[2025-06-09T07:31:08.468Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:08.973Z] 
+[2025-06-09T07:31:08.972Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:09.477Z] 
+[2025-06-09T07:31:09.477Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T07:31:09.987Z] 
+[2025-06-09T07:31:09.986Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T08:21:24.507Z] Starting server script...
+[2025-06-09T08:21:24.511Z] Registering test routes...
+[2025-06-09T08:21:24.512Z] Successfully registered /api route
+[2025-06-09T08:21:24.512Z] Successfully registered /api/tests route
+[2025-06-09T08:21:24.512Z] Successfully registered /api/k6-tests route
+[2025-06-09T08:21:24.512Z] Successfully registered /api/visual-tests route
+[2025-06-09T08:21:24.512Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T08:21:24.513Z] Successfully registered image server routes
+[2025-06-09T08:21:24.515Z] Script end
+[2025-06-09T08:21:24.516Z] Server listening on port 3005
+[2025-06-09T08:21:24.516Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-09T08:21:24.519Z] Loaded 1 flows
+[2025-06-09T11:58:51.397Z] Starting server script...
+[2025-06-09T11:58:51.406Z] Registering test routes...
+[2025-06-09T11:58:51.409Z] Successfully registered /api route
+[2025-06-09T11:58:51.409Z] Successfully registered /api/tests route
+[2025-06-09T11:58:51.410Z] Successfully registered /api/k6-tests route
+[2025-06-09T11:58:51.412Z] Successfully registered /api/visual-tests route
+[2025-06-09T11:58:51.413Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T11:58:51.414Z] Successfully registered image server routes
+[2025-06-09T11:58:51.419Z] Script end
+[2025-06-09T11:58:51.422Z] Server listening on port 3005
+[2025-06-09T11:58:51.422Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-09T11:58:51.449Z] Loaded 1 flows
+[2025-06-09T12:29:35.812Z] 
+[2025-06-09T12:29:35.812Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "__next_hmr_refresh_hash__=d67f139394d502782939f55d7c244a728edfc255fb659e9e; _dd_s=logs=1&id=edfd94c0-ce96-462c-9568-855bc755ec88&created=1749471506475&expire=1749473075135",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-09T12:29:35.898Z] [2025-06-09T12:29:35.812Z] Response sent: {
+  "statusCode": 200,
+  "duration": "85ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T12:29:35.946Z] 
+[2025-06-09T12:29:35.946Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "__next_hmr_refresh_hash__=d67f139394d502782939f55d7c244a728edfc255fb659e9e; _dd_s=logs=1&id=edfd94c0-ce96-462c-9568-855bc755ec88&created=1749471506475&expire=1749473075135",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-09T12:29:35.951Z] [2025-06-09T12:29:35.946Z] Response sent: {
+  "statusCode": 200,
+  "duration": "5ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T12:31:58.113Z] 
+[2025-06-09T12:31:58.113Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:31:58.621Z] 
+[2025-06-09T12:31:58.621Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:31:59.129Z] 
+[2025-06-09T12:31:59.128Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:31:59.633Z] 
+[2025-06-09T12:31:59.633Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:00.139Z] 
+[2025-06-09T12:32:00.139Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:00.679Z] 
+[2025-06-09T12:32:00.679Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:01.183Z] 
+[2025-06-09T12:32:01.183Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:01.688Z] 
+[2025-06-09T12:32:01.688Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:02.195Z] 
+[2025-06-09T12:32:02.195Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:02.699Z] 
+[2025-06-09T12:32:02.699Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:03.203Z] 
+[2025-06-09T12:32:03.203Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:03.707Z] 
+[2025-06-09T12:32:03.707Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:04.215Z] 
+[2025-06-09T12:32:04.215Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:04.721Z] 
+[2025-06-09T12:32:04.721Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:05.229Z] 
+[2025-06-09T12:32:05.229Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:05.734Z] 
+[2025-06-09T12:32:05.734Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:06.238Z] 
+[2025-06-09T12:32:06.238Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:06.743Z] 
+[2025-06-09T12:32:06.743Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:07.248Z] 
+[2025-06-09T12:32:07.248Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:32:07.754Z] 
+[2025-06-09T12:32:07.754Z] Incoming request: {
+  "method": "GET",
+  "url": "/",
+  "headers": {
+    "host": "localhost:3005",
+    "user-agent": "Grafana k6/1.0.0"
+  },
+  "query": {}
+}
+[2025-06-09T12:48:36.300Z] 
+[2025-06-09T12:48:36.300Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "__next_hmr_refresh_hash__=e4192bd91e72bd5289a2abcdd2b24c728edfc255fb659e9e; _dd_s=logs=1&id=edfd94c0-ce96-462c-9568-855bc755ec88&created=1749471506475&expire=1749474215771",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-09T12:48:36.305Z] [2025-06-09T12:48:36.300Z] Response sent: {
+  "statusCode": 200,
+  "duration": "5ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T12:48:36.348Z] 
+[2025-06-09T12:48:36.348Z] Incoming request: {
+  "method": "GET",
+  "url": "/api/visual-tests",
+  "headers": {
+    "x-forwarded-for": "::1",
+    "x-forwarded-proto": "http",
+    "x-forwarded-port": "3000",
+    "x-forwarded-host": "localhost:3000",
+    "if-none-match": "W/\"4a3-M/pQEyewqIZBp2flK8p1La99djE\"",
+    "cookie": "__next_hmr_refresh_hash__=e4192bd91e72bd5289a2abcdd2b24c728edfc255fb659e9e; _dd_s=logs=1&id=edfd94c0-ce96-462c-9568-855bc755ec88&created=1749471506475&expire=1749474215771",
+    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "referer": "http://localhost:3000/test-files?category=ai&type=visual",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "accept": "*/*",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "connection": "close",
+    "host": "localhost:3005"
+  },
+  "query": {}
+}
+[2025-06-09T12:48:36.351Z] [2025-06-09T12:48:36.348Z] Response sent: {
+  "statusCode": 200,
+  "duration": "3ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T15:50:17.851Z] Starting server script...
+[2025-06-09T15:50:17.856Z] Registering test routes...
+[2025-06-09T15:50:17.857Z] Successfully registered /api route
+[2025-06-09T15:50:17.857Z] Successfully registered /api/tests route
+[2025-06-09T15:50:17.857Z] Successfully registered /api/k6-tests route
+[2025-06-09T15:50:17.857Z] Successfully registered /api/visual-tests route
+[2025-06-09T15:50:17.857Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T15:50:17.858Z] Successfully registered image server routes
+[2025-06-09T15:50:17.862Z] Script end
+[2025-06-09T15:50:17.864Z] Server listening on port 3005
+[2025-06-09T15:50:17.865Z] Performance testing API available at http://localhost:3005/api/performance
+[2025-06-09T15:50:17.885Z] Loaded 1 flows
+[2025-06-09T18:55:10.237Z] Starting server script...
+[2025-06-09T18:55:10.240Z] Successfully registered /api route
+[2025-06-09T18:55:10.240Z] Successfully registered /api/tests route
+[2025-06-09T18:55:10.240Z] Successfully registered /api/k6-tests route
+[2025-06-09T18:55:10.240Z] Successfully registered /api/visual-tests route
+[2025-06-09T18:55:10.240Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T18:55:10.240Z] Successfully registered image server routes
+[2025-06-09T18:55:10.241Z] Script end
+[2025-06-09T18:55:10.248Z] Server listening on port 3001
+[2025-06-09T18:55:10.248Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-09T18:55:10.251Z] Loaded 1 flows
+[2025-06-09T18:57:32.778Z] Starting server script...
+[2025-06-09T18:57:32.781Z] Successfully registered /api route
+[2025-06-09T18:57:32.781Z] Successfully registered /api/tests route
+[2025-06-09T18:57:32.781Z] Successfully registered /api/k6-tests route
+[2025-06-09T18:57:32.781Z] Successfully registered /api/visual-tests route
+[2025-06-09T18:57:32.781Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T18:57:32.781Z] Successfully registered image server routes
+[2025-06-09T18:57:32.782Z] Script end
+[2025-06-09T18:57:32.783Z] Server listening on port 3001
+[2025-06-09T18:57:32.783Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-09T18:57:32.786Z] Loaded 1 flows
+[2025-06-09T18:58:07.607Z] 
+[2025-06-09T18:58:07.607Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T18:58:07.616Z] [API] New MCP session requested
+[2025-06-09T18:58:07.616Z] [2025-06-09T18:58:07.607Z] Response sent: {
+  "statusCode": 200,
+  "duration": "9ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T18:58:21.758Z] 
+[2025-06-09T18:58:21.758Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749495487616/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "238",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:04:42.970Z] Starting server script...
+[2025-06-09T19:04:42.973Z] Successfully registered /api route
+[2025-06-09T19:04:42.973Z] Successfully registered /api/tests route
+[2025-06-09T19:04:42.973Z] Successfully registered /api/k6-tests route
+[2025-06-09T19:04:42.973Z] Successfully registered /api/visual-tests route
+[2025-06-09T19:04:42.973Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T19:04:42.973Z] Successfully registered image server routes
+[2025-06-09T19:04:42.975Z] Script end
+[2025-06-09T19:04:42.976Z] Server listening on port 3001
+[2025-06-09T19:04:42.976Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-09T19:04:42.978Z] Loaded 1 flows
+[2025-06-09T19:05:42.153Z] 
+[2025-06-09T19:05:42.153Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:05:42.164Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-09T19:05:42.165Z] [BrowserManager] Creating new browser session: mcp-1749495942164
+[2025-06-09T19:05:44.275Z] [BrowserManager] Browser session created: mcp-1749495942164 (chromium)
+[2025-06-09T19:05:44.275Z] [2025-06-09T19:05:42.153Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2122ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T19:06:05.207Z] 
+[2025-06-09T19:06:05.207Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749495942164/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "238",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:06:05.209Z] [API] Command received for session mcp-1749495942164: {}
+[2025-06-09T19:06:05.210Z] [2025-06-09T19:06:05.207Z] Response sent: {
+  "statusCode": 400,
+  "duration": "3ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T19:47:20.413Z] Starting server script...
+[2025-06-09T19:47:20.416Z] Successfully registered /api route
+[2025-06-09T19:47:20.416Z] Successfully registered /api/tests route
+[2025-06-09T19:47:20.416Z] Successfully registered /api/k6-tests route
+[2025-06-09T19:47:20.416Z] Successfully registered /api/visual-tests route
+[2025-06-09T19:47:20.417Z] Successfully registered /api/keyboard-tests route
+[2025-06-09T19:47:20.417Z] Successfully registered image server routes
+[2025-06-09T19:47:20.418Z] Script end
+[2025-06-09T19:47:20.419Z] Server listening on port 3001
+[2025-06-09T19:47:20.420Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-09T19:47:20.422Z] Loaded 1 flows
+[2025-06-09T19:47:28.318Z] 
+[2025-06-09T19:47:28.317Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "40",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:47:28.338Z] [API] New MCP session requested {
+  "url": "https://apply-qa.apps.asu.edu/"
+}
+[2025-06-09T19:47:28.339Z] [BrowserManager] Creating new browser session: mcp-1749498448339
+[2025-06-09T19:47:30.117Z] [BrowserManager] Browser session created: mcp-1749498448339 (chromium)
+[2025-06-09T19:47:30.120Z] [2025-06-09T19:47:28.317Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1803ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T19:47:39.021Z] 
+[2025-06-09T19:47:39.021Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749498448339/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "238",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:47:39.024Z] [API] Command received for session mcp-1749498448339: {}
+[2025-06-09T19:47:39.024Z] [2025-06-09T19:47:39.021Z] Response sent: {
+  "statusCode": 400,
+  "duration": "3ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T19:50:45.413Z] 
+[2025-06-09T19:50:45.413Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:50:45.414Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-09T19:50:45.414Z] [BrowserManager] Creating new browser session: mcp-1749498645414
+[2025-06-09T19:50:47.159Z] [BrowserManager] Browser session created: mcp-1749498645414 (chromium)
+[2025-06-09T19:50:47.160Z] [2025-06-09T19:50:45.413Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1747ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T19:50:55.940Z] 
+[2025-06-09T19:50:55.940Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749498645414/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "238",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:50:55.941Z] [API] Command received for session mcp-1749498645414: {}
+[2025-06-09T19:50:55.942Z] [2025-06-09T19:50:55.940Z] Response sent: {
+  "statusCode": 400,
+  "duration": "2ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T19:54:49.799Z] 
+[2025-06-09T19:54:49.799Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:54:49.800Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-09T19:54:49.800Z] [BrowserManager] Creating new browser session: mcp-1749498889800
+[2025-06-09T19:54:51.538Z] [BrowserManager] Browser session created: mcp-1749498889800 (chromium)
+[2025-06-09T19:54:51.540Z] [2025-06-09T19:54:49.799Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1741ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T19:55:04.538Z] 
+[2025-06-09T19:55:04.538Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749498889800/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "240",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T19:55:04.541Z] [API] Command received for session mcp-1749498889800: {}
+[2025-06-09T19:55:04.541Z] [2025-06-09T19:55:04.538Z] Response sent: {
+  "statusCode": 400,
+  "duration": "3ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:18:13.926Z] 
+[2025-06-09T20:18:13.926Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:18:13.929Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-09T20:18:13.930Z] [BrowserManager] Creating new browser session: mcp-1749500293930
+[2025-06-09T20:18:15.691Z] [BrowserManager] Browser session created: mcp-1749500293930 (chromium)
+[2025-06-09T20:18:15.692Z] [2025-06-09T20:18:13.926Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1766ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:18:21.425Z] 
+[2025-06-09T20:18:21.425Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749500293930/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "238",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:18:21.427Z] [API] Command received for session mcp-1749500293930: {}
+[2025-06-09T20:18:21.427Z] [2025-06-09T20:18:21.425Z] Response sent: {
+  "statusCode": 400,
+  "duration": "2ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:31:06.937Z] 
+[2025-06-09T20:31:06.937Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "40",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:31:06.939Z] [API] New MCP session requested {
+  "url": "https://apply-qa.apps.asu.edu/"
+}
+[2025-06-09T20:31:06.939Z] [BrowserManager] Creating new browser session: mcp-1749501066939
+[2025-06-09T20:31:08.775Z] [BrowserManager] Browser session created: mcp-1749501066939 (chromium)
+[2025-06-09T20:31:08.776Z] [2025-06-09T20:31:06.937Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1839ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:31:34.922Z] 
+[2025-06-09T20:31:34.922Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749501066939/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "291",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:31:34.922Z] [API] Command received for session mcp-1749501066939: {}
+[2025-06-09T20:31:34.923Z] [2025-06-09T20:31:34.922Z] Response sent: {
+  "statusCode": 400,
+  "duration": "1ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:35:44.754Z] 
+[2025-06-09T20:35:44.754Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:35:44.756Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-09T20:35:44.756Z] [BrowserManager] Creating new browser session: mcp-1749501344756
+[2025-06-09T20:35:46.513Z] [BrowserManager] Browser session created: mcp-1749501344756 (chromium)
+[2025-06-09T20:35:46.513Z] [2025-06-09T20:35:44.754Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1759ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:35:55.952Z] 
+[2025-06-09T20:35:55.952Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749501344756/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "291",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:35:55.952Z] [API] Command received for session mcp-1749501344756: {}
+[2025-06-09T20:35:55.953Z] [2025-06-09T20:35:55.952Z] Response sent: {
+  "statusCode": 400,
+  "duration": "1ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:38:11.499Z] 
+[2025-06-09T20:38:11.499Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:38:11.501Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-09T20:38:11.501Z] [BrowserManager] Creating new browser session: mcp-1749501491501
+[2025-06-09T20:38:13.249Z] [BrowserManager] Browser session created: mcp-1749501491501 (chromium)
+[2025-06-09T20:38:13.250Z] [2025-06-09T20:38:11.499Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1751ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:38:28.137Z] 
+[2025-06-09T20:38:28.137Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749501491501/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "291",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:38:28.139Z] [API] Command received for session mcp-1749501491501: {}
+[2025-06-09T20:38:28.140Z] [2025-06-09T20:38:28.137Z] Response sent: {
+  "statusCode": 400,
+  "duration": "3ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-09T20:40:42.614Z] 
+[2025-06-09T20:40:42.614Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-09T20:40:42.616Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-09T20:40:42.617Z] [BrowserManager] Creating new browser session: mcp-1749501642617
+[2025-06-09T20:40:44.409Z] [BrowserManager] Browser session created: mcp-1749501642617 (chromium)
+[2025-06-09T20:40:44.409Z] [2025-06-09T20:40:42.614Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1795ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T05:25:27.394Z] Starting server script...
+[2025-06-10T05:25:27.399Z] Successfully registered /api route
+[2025-06-10T05:25:27.399Z] Successfully registered /api/tests route
+[2025-06-10T05:25:27.400Z] Successfully registered /api/k6-tests route
+[2025-06-10T05:25:27.400Z] Successfully registered /api/visual-tests route
+[2025-06-10T05:25:27.400Z] Successfully registered /api/keyboard-tests route
+[2025-06-10T05:25:27.400Z] Successfully registered image server routes
+[2025-06-10T05:25:27.402Z] Script end
+[2025-06-10T05:25:27.403Z] Server listening on port 3001
+[2025-06-10T05:25:27.404Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-10T05:25:27.405Z] Loaded 1 flows
+[2025-06-10T05:26:01.813Z] 
+[2025-06-10T05:26:01.813Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T05:26:01.856Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-10T05:26:01.858Z] [BrowserManager] Creating new browser session: mcp-1749533161857
+[2025-06-10T05:26:03.849Z] [BrowserManager] Browser session created: mcp-1749533161857 (chromium)
+[2025-06-10T05:26:03.851Z] [2025-06-10T05:26:01.813Z] Response sent: {
+  "statusCode": 200,
+  "duration": "2038ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T05:27:23.877Z] 
+[2025-06-10T05:27:23.877Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749533161857/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "301",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T05:27:23.882Z] [API] Command received for session mcp-1749533161857: {}
+[2025-06-10T05:27:23.884Z] [2025-06-10T05:27:23.877Z] Response sent: {
+  "statusCode": 400,
+  "duration": "7ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T05:42:47.483Z] 
+[2025-06-10T05:42:47.483Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T05:42:47.487Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-10T05:42:47.487Z] [BrowserManager] Creating new browser session: mcp-1749534167487
+[2025-06-10T05:42:49.437Z] [BrowserManager] Browser session created: mcp-1749534167487 (chromium)
+[2025-06-10T05:42:49.437Z] [2025-06-10T05:42:47.483Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1954ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T05:43:00.844Z] 
+[2025-06-10T05:43:00.843Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749534167487/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "291",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T05:43:00.848Z] [API] Command received for session mcp-1749534167487: {}
+[2025-06-10T05:43:00.848Z] [2025-06-10T05:43:00.843Z] Response sent: {
+  "statusCode": 400,
+  "duration": "5ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T05:45:34.647Z] 
+[2025-06-10T05:45:34.647Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T05:45:34.649Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-10T05:45:34.649Z] [BrowserManager] Creating new browser session: mcp-1749534334649
+[2025-06-10T05:45:36.576Z] [BrowserManager] Browser session created: mcp-1749534334649 (chromium)
+[2025-06-10T05:45:36.576Z] [2025-06-10T05:45:34.647Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1929ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}

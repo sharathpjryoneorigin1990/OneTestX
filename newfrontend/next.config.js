@@ -10,7 +10,6 @@ const nextConfig = {
     return config;
   },
   reactStrictMode: true,
-  swcMinify: true,
   
   // Environment variables
   env: {

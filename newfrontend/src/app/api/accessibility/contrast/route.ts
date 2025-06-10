@@ -1,0 +1,528 @@
+﻿import { NextResponse } from 'next/server';
+import { chromium, Browser, BrowserContext, Page } from 'playwright';
+// Type definitions
+// Extend Window interface to include our custom function
+declare global {
+  interface Window {
+    checkPageContrast: () => Promise<ContrastCheckResult[]>;
+  }
+}
+
+interface ContrastResult {
+  contrastRatio: number;
+  aa: {
+    normal: boolean;
+    large: boolean;
+  };
+  aaa: {
+    normal: boolean;
+    large: boolean;
+  };
+  wcagLevel: 'AAA' | 'AA' | 'Fail';
+  fontSize: string;
+  fontWeight: string;
+}
+
+export interface ContrastCheckResult {
+  element: string;
+  text: string;
+  foreground: string;
+  background: string;
+  contrast: ContrastResult;
+  selector: string;
+  html: string;
+}
+
+// Helper functions to be injected into the page
+const contrastUtils = `
+// Helper function to check if a color is light
+const isLightColor = (color) => {
+  try {
+    // Convert color to RGB
+    const rgb = color.match(/\d+/g).map(Number);
+    if (rgb.length < 3) return false;
+    const [r, g, b] = rgb;
+    // Calculate relative luminance (WCAG formula)
+    const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+    return luminance > 0.5;
+  } catch (e) {
+    return false;
+  }
+};
+
+// Helper function to get contrast ratio between two colors
+const getContrastRatio = (color1, color2) => {
+  try {
+    // Simple contrast ratio calculation (not WCAG compliant but good enough for demo)
+    const rgb1 = color1.match(/\d+/g).map(Number);
+    const rgb2 = color2.match(/\d+/g).map(Number);
+    
+    if (rgb1.length < 3 || rgb2.length < 3) return 1;
+    
+    const lum1 = (0.2126 * rgb1[0] + 0.7152 * rgb1[1] + 0.0722 * rgb1[2]) / 255;
+    const lum2 = (0.2126 * rgb2[0] + 0.7152 * rgb2[1] + 0.0722 * rgb2[2]) / 255;
+    
+    const lighter = Math.max(lum1, lum2);
+    const darker = Math.min(lum1, lum2);
+    
+    return (lighter + 0.05) / (darker + 0.05);
+  } catch (e) {
+    console.error('Error calculating contrast:', e);
+    return 1;
+  }
+};
+
+// Helper function to get computed styles for an element
+const getElementStyles = (element) => {
+  const styles = window.getComputedStyle(element);
+  const fontSize = parseFloat(styles.fontSize || '16');
+  const fontWeight = parseInt(styles.fontWeight || '400', 10);
+  
+  // Get background color by traversing up the DOM tree
+  let bgColor = 'rgba(255, 255, 255, 1)';
+  let current = element;
+  
+  while (current && current !== document.documentElement) {
+    const bg = window.getComputedStyle(current).backgroundColor;
+    if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+      bgColor = bg;
+      break;
+    }
+    current = current.parentElement;
+  }
+
+  return {
+    color: styles.color || 'rgba(0, 0, 0, 1)',
+    backgroundColor: bgColor,
+    fontSize,
+    isBold: fontWeight >= 600 || styles.fontWeight === 'bold'
+  };
+};
+
+// Check WCAG compliance
+const checkWCAGCompliance = (contrastRatio, fontSize, isBold) => {
+  const isLargeText = fontSize >= 18 || (fontSize >= 14 && isBold);
+  
+  // WCAG 2.1 AA requires:
+  // - 4.5:1 for normal text
+  // - 3:1 for large text (18pt or 14pt bold)
+  // WCAG 2.1 AAA requires:
+  // - 7:1 for normal text
+  // - 4.5:1 for large text
+  const aaNormal = contrastRatio >= 4.5;
+  const aaaNormal = contrastRatio >= 7;
+  const aaLarge = contrastRatio >= 3;
+  const aaaLarge = contrastRatio >= 4.5;
+
+  let wcagLevel = 'Fail';
+  if (isLargeText) {
+    if (aaLarge) wcagLevel = 'AA';
+    if (aaaLarge) wcagLevel = 'AAA';
+  } else {
+    if (aaNormal) wcagLevel = 'AA';
+    if (aaaNormal) wcagLevel = 'AAA';
+  }
+
+  return {
+    contrastRatio: parseFloat(contrastRatio.toFixed(2)),
+    aa: {
+      normal: aaNormal,
+      large: aaLarge
+    },
+    aaa: {
+      normal: aaaNormal,
+      large: aaaLarge
+    },
+    wcagLevel,
+    fontSize: \`\${fontSize}px\`,
+    fontWeight: isBold ? 'bold' : 'normal'
+  };
+};
+
+// Generate CSS selector for an element
+const getCssSelector = (element) => {
+  if (!(element instanceof Element)) return '';
+  
+  const path = [];
+  let current = element;
+  
+  while (current && current !== document.body) {
+    let selector = current.nodeName.toLowerCase();
+    
+    if (current.id) {
+      selector = \`#\${current.id}\`;
+      path.unshift(selector);
+      break;
+    } else {
+      let sibling = current;
+      let nth = 1;
+      
+      while (sibling.previousElementSibling) {
+        sibling = sibling.previousElementSibling;
+        if (sibling.nodeName.toLowerCase() === selector) {
+          nth++;
+        }
+      }
+      
+      if (nth !== 1) {
+        selector += \`:nth-of-type(\${nth})\`;
+      }
+    }
+    
+    path.unshift(selector);
+    current = current.parentElement;
+  }
+  
+  return path.join(' > ');
+};
+
+// Find all text nodes in the document
+const getAllTextNodes = () => {
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode: (node) => {
+        // Skip script and style elements
+        if (node.parentElement?.tagName === 'SCRIPT' || 
+            node.parentElement?.tagName === 'STYLE' ||
+            node.parentElement?.tagName === 'NOSCRIPT') {
+          return NodeFilter.FILTER_REJECT;
+        }
+        
+        // Skip empty or whitespace-only text nodes
+        if (!node.nodeValue?.trim()) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    },
+    false
+  );
+
+  const nodes = [];
+  let node;
+  while (node = walker.nextNode()) {
+    if (node.parentElement) {
+      nodes.push({
+        node,
+        element: node.parentElement
+      });
+    }
+  }
+  
+  return nodes;
+};
+
+// Check contrast for a single element
+const checkElementContrast = (element) => {
+  try {
+    const { color, backgroundColor, fontSize, isBold } = getElementStyles(element);
+    
+    // Skip if colors are the same or transparent
+    if (color === backgroundColor || 
+        color === 'transparent' || 
+        backgroundColor === 'transparent' ||
+        color === 'rgba(0, 0, 0, 0)' ||
+        backgroundColor === 'rgba(0, 0, 0, 0)') {
+      return null;
+    }
+    
+    const contrastRatio = getContrastRatio(color, backgroundColor);
+    
+    // Skip if contrast ratio is 0 (error case)
+    if (contrastRatio === 0) {
+      return null;
+    }
+    
+    const contrastResult = checkWCAGCompliance(contrastRatio, fontSize, isBold);
+    
+    // Only return elements with contrast issues
+    if (contrastResult.wcagLevel === 'Fail') {
+      return {
+        element: element.tagName.toLowerCase(),
+        text: element.textContent?.trim().substring(0, 100) + (element.textContent?.trim().length > 100 ? '...' : '') || '',
+        foreground: color,
+        background: backgroundColor,
+        contrast: contrastResult,
+        selector: getCssSelector(element),
+        html: element.outerHTML.substring(0, 200) + (element.outerHTML.length > 200 ? '...' : '')
+      };
+    }
+    
+    return null;
+  } catch (e) {
+    console.error('Error checking element contrast:', e);
+    return null;
+  }
+};
+
+// Main function to check contrast on a page
+const checkPageContrast = () => {
+  const results = [];
+  const textNodes = getAllTextNodes();
+  const processedElements = new Set();
+  
+  for (const { element } of textNodes) {
+    if (!processedElements.has(element)) {
+      const result = checkElementContrast(element);
+      if (result) {
+        results.push(result);
+      }
+      processedElements.add(element);
+    }
+  }
+  
+  return results;
+};
+`;
+
+// Main API handler
+export async function POST(request: Request) {
+  const { url: inputUrl } = await request.json();
+  
+  if (!inputUrl) {
+    return NextResponse.json(
+      { error: 'URL is required' },
+      { status: 400 }
+    );
+  }
+  
+  // Ensure the URL is properly formatted
+  let url: URL;
+  try {
+    // If URL doesn't start with http:// or https://, add https://
+    const urlStr = inputUrl.trim().startsWith('http') ? inputUrl.trim() : `https://${inputUrl.trim()}`;
+    url = new URL(urlStr);
+    
+    // Ensure we have a valid hostname
+    if (!url.hostname) {
+      throw new Error('Invalid hostname');
+    }
+    
+    // Force HTTPS for security
+    if (url.protocol !== 'https:') {
+      url.protocol = 'https:';
+    }
+  } catch (e) {
+    console.error('Invalid URL:', e);
+    return new NextResponse(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Invalid URL format. Please include http:// or https:// and a valid domain name.' 
+      }),
+      { 
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+  
+  const urlString = url.toString();
+
+  let browser: Browser | null = null;
+  let context: BrowserContext | null = null;
+  let page: Page | null = null;
+  
+  try {
+    // Launch browser with additional arguments for better compatibility
+    browser = await chromium.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-zygote',
+        '--disable-gpu'
+      ]
+    });
+    
+    // Create a new browser context with default viewport
+    const context = await browser.newContext({
+      viewport: { width: 1280, height: 800 },
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      ignoreHTTPSErrors: true,
+      javaScriptEnabled: true
+    });
+    
+    // Create a new page
+    page = await context.newPage();
+    
+    try {
+      // Set default timeout for page operations
+      page.setDefaultTimeout(30000);
+      page.setDefaultNavigationTimeout(60000);
+      // Load the URL in an iframe to handle cross-origin requests
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Contrast Check</title>
+            <style>
+              body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+              iframe { width: 100%; height: 100%; border: none; }
+            </style>
+          </head>
+          <body>
+            <iframe id="targetFrame" src="${url}" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+            <script>
+              // Forward messages from the iframe to the parent
+              window.addEventListener('message', (event) => {
+                window.parent.postMessage(event.data, '*');
+              });
+            </script>
+          </body>
+        </html>
+      `;
+      
+      // Set the content and wait for the iframe to load
+      await page.setContent(htmlContent, { waitUntil: 'domcontentloaded' });
+      
+      // Wait for the iframe to load
+      await page.waitForSelector('iframe#targetFrame');
+      const frame = await (await page.$('iframe#targetFrame'))?.contentFrame();
+      
+      if (!frame) {
+        throw new Error('Failed to load iframe');
+      }
+      
+      // Wait for the frame to be ready
+      await frame.waitForLoadState('domcontentloaded');
+      await frame.waitForLoadState('networkidle');
+      await page.waitForTimeout(3000); // Additional wait for dynamic content
+      
+      // Add type declaration for window.contrastUtils
+      await page.addScriptTag({ content: 'window.contrastUtils = null;' });
+      
+      // Inject the contrast utilities and execute the check
+      if (!frame) throw new Error('Frame not available');
+      
+      try {
+        // 1. First inject the contrast utilities into the frame
+        await frame.evaluate((utils: string) => {
+          try {
+            // Execute the utility functions in the frame's context
+            const func = new Function(utils);
+            func();
+            
+            // Ensure checkPageContrast is available
+            if (typeof window.checkPageContrast !== 'function') {
+              throw new Error('checkPageContrast function not found after injecting utilities');
+            }
+          } catch (e) {
+            console.error('Error in injected script:', e);
+            throw e;
+          }
+        }, contrastUtils);
+        
+        // 2. Execute the contrast check and get results
+        const results: ContrastCheckResult[] = await frame.evaluate(() => {
+          try {
+            // This function should be available from the injected contrastUtils
+            return window.checkPageContrast();
+          } catch (e) {
+            console.error('Error during contrast check:', e);
+            throw new Error(`Contrast check failed: ${e instanceof Error ? e.message : 'Unknown error'}`);
+          }
+        });
+        
+        // 3. Get page title for the report
+        const pageTitle = await page.title();
+        
+        // Close the browser before returning the response
+        if (browser) {
+          await browser.close();
+        }
+        
+        return new NextResponse(JSON.stringify({
+          success: true,
+          url,
+          pageTitle,
+          timestamp: new Date().toISOString(),
+          results: results || [],
+          totalIssues: results ? results.length : 0
+        }), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+      } catch (error) {
+        console.error('Error during page processing:', error);
+        
+        // Ensure browser and context are closed even on error
+        if (browser) {
+          if (context) {
+            try {
+              await context.close();
+            } catch (e) {
+              console.error('Error closing browser context:', e);
+            }
+          }
+          try {
+            await browser.close();
+          } catch (e) {
+            console.error('Error closing browser:', e);
+          }
+        }
+        
+        return new NextResponse(JSON.stringify({
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error occurred during page processing',
+          url
+        }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error in contrast check API:', error);
+      
+      if (browser) {
+        await browser.close();
+      }
+      
+      return new NextResponse(JSON.stringify({
+        success: false, 
+        error: 'An unexpected error occurred',
+        url
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+  } catch (error) {
+    console.error('Unexpected error in contrast check API:', error);
+    return new NextResponse(JSON.stringify({
+      success: false, 
+      error: 'An unexpected error occurred',
+      url: inputUrl
+    }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+}
+
+// Add GET handler for testing
+export async function GET() {
+  return NextResponse.json({
+    message: 'Use POST /api/accessibility/contrast with { "url": "https://example.com" } to check contrast',
+    example: {
+      url: 'https://example.com',
+      results: []
+    }
+  });
+}
+

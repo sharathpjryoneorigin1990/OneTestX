@@ -1,0 +1,22 @@
+{
+  "id": "tab-navigation-1749372111765",
+  "testId": "tab-navigation",
+  "testName": "Tab Navigation",
+  "url": "apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T08:41:53.376Z",
+  "status": "error",
+  "passed": false,
+  "details": "Error: Failed to save test result",
+  "steps": [
+    {
+      "action": "Test failed",
+      "timestamp": "2025-06-08T08:41:53.376Z",
+      "status": "error",
+      "error": "Failed to save test result"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null,
+  "error": "Failed to save test result"
+}

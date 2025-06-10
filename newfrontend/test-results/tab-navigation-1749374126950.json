@@ -1,0 +1,26 @@
+{
+  "id": "tab-navigation-1749374126950",
+  "testId": "tab-navigation",
+  "testName": "Tab Navigation",
+  "url": "apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T09:15:33.607Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Test completed successfully.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-08T09:15:33.607Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test passed",
+      "timestamp": "2025-06-08T09:15:35.800Z",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null,
+  "videoUrl": "blob:http://localhost:3000/e301001d-fbfc-4021-821a-61c1fa4ed16b"
+}

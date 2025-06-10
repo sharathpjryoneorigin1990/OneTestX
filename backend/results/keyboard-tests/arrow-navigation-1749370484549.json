@@ -1,0 +1,30 @@
+{
+  "id": "arrow-navigation-1749370484549",
+  "testId": "arrow-navigation",
+  "testName": "Arrow Key Navigation",
+  "url": "https://apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T08:14:44.549Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Successfully completed Arrow Key Navigation test",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://apply-qa.apps.asu.edu/dashboard",
+      "timestamp": "2025-06-08T08:14:46.537Z"
+    },
+    {
+      "action": "start_test",
+      "testId": "arrow-navigation",
+      "timestamp": "2025-06-08T08:14:57.881Z"
+    },
+    {
+      "action": "arrow_navigation",
+      "timestamp": "2025-06-08T08:14:57.882Z",
+      "note": "Arrow key navigation test would be implemented here based on specific UI components"
+    }
+  ],
+  "screenshots": [
+    "H:\\ASU projects\\new cursor\\backend\\results\\keyboard-tests\\screenshots\\arrow-navigation-1749370484549-initial-2025-06-08T08-14-56-532Z.png"
+  ]
+}

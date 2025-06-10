@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 
 interface ChatMessage {
-  type: 'user' | 'system';
+  type: 'user' | 'system' | 'error';
   text: string;
 }
 

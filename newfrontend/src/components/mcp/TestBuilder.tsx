@@ -169,7 +169,7 @@ export const TestBuilder = () => {
     handleClearTest,
     handleClearChat,
     handleChatCommand
-  } = useTestBuilder();
+  } = useTestBuilder(iframeRef);
 
   return (
     <div className="flex flex-col h-full bg-gray-900 text-white p-6 space-y-6 overflow-y-auto">
@@ -317,7 +317,7 @@ export const TestBuilder = () => {
               isProcessing={isProcessingCommand}
               isRecording={isRecording}
               onInputChange={setChatInput}
-              onSendMessage={() => handleChatCommand(chatInput)}
+              onSendMessage={handleChatCommand}
               onClearChat={handleClearChat}
             />
           </div>

@@ -9,8 +9,12 @@ import { existsSync, mkdirSync, readdirSync, createWriteStream } from 'fs';
 import { spawn } from 'child_process';
 import fetch from 'node-fetch';
 
+// Setup __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Setup logging
-const logStream = createWriteStream('server-debug.log', { flags: 'a' });
+const logStream = createWriteStream(path.join(__dirname, 'server-debug.log'), { flags: 'a' });
 const originalConsoleLog = console.log;
 console.log = function(...args) {
     const message = args.map(arg => 
@@ -30,9 +34,9 @@ import keyboardTestRoutes from './routes/keyboardTests.js';
 import imageRoutes from './routes/imageServer.js';
 import behaviorAnalysisRoutes from './routes/behaviorAnalysis.js';
 import jiraRoutes from './routes/jira.js';
+import mcpRoutes from './routes/mcp.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// __dirname already defined above
 
 console.log('Starting server script...');
 
@@ -351,16 +355,17 @@ async function getTestFiles(dir) {
 }
 
 // Use the test routes
+app.use('/api/performance', performanceRoutes);
 app.use('/api/tests', testRoutes);
-
-// Use the accessibility test routes
-app.use('/api/accessibility', accessibilityTestRoutes);
-
-// Use the Jira routes
+app.use('/api/k6-tests', k6TestRoutes);
+app.use('/api/visual-tests', visualTestRoutes);
+app.use('/api/accessibility-tests', accessibilityTestRoutes);
+app.use('/api/keyboard-tests', keyboardTestRoutes);
+app.use('/api/images', imageRoutes);
+app.use('/api/behavior-analysis', behaviorAnalysisRoutes);
 app.use('/api/jira', jiraRoutes);
+app.use('/api/mcp', mcpRoutes);
 
-// Use the test routes
-console.log('Registering test routes...');
 try {
   // Add behavior analysis routes
   app.use('/api', behaviorAnalysisRoutes);
@@ -504,7 +509,7 @@ function cleanupTempFiles() {
 }
 setInterval(cleanupTempFiles, 60 * 60 * 1000);
 // Start the server
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
     console.log(`Performance testing API available at http://localhost:${PORT}/api/performance`);

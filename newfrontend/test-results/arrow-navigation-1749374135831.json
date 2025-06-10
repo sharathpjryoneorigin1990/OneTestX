@@ -1,0 +1,26 @@
+{
+  "id": "arrow-navigation-1749374135831",
+  "testId": "arrow-navigation",
+  "testName": "Arrow Key Navigation",
+  "url": "apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T09:15:41.298Z",
+  "status": "completed",
+  "passed": false,
+  "details": "Test failed. Some keyboard navigation issues were found.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-08T09:15:41.298Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test failed",
+      "timestamp": "2025-06-08T09:15:43.357Z",
+      "status": "failed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null,
+  "videoUrl": "blob:http://localhost:3000/19699f78-032f-4b77-93af-6613e26ed1c7"
+}

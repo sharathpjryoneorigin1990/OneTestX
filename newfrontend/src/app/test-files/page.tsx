@@ -51,13 +51,13 @@ const BehaviorDashboard = dynamic(
   }
 );
 
-const TestBuilderComponent = dynamic(
-  () => import('@/components/mcp/TestBuilder'),
+const AiTestBuilderPage = dynamic(
+  () => import('@/app/ai-test-builder/page'),
   { 
     ssr: false,
     loading: () => (
       <div className="flex items-center justify-center h-64">
-        <p>Loading test builder...</p>
+        <p>Loading AI Test Builder...</p>
       </div>
     ),
   }
@@ -81,7 +81,7 @@ const ProjectDashboard = dynamic(
   }
 );
 
-type TabType = 'test-files' | 'visual' | 'smart' | 'content-analysis' | 'behavior' | 'test-builder' | 'project-management';
+type TabType = 'test-files' | 'visual' | 'smart' | 'content-analysis' | 'behavior' | 'test-builder' | 'project-management' | 'screen-reader';
 
 export default function TestFilesPage() {
   console.log('TestFilesPage component mounted');
@@ -91,8 +91,10 @@ export default function TestFilesPage() {
   
   const type = searchParams.get('type')?.toLowerCase() as TabType | null;
   const category = searchParams.get('category')?.toLowerCase() || '';
+  // Check if we're on the screen reader test page
+  const isScreenReaderTest = pathname === '/test-files/screen-reader-test';
   // Ensure activeTab is one of the valid tab types
-  const activeTab: TabType = (type && ['test-files', 'visual', 'smart', 'content-analysis', 'behavior', 'test-builder', 'project-management'].includes(type) 
+  const activeTab: TabType = (type && ['test-files', 'visual', 'smart', 'content-analysis', 'behavior', 'test-builder', 'project-management', 'screen-reader'].includes(type) 
     ? type as TabType 
     : 'test-files');
   
@@ -140,21 +142,11 @@ export default function TestFilesPage() {
     );
   }
   
-  // Show TestBuilder when type is 'test-builder'
+  // Show AI Test Builder when type is 'test-builder'
   if (activeTab === 'test-builder') {
     return (
       <div className="container mx-auto py-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-            Build Your Test
-          </h1>
-          <p className="text-gray-300">
-            Create and record automated UI tests using the Model-Client-Protocol (MCP)
-          </p>
-        </div>
-        <MCPClientProvider>
-          <TestBuilderComponent />
-        </MCPClientProvider>
+        <AiTestBuilderPage />
       </div>
     );
   }
@@ -166,6 +158,11 @@ export default function TestFilesPage() {
         <BehaviorDashboard />
       </div>
     );
+  }
+
+  // Show Screen Reader Test when on screen-reader-test page
+  if (isScreenReaderTest) {
+    return null;
   }
 
   // Show Content Analysis when type is 'content-analysis'

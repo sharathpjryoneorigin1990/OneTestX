@@ -1,0 +1,25 @@
+{
+  "id": "skip-links-1749454488743",
+  "testId": "skip-links",
+  "testName": "Skip Links",
+  "url": "https://apply.apps.asu.edu/",
+  "timestamp": "2025-06-09T07:34:50.755Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Test completed successfully.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-09T07:34:50.755Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test passed",
+      "timestamp": "2025-06-09T07:34:52.823Z",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null
+}

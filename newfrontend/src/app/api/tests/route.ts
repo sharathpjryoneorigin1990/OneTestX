@@ -1,159 +1,43 @@
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'fs/promises';
 
-// Get the directory name in ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// We'll scan the actual backend directory directly
 
-// Path to the tests directory (relative to the project root)
-const TESTS_DIR = path.join(process.cwd(), '..', '..', 'backend', 'tests');
-
-// Debug function to log directory contents
-async function logDirectoryContents() {
-  try {
-    console.log('Initializing tests API route...');
-    console.log('Current working directory:', process.cwd());
-    console.log('Looking for tests in:', TESTS_DIR);
-    
-    const dirContents = await fs.readdir(path.join(process.cwd(), '..'));
-    console.log('Parent directory contents:', dirContents);
-    
-    const backendContents = await fs.readdir(path.join(process.cwd(), '..', 'backend'));
-    console.log('Backend directory contents:', backendContents);
-    
-    const testsDirExists = await fs.access(TESTS_DIR).then(() => true).catch(() => false);
-    console.log('Tests directory exists:', testsDirExists);
-    
-    if (testsDirExists) {
-      const testFiles = await fs.readdir(TESTS_DIR);
-      console.log('Test files found:', testFiles);
-    }
-  } catch (err) {
-    console.error('Error checking directories:', err);
-  }
+// Define test file types
+interface TestCase {
+  name: string;
+  group: string | null;
+  line: number;
 }
 
-// Log directory contents when the module loads
-logDirectoryContents().catch(console.error);
+interface TestFile {
+  id: string;
+  name: string;
+  path: string;
+  category: string;
+  tags: string[];
+  testCases: TestCase[];
+  lastRun: {
+    status: string;
+    timestamp: string;
+  };
+  isEmpty?: boolean;
+}
 
-// Helper function to recursively get all files in a directory
-async function getAllFiles(dir: string, fileList: string[] = []): Promise<string[]> {
-  const files = await fs.readdir(dir);
+// Extract test cases from file content
+function extractTestCases(content: string): TestCase[] {
+  const testCases: TestCase[] = [];
+  const testRegex = /test\(['"](.+?)['"]|it\(['"](.+?)['"]|describe\(['"](.+?)['"]|context\(['"](.+?)['"]|suite\(['"](.+?)['"]|spec\(['"](.+?)['"]|it\.only\(['"](.+?)['"]|test\.only\(['"](.+?)['"]|it\.skip\(['"](.+?)['"]|test\.skip\(['"](.+?)['"]|it\s*`(.+?)`|test\s*`(.+?)`/g;
   
-  for (const file of files) {
-    const filePath = path.join(dir, file);
-    const stat = await fs.stat(filePath);
-    
-    if (stat.isDirectory()) {
-      await getAllFiles(filePath, fileList);
-    } else {
-      fileList.push(filePath);
-    }
-  }
-  
-  return fileList;
-}
-
-// Map of test file paths to their categories and tags
-const TEST_CATEGORIES = {
-  'performance/stress': ['performance', 'stress'],
-  'ui/accessibility': ['ui', 'accessibility', 'a11y'],
-  'ui/e2e': ['ui', 'e2e', 'end-to-end'],
-  'ui/visual': ['ui', 'visual', 'screenshot', 'ai', 'smart'],
-  'ui/smoke': ['ui', 'smoke', 'ai', 'smart']
-};
-
-async function getTestFiles(dir: string, baseDir = ''): Promise<any[]> {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
-  let testFiles: any[] = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relativePath = baseDir ? `${baseDir}/${entry.name}` : entry.name;
-
-    if (entry.isDirectory()) {
-      const subFiles = await getTestFiles(fullPath, relativePath);
-      testFiles = testFiles.concat(subFiles);
-    } else if (entry.name.endsWith('.test.js') || entry.name.endsWith('.test.ts')) {
-      // Get the relative path without the tests directory
-      let testPath = path.relative(TESTS_DIR, fullPath).replace(/\\/g, '/');
-// Remove any leading ../ or .\ segments
-if (testPath.startsWith('../') || testPath.startsWith('..\\')) {
-  const parts = testPath.split(/[\\/]/);
-  // Find the first part that is a known category (e.g., 'ui', 'performance')
-  const knownRoots = ['ui', 'performance'];
-  const idx = parts.findIndex(p => knownRoots.includes(p));
-  if (idx !== -1) {
-    testPath = parts.slice(idx).join('/');
-  }
-}
-      
-            // Determine category and tags based on file path
-      // Extract category as first two segments of the path if it matches pattern
-      let category = 'other';
-      let tags: string[] = [];
-      const match = testPath.match(/^([\w-]+)\/([\w-]+)/);
-      if (match) {
-        category = `${match[1]}/${match[2]}`;
-        tags = [match[1], match[2]];
-      } else {
-        // fallback to old logic if needed
-        const legacyCategory = Object.keys(TEST_CATEGORIES).find(cat => testPath.startsWith(cat));
-        if (legacyCategory) {
-          category = legacyCategory;
-          tags = TEST_CATEGORIES[legacyCategory as keyof typeof TEST_CATEGORIES] || [];
-        }
-      }
-      
-      // Read the test file to get test cases
-      const content = await fs.readFile(fullPath, 'utf-8');
-      const testCases = extractTestCases(content);
-      
-      testFiles.push({
-        id: `test-${testPath.replace(/[\\/.:]/g, '-')}`,
-        name: entry.name.replace(/\.test\.(js|ts)$/, '').replace(/[-_]/g, ' '),
-        path: testPath,
-        category,
-        tags,
-        testCases,
-        lastRun: {
-          status: 'pending',
-          timestamp: new Date().toISOString(),
-        }
-      });
-    }
-  }
-
-  return testFiles;
-}
-
-function extractTestCases(content: string): Array<{name: string, group: string | null, line: number}> {
-  // Simple regex to find test cases in the file
-  // This is a basic implementation and might need adjustments based on your test structure
-  const testRegex = /(it|test)\(['"]([^'"]+)['"],/g;
-  const describeRegex = /describe\(['"]([^'"]+)['"],/g;
-  
-  const testCases: Array<{name: string, group: string | null, line: number}> = [];
   let match;
-  
-  // Find all test cases
   while ((match = testRegex.exec(content)) !== null) {
-    const lineNumber = (content.substring(0, match.index).match(/\n/g) || []).length + 1;
+    // Find the first non-undefined capture group
+    const testName = match.slice(1).find(group => group !== undefined) || 'Unnamed test';
     testCases.push({
-      name: match[2],
+      name: testName,
       group: null,
-      line: lineNumber
-    });
-  }
-  
-  // If no test cases found, add a default one
-  if (testCases.length === 0) {
-    testCases.push({
-      name: 'Default test case',
-      group: null,
-      line: 1
+      line: content.substring(0, match.index).split('\n').length
     });
   }
   
@@ -162,91 +46,191 @@ function extractTestCases(content: string): Array<{name: string, group: string |
 
 export async function GET() {
   try {
-    console.log(`[GET] Reading tests from: ${TESTS_DIR}`);
-    console.log('Current working directory:', process.cwd());
-    console.log('__dirname:', __dirname);
+    console.log('[GET] Scanning actual backend directory for test files');
     
-    // Try multiple possible locations for the tests directory
-    const possibleTestDirs = [
-      TESTS_DIR,
-      path.join(process.cwd(), 'backend', 'tests'),
-      path.join(process.cwd(), '..', 'backend', 'tests'),
-      path.join(process.cwd(), 'tests'),
-      path.join(__dirname, '..', '..', '..', '..', 'tests'),
-      path.join(process.cwd(), '..', '..', 'backend', 'tests')
-    ];
+    // Define the exact path to the backend tests directory
+    const backendTestsDir = 'H:\\ASU projects\\new cursor\\backend\\tests';
+    console.log(`Using tests directory: ${backendTestsDir}`);
     
-    let foundTestsDir = null;
+    // Check if the directory exists
+    try {
+      await fs.access(backendTestsDir);
+      console.log('Backend tests directory exists');
+    } catch (error) {
+      console.error('Backend tests directory not found:', error);
+      return NextResponse.json({ error: 'Tests directory not found' }, { status: 404 });
+    }
     
-    // Find the first existing tests directory
-    for (const testDir of possibleTestDirs) {
-      try {
-        console.log(`Checking for tests in: ${testDir}`);
-        await fs.access(testDir);
-        // List directory contents for debugging
-        try {
-          const contents = await fs.readdir(testDir);
-          console.log(`Directory contents of ${testDir}:`, contents);
-        } catch (e) {
-          console.log(`Could not read directory ${testDir}:`, e);
+    // Initialize test files array
+    const testFiles: TestFile[] = [];
+    
+    // Process ui/e2e directory
+    try {
+      const e2eDir = path.join(backendTestsDir, 'ui', 'e2e');
+      console.log(`Checking e2e directory: ${e2eDir}`);
+      
+      const e2eFiles = await fs.readdir(e2eDir);
+      console.log(`Found ${e2eFiles.length} files in e2e directory:`, e2eFiles);
+      
+      // Process each file in the e2e directory
+      for (const fileName of e2eFiles) {
+        const filePath = path.join(e2eDir, fileName);
+        const stats = await fs.stat(filePath);
+        
+        if (!stats.isDirectory()) {
+          console.log(`Processing e2e file: ${fileName}, size: ${stats.size}`);
+          
+          // Accept any .js or .ts file
+          if (fileName.endsWith('.js') || fileName.endsWith('.ts')) {
+            let testCases = [];
+            
+            if (stats.size > 0) {
+              try {
+                const content = await fs.readFile(filePath, 'utf-8');
+                testCases = extractTestCases(content);
+                console.log(`Extracted ${testCases.length} test cases from ${fileName}`);
+              } catch (err) {
+                console.error(`Error reading file ${fileName}:`, err);
+                testCases = [{ name: 'Error reading file', group: null, line: 1 }];
+              }
+            } else {
+              console.log(`File ${fileName} is empty`);
+              testCases = [{ name: 'Empty test file', group: null, line: 1 }];
+            }
+            
+            const testPath = `ui/e2e/${fileName}`;
+            
+            testFiles.push({
+              id: `test-${testPath.replace(/[\/.:]/g, '-')}`,
+              name: fileName.replace(/\.(test|spec|flow\.test)\.(js|ts)$/, '').replace(/[-_]/g, ' '),
+              path: testPath,
+              category: 'ui/e2e',
+              tags: ['ui', 'e2e'],
+              testCases,
+              lastRun: {
+                status: 'pending',
+                timestamp: new Date().toISOString(),
+              },
+              isEmpty: stats.size === 0
+            });
+            
+            console.log(`Added e2e test file: ${fileName}`);
+          }
         }
-        foundTestsDir = testDir;
-        console.log(`Found tests directory at: ${testDir}`);
-        break;
-      } catch (err) {
-        console.log(`Directory not found: ${testDir}`, err);
       }
+    } catch (err) {
+      console.error(`Error accessing ui/e2e directory:`, err);
     }
     
-    if (!foundTestsDir) {
-      const errorMsg = `Tests directory not found. Checked: ${possibleTestDirs.join('\n')}`;
-      console.error(errorMsg);
-      return NextResponse.json(
-        { 
-          error: 'Tests directory not found',
-          details: errorMsg,
-          currentWorkingDir: process.cwd(),
-          possibleLocations: possibleTestDirs,
-          __dirname: __dirname,
-          filesInRoot: await fs.readdir(process.cwd()).catch(e => e.toString())
-        },
-        { status: 404 }
-      );
-    }
-    
-    console.log(`Using tests directory: ${foundTestsDir}`);
-    const testFiles = await getTestFiles(foundTestsDir);
-    console.log(`Found ${testFiles.length} test files`);
-    
-    if (testFiles.length === 0) {
-      console.warn('No test files found in:', foundTestsDir);
-      console.log('Attempting to list all files in directory...');
-      try {
-        const allFiles = await getAllFiles(foundTestsDir);
-        console.log('All files in directory:', allFiles);
-      } catch (e) {
-        console.error('Error listing files:', e);
+    // Process ui/smoke directory
+    try {
+      const smokeDir = path.join(backendTestsDir, 'ui', 'smoke');
+      console.log(`Checking smoke directory: ${smokeDir}`);
+      
+      const smokeFiles = await fs.readdir(smokeDir);
+      console.log(`Found ${smokeFiles.length} files in smoke directory:`, smokeFiles);
+      
+      // Process each file in the smoke directory
+      for (const fileName of smokeFiles) {
+        const filePath = path.join(smokeDir, fileName);
+        const stats = await fs.stat(filePath);
+        
+        if (!stats.isDirectory()) {
+          console.log(`Processing smoke file: ${fileName}, size: ${stats.size}`);
+          
+          // Accept any .js or .ts file
+          if (fileName.endsWith('.js') || fileName.endsWith('.ts')) {
+            let testCases = [];
+            
+            if (stats.size > 0) {
+              try {
+                const content = await fs.readFile(filePath, 'utf-8');
+                testCases = extractTestCases(content);
+                console.log(`Extracted ${testCases.length} test cases from ${fileName}`);
+              } catch (err) {
+                console.error(`Error reading file ${fileName}:`, err);
+                testCases = [{ name: 'Error reading file', group: null, line: 1 }];
+              }
+            } else {
+              console.log(`File ${fileName} is empty`);
+              testCases = [{ name: 'Empty test file', group: null, line: 1 }];
+            }
+            
+            const testPath = `ui/smoke/${fileName}`;
+            
+            testFiles.push({
+              id: `test-${testPath.replace(/[\/.:]/g, '-')}`,
+              name: fileName.replace(/\.(test|spec|flow\.test)\.(js|ts)$/, '').replace(/[-_]/g, ' '),
+              path: testPath,
+              category: 'ui/smoke',
+              tags: ['ui', 'smoke'],
+              testCases,
+              lastRun: {
+                status: 'pending',
+                timestamp: new Date().toISOString(),
+              },
+              isEmpty: stats.size === 0
+            });
+            
+            console.log(`Added smoke test file: ${fileName}`);
+          }
+        }
       }
+    } catch (err) {
+      console.error(`Error accessing ui/smoke directory:`, err);
+    }
+
+    // Process performance/load directory (for k6 scripts)
+    try {
+      const performanceDir = path.join(backendTestsDir, 'performance', 'load');
+      console.log(`Checking performance directory: ${performanceDir}`);
+      
+      const performanceFiles = await fs.readdir(performanceDir);
+      console.log(`Found ${performanceFiles.length} files in performance directory:`, performanceFiles);
+      
+      for (const fileName of performanceFiles) {
+        const filePath = path.join(performanceDir, fileName);
+        const stats = await fs.stat(filePath);
+        
+        if (!stats.isDirectory() && fileName.endsWith('.js')) { // k6 scripts are .js files
+          console.log(`Processing performance script: ${fileName}, size: ${stats.size}`);
+          
+          const testPath = `performance/load/${fileName}`;
+          const testName = fileName.replace(/\.js$/, '').replace(/[-_]/g, ' '); 
+
+          testFiles.push({
+            id: `test-${testPath.replace(/[/.:]/g, '-')}`,
+            name: testName,
+            path: testPath,
+            category: 'performance', // Matches the category in client-page.tsx
+            tags: ['performance', 'k6', 'load'], // Add relevant tags
+            testCases: [{ name: 'Main load test scenario', group: null, line: 1 }], // Placeholder for k6
+            lastRun: {
+              status: 'pending',
+              timestamp: new Date().toISOString(),
+            },
+            isEmpty: stats.size === 0
+          });
+          
+          console.log(`Added performance test script: ${fileName}`);
+        }
+      }
+    } catch (err) {
+      console.error(`Error accessing performance directory:`, err);
     }
     
-    return NextResponse.json({ 
+    console.log(`Total test files found: ${testFiles.length}`);
+    
+    return NextResponse.json({
       tests: testFiles,
       _meta: {
-        source: foundTestsDir,
+        source: backendTestsDir,
         count: testFiles.length,
         timestamp: new Date().toISOString()
       }
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('Error reading test files:', error);
-    return NextResponse.json(
-      { 
-        error: 'Failed to read test files', 
-        details: errorMessage,
-        stack: error instanceof Error ? error.stack : undefined
-      },
-      { status: 500 }
-    );
+    console.error('Error reading tests:', error);
+    return NextResponse.json({ error: 'Failed to read tests' }, { status: 500 });
   }
 }

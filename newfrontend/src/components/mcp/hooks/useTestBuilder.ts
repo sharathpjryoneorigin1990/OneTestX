@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useMCP } from '../MCPClient';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useMCP } from '../MCPClient'; // Assuming MCPClient exports useMCP
 import toast from 'react-hot-toast';
+import * as mcpService from '../../../services/mcpService';
 
 interface TestStep {
   id: string;
@@ -8,32 +9,39 @@ interface TestStep {
   selector?: string;
   value?: string;
   timestamp?: number;
+  description: string; // Made non-optional
 }
 
 interface MCPTest {
   id: string;
   name: string;
   description: string;
-  websiteUrl: string;
+  websiteUrl?: string; // Made optional to align with mcpCurrentTest type
   steps: TestStep[];
   createdAt: number;
   updatedAt: number;
 }
 
-export const useTestBuilder = () => {
+interface ChatMessage {
+  type: 'user' | 'system' | 'error';
+  text: string;
+}
+
+export const useTestBuilder = (iframeRef: React.RefObject<HTMLIFrameElement>) => {
   const {
-    currentTest,
-    startRecording,
-    stopRecording,
-    saveTest,
-    runTest,
-    clearCurrentTest,
-    addTestStep,
+    currentTest: mcpCurrentTest, // Renamed to avoid conflict
+    startRecording: mcpStartRecording,
+    stopRecording: mcpStopRecording,
+    saveTest: mcpSaveTest,
+    runTest: mcpRunTest,
+    clearCurrentTest: mcpClearCurrentTest,
+    addTestStep: mcpAddTestStep,
     connect,
-    isConnected,
-    setupEventListeners
+    // isConnected, // Not directly used, connect() result is used
+    // setupEventListeners // Assuming this is handled within MCPClient or not needed here
   } = useMCP();
 
+  const [currentTest, setCurrentTest] = useState<MCPTest | null>(null);
   const [testName, setTestName] = useState('');
   const [testDescription, setTestDescription] = useState('');
   const [websiteUrl, setWebsiteUrl] = useState('');
@@ -43,404 +51,354 @@ export const useTestBuilder = () => {
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [chatInput, setChatInput] = useState('');
-  const [chatMessages, setChatMessages] = useState<Array<{type: 'user' | 'system', text: string}>>([]);
+  const [chatMessages, setChatMessagesInternal] = useState<ChatMessage[]>([]); // Renamed for clarity
   const [isProcessingCommand, setIsProcessingCommand] = useState(false);
 
-  // Initialize MCP client on mount
-  useEffect(() => {
-    console.log('Initializing MCP client...');
-    const init = async () => {
-      try {
-        const connected = await connect();
-        console.log('MCP client connected:', connected);
-      } catch (error) {
-        console.error('Failed to initialize MCP client:', error);
-        toast.error('Failed to initialize MCP client');
-      }
-    };
+  // Browser automation state
+  const [browserSession, setBrowserSession] = useState<mcpService.BrowserSession | null>(null);
+  const [isAutomatedBrowser, setIsAutomatedBrowser] = useState(false);
+  const [lastScreenshot, setLastScreenshot] = useState<string | null>(null);
+  const screenshotIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    init();
-  }, [connect]);
+  const setChatMessages = useCallback((updater: ChatMessage[] | ((prev: ChatMessage[]) => ChatMessage[])) => {
+    setChatMessagesInternal(updater);
+  }, []);
 
-  // Initialize form with current test data and create a new test if none exists
-  useEffect(() => {
-    console.log('Current test changed:', currentTest);
-    
-    if (currentTest) {
-      setTestName(currentTest.name);
-      setTestDescription(currentTest.description);
-      setWebsiteUrl(currentTest.websiteUrl || '');
-    } else {
-      createNewTest();
-    }
-  }, [currentTest]);
-
+  // Initialize MCP client and check for browser automation service
   const createNewTest = useCallback(() => {
-    const newTest = {
-      id: `test-${Date.now()}`,
+    const newId = `test-${Date.now()}`;
+    const newTestObj: MCPTest = { 
+      id: newId,
       name: 'New Test',
-      description: 'Test created with TestBuilder',
+      description: 'A new test created via TestBuilder',
       websiteUrl: '',
       steps: [],
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     };
-    
-    console.log('Creating new test:', newTest);
-    if (typeof clearCurrentTest === 'function') {
-      clearCurrentTest();
-      setTimeout(() => {
-        if (typeof saveTest === 'function') {
-          saveTest(newTest).then(savedTest => {
-            console.log('New test saved:', savedTest);
-          }).catch(error => {
-            console.error('Error saving new test:', error);
-          });
-        }
-      }, 100);
-    }
-  }, [clearCurrentTest, saveTest]);
+    setCurrentTest(newTestObj);
+    setTestName(newTestObj.name);
+    setTestDescription(newTestObj.description);
+    setWebsiteUrl(newTestObj.websiteUrl || ''); // Ensure string for setWebsiteUrl
+    if (typeof mcpClearCurrentTest === 'function') mcpClearCurrentTest();
+    if (typeof mcpSaveTest === 'function') mcpSaveTest(newTestObj);
+    console.log('Created new test:', newTestObj);
+  }, [mcpClearCurrentTest, mcpSaveTest, setCurrentTest, setTestName, setTestDescription, setWebsiteUrl]);
 
-  const handleStartRecording = useCallback(() => {
+  // Initialize MCP client and check for browser automation service
+  useEffect(() => {
+    const initMcp = async () => {
+      try {
+        await connect(); // Establish connection
+        const status = await mcpService.checkStatus();
+        if (status && status.status === 'active') {
+          setIsAutomatedBrowser(true);
+          toast.success('Browser automation service is available.');
+        } else {
+          toast.error('Browser automation service not available. Falling back to iframe mode.');
+          setIsAutomatedBrowser(false);
+        }
+      } catch (error) {
+        console.error('Failed to initialize MCP client or check service status:', error);
+        toast.error('MCP initialization failed. Using iframe mode.');
+        setIsAutomatedBrowser(false);
+      }
+    };
+    initMcp();
+
+    return () => { // Cleanup
+      if (browserSession?.sessionId) {
+        mcpService.closeBrowserSession(browserSession.sessionId)
+          .catch(err => console.error('Error closing browser session on unmount:', err));
+      }
+      if (screenshotIntervalRef.current) {
+        clearInterval(screenshotIntervalRef.current);
+      }
+    };
+  }, [connect]); // Only re-run if connect changes
+
+  // Sync with mcpCurrentTest
+  useEffect(() => {
+    if (mcpCurrentTest) {
+      setCurrentTest(mcpCurrentTest);
+      setTestName(mcpCurrentTest.name);
+      setTestDescription(mcpCurrentTest.description);
+      setWebsiteUrl(mcpCurrentTest.websiteUrl || '');
+    } else if (!currentTest) { // If no mcpCurrentTest and no local currentTest, create one
+      createNewTest();
+    }
+  }, [mcpCurrentTest, currentTest, createNewTest]); // Added currentTest to dependencies
+
+  const handleStartRecording = useCallback(async () => {
     if (!websiteUrl) {
-      toast.error('Please enter a website URL');
+      toast.error('Please enter a website URL to start recording.');
+      return;
+    }
+    try {
+      new URL(websiteUrl); // Validate URL
+    } catch (_) {
+      toast.error('Invalid URL format.');
       return;
     }
 
-    try {
-      // Validate URL format
-      const url = new URL(websiteUrl);
-      if (!url.protocol.startsWith('http')) {
-        toast.error('Please enter a valid http:// or https:// URL');
-        return;
-      }
+    setIsRecording(true);
 
-      if (!isIframeLoaded) {
-        toast.error('Please wait for the website to load');
-        return;
-      }
+    if (isAutomatedBrowser) {
+      try {
+        toast.loading('Starting browser session...', { id: 'sessionToast' });
+        let currentSession = browserSession;
+        if (!currentSession || !currentSession.sessionId) {
+            currentSession = await mcpService.createBrowserSession({}); // Pass options if any
+            setBrowserSession(currentSession);
+        }
+        
+        if (currentSession?.sessionId) {
+            await mcpService.navigateToUrl(currentSession.sessionId, websiteUrl);
+            toast.success(`Navigated to ${websiteUrl}`, { id: 'sessionToast' });
 
-      const success = startRecording(websiteUrl);
-      if (success) {
-        setIsRecording(true);
-        toast.success('Recording started');
+            if (screenshotIntervalRef.current) clearInterval(screenshotIntervalRef.current);
+            screenshotIntervalRef.current = setInterval(async () => {
+                try {
+                    if (browserSession?.sessionId) { // Re-check session
+                        const screenshotResult = await mcpService.takeScreenshot(browserSession.sessionId);
+                        if (screenshotResult) {
+                            if (typeof (screenshotResult as any).screenshot === 'string') {
+                                setLastScreenshot(`data:image/jpeg;base64,${(screenshotResult as any).screenshot}`);
+                            } else if (screenshotResult instanceof Blob) {
+                                setLastScreenshot(URL.createObjectURL(screenshotResult));
+                            } else {
+                                console.error('Unexpected screenshot format from mcpService.takeScreenshot:', screenshotResult);
+                                setLastScreenshot(null);
+                            }
+                        } else {
+                            console.error('No screenshot data received from mcpService.takeScreenshot');
+                            setLastScreenshot(null);
+                        }
+                    }
+                } catch (err) {
+                    console.error('Error taking screenshot:', err);
+                    // Optionally stop interval if screenshot fails repeatedly
+                }
+            }, 3000);
+        } else {
+             throw new Error('Failed to create or retrieve browser session.');
+        }
+      } catch (error) {
+        console.error('Browser automation start error:', error);
+        toast.error(`Browser session error: ${error instanceof Error ? error.message : 'Unknown error'}`, { id: 'sessionToast' });
+        setIsAutomatedBrowser(false); // Fallback to iframe if session fails
+        toast('Falling back to iframe recording mode.', { icon: 'ℹ️' });
+        // Proceed with iframe recording
+        if (typeof mcpStartRecording === 'function') mcpStartRecording(websiteUrl);
       }
-    } catch (error) {
-      toast.error('Please enter a valid URL');
+    } else {
+        // Standard iframe recording
+        if (typeof mcpStartRecording === 'function') mcpStartRecording(websiteUrl);
     }
-  }, [websiteUrl, isIframeLoaded, startRecording]);
+    toast.success('Recording started!');
+  }, [websiteUrl, isAutomatedBrowser, browserSession, mcpStartRecording, setBrowserSession, setLastScreenshot, screenshotIntervalRef]);
 
   const handleStopRecording = useCallback(() => {
-    stopRecording();
+    if (typeof mcpStopRecording === 'function') mcpStopRecording();
     setIsRecording(false);
-    toast.success('Recording stopped');
-  }, [stopRecording]);
+    if (screenshotIntervalRef.current) {
+      clearInterval(screenshotIntervalRef.current);
+      screenshotIntervalRef.current = null;
+    }
+    if (browserSession?.sessionId && isAutomatedBrowser) { // Only close if it was an automated session
+        mcpService.closeBrowserSession(browserSession.sessionId)
+            .then(() => {
+                toast.success('Browser session closed.');
+                setBrowserSession(null); // Clear session state
+            })
+            .catch(err => toast.error(`Failed to close browser session: ${err.message}`));
+    }
+    toast.success('Recording stopped.');
+  }, [mcpStopRecording, browserSession, isAutomatedBrowser]);
 
   const handleSaveTest = useCallback(async () => {
-    if (!testName) {
-      toast.error('Please enter a test name');
+    if (!currentTest) {
+      toast.error('No test data to save.');
       return;
     }
-
     setIsSaving(true);
+    const testToSave: MCPTest = { 
+      ...currentTest,
+      name: testName,
+      description: testDescription,
+      websiteUrl: websiteUrl,
+      updatedAt: Date.now(),
+    };
     try {
-      const testData = {
-        name: testName,
-        description: testDescription,
-        websiteUrl,
-        steps: currentTest?.steps || []
-      };
-      await saveTest(testData);
-      toast.success('Test saved successfully');
+      if (typeof mcpSaveTest === 'function') {
+        await mcpSaveTest(testToSave);
+        toast.success('Test saved successfully!');
+      } else {
+        throw new Error("Save function not available.");
+      }
     } catch (error) {
       console.error('Error saving test:', error);
-      toast.error('Failed to save test');
+      toast.error(`Failed to save test: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsSaving(false);
     }
-  }, [currentTest, testName, testDescription, websiteUrl, saveTest]);
+  }, [currentTest, testName, testDescription, websiteUrl, mcpSaveTest]);
 
   const handleRunTest = useCallback(async () => {
     if (!currentTest?.id) {
-      toast.error('No test selected to run');
+      toast.error('No test selected to run.');
       return;
     }
-    
     setIsRunning(true);
     try {
-      await runTest(currentTest.id);
-      toast.success('Test completed successfully');
+      if (typeof mcpRunTest === 'function') {
+        await mcpRunTest(currentTest.id); // Assumes mcpRunTest handles UI updates or returns status
+        toast.success(`Test "${currentTest.name}" run initiated.`);
+      } else {
+        throw new Error("Run function not available.");
+      }
     } catch (error) {
       console.error('Error running test:', error);
-      toast.error('Failed to run test');
+      toast.error(`Failed to run test: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsRunning(false);
     }
-  }, [currentTest, runTest]);
+  }, [currentTest, mcpRunTest]);
 
   const handleClearTest = useCallback(() => {
-    clearCurrentTest();
-    createNewTest();
-    toast.success('Test cleared');
-  }, [clearCurrentTest, createNewTest]);
+    if (typeof mcpClearCurrentTest === 'function') mcpClearCurrentTest();
+    createNewTest(); // This will also save the new empty test via useEffect in useMCP
+    setChatMessagesInternal([]);
+    setLastScreenshot(null);
+    if (browserSession?.sessionId) {
+        mcpService.closeBrowserSession(browserSession.sessionId)
+            .then(() => setBrowserSession(null))
+            .catch(err => console.error('Error clearing test session:', err));
+    }
+    toast.success('Test cleared and new test started.');
+  }, [mcpClearCurrentTest, createNewTest, browserSession]);
 
-  const handleClearChat = useCallback(() => {
-    setChatMessages([]);
-  }, []);
+  const addStepToTest = useCallback((stepData: Omit<TestStep, 'id' | 'timestamp'>) => {
+    const newStep: TestStep = {
+      ...stepData,
+      id: `step-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      timestamp: Date.now(),
+    };
+    if (typeof mcpAddTestStep === 'function') {
+        mcpAddTestStep(newStep); // This should update currentTest in useMCP context
+        toast.success(`Step added: ${newStep.action} on ${newStep.selector || 'page'}`);
+    } else {
+        console.error("addTestStep function is not available from useMCP.");
+        toast.error("Could not add step: MCP function unavailable.");
+    }
+  }, [mcpAddTestStep]);
 
-  const handleChatCommand = useCallback(async (command: string) => {
-    if (!websiteUrl) {
-      toast.error('Please enter a website URL first');
-      return;
+  useEffect(() => {
+    const messageHandler = (event: MessageEvent<any>) => { 
+      if (event.data && event.data.type === 'MCP_IFRAME_EVENT' && isRecording) {
+        const { action, selector, value, description: eventDescription } = event.data.payload;
+        const stepDesc = eventDescription || `${action}${selector ? ` on ${selector}` : ''}${value ? ` with value '${value}'` : ''}`;
+        
+        if (currentTest && currentTest.steps && currentTest.steps.length > 0) {
+            const lastStep = currentTest.steps[currentTest.steps.length - 1];
+            if (lastStep.action === action && lastStep.selector === selector && lastStep.value === value) {
+                console.log("Skipping duplicate step from iframe event:", stepDesc);
+                return;
+            }
+        }
+
+        addStepToTest({
+          action: action,
+          selector: selector,
+          value: value,
+          description: stepDesc || `Step ${currentTest && currentTest.steps ? currentTest.steps.length + 1 : 1}: ${action} ${selector || ''} ${value || ''}`.trim(),
+        });
+        setChatMessagesInternal(prev => [...prev, { type: 'system', text: `IFRAME EVENT: ${stepDesc}` }]);
+        toast(`Step from iframe: ${stepDesc}`, { icon: '➡️' });
+      } else if (event.data && event.data.type === 'IFRAME_LOADED') {
+        setIsIframeLoaded(true);
+        toast.success('Iframe content loaded.');
+        setChatMessagesInternal(prev => [...prev, { type: 'system', text: 'Iframe content loaded and ready.'}]);
+      }
+    };
+
+    window.addEventListener('message', messageHandler);
+    return () => {
+      window.removeEventListener('message', messageHandler);
+    };
+  }, [isRecording, addStepToTest, currentTest, setChatMessagesInternal, setIsIframeLoaded]);
+
+  const executeIframeCommand = useCallback(async (actionCmd: string, targetSelector?: string, inputValue?: string): Promise<any> => {
+    const iframe = iframeRef.current;
+    if (!iframe) {
+        toast.error('Iframe element not found.');
+        setChatMessagesInternal(prev => [...prev, { type: 'error', text: 'Iframe element not found.' }]);
+        return Promise.reject(new Error('Iframe element not found.'));
+    }
+    const contentWin = iframe.contentWindow;
+    if (!contentWin) {
+        toast.error('Iframe content window not accessible.');
+        setChatMessagesInternal(prev => [...prev, { type: 'error', text: 'Iframe content window not accessible.' }]);
+        return Promise.reject(new Error('Iframe content window not accessible.'));
     }
 
-    if (!isIframeLoaded) {
-      toast.error('Please wait for the website to load');
-      return;
-    }
 
-    setChatMessages(prev => [...prev, { type: 'user', text: command }]);
-    setIsProcessingCommand(true);
-    setChatInput('');
 
-    try {
-      // Parse the command
-      let action = 'click';
-      let value = command;
-      let target = '';
-      
-      if (command.toLowerCase().startsWith('click ')) {
-        action = 'click';
-        target = command.substring(6).trim();
-        value = target;
-        console.log(`Parsed click command: target="${target}"`);
-      } else if (command.toLowerCase().startsWith('type ')) {
-        action = 'type';
-        
-        // Try to parse "type value in field" pattern
-        const typeMatch = command.match(/^type\s+(["']?)(.+?)\1\s+(?:in|into|to)\s+(["']?)(.+?)\3$/);
-        
-        if (typeMatch) {
-          value = typeMatch[2];
-          target = typeMatch[4];
-          console.log(`Parsed type command with regex: value="${value}", target="${target}"`);
-        } else {
-          // Simpler pattern: "type value in field"
-          const parts = command.substring(5).trim().split(/\s+(?:in|into|to)\s+/);
-          if (parts.length === 2) {
-            value = parts[0].trim();
-            target = parts[1].trim();
-            console.log(`Parsed type command with split: value="${value}", target="${target}"`);
+    const messageId = `mcp-cmd-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    return new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        window.removeEventListener('message', listener);
+        const errorMsg = `Iframe command timed out: ${actionCmd}`;
+        setChatMessagesInternal(prev => [...prev, { type: 'error', text: errorMsg }]);
+        toast.error(errorMsg);
+        reject(new Error(errorMsg));
+      }, 15000); 
+
+      const listener = (event: MessageEvent<any>) => {
+        if (event.data && event.data.type === 'MCP_COMMAND_RESPONSE' && event.data.messageId === messageId) {
+          clearTimeout(timeoutId);
+          window.removeEventListener('message', listener);
+          if (event.data.status === 'success') {
+            const successMsg = `Iframe command success: ${event.data.result || actionCmd}`;
+            setChatMessagesInternal(prev => [...prev, { type: 'system', text: successMsg }]);
+            resolve(event.data.result);
           } else {
-            value = command.substring(5).trim();
-            console.log(`Parsed simple type command: value="${value}", no target specified`);
+            const errorMsg = `Iframe command error: ${event.data.error || 'Unknown error'}`;
+            setChatMessagesInternal(prev => [...prev, { type: 'error', text: errorMsg }]);
+            toast.error(errorMsg);
+            reject(new Error(event.data.error || 'Iframe command failed'));
           }
-        }
-      } else if (command.toLowerCase().startsWith('select ')) {
-        action = 'select';
-        
-        // Try to parse "select option from dropdown" pattern
-        const selectMatch = command.match(/^select\s+(["']?)(.+?)\1\s+(?:from|in)\s+(["']?)(.+?)\3$/);
-        
-        if (selectMatch) {
-          value = selectMatch[2];
-          target = selectMatch[4];
-          console.log(`Parsed select command with regex: value="${value}", target="${target}"`);
-        } else {
-          // Simpler pattern: "select option from dropdown"
-          const parts = command.substring(7).trim().split(/\s+(?:from|in)\s+/);
-          if (parts.length === 2) {
-            value = parts[0].trim();
-            target = parts[1].trim();
-            console.log(`Parsed select command with split: value="${value}", target="${target}"`);
-          } else {
-            value = command.substring(7).trim();
-            console.log(`Parsed simple select command: value="${value}", no target specified`);
-          }
-        }
-      }
-      
-      console.log(`Parsed command: action=${action}, target=${target}, value=${value}`);
-      
-      // Create a unique message ID for this command
-      const messageId = `cmd_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-      
-      // Create a promise that will resolve when we get a response from the iframe
-      const resultPromise = new Promise((resolve, reject) => {
-        // Set up message listener for this specific command
-        const messageHandler = (event: MessageEvent) => {
-          console.log('Received message in handler:', event.data?.type, event.data);
-          
-          // Handle command acknowledgment
-          if (event.data?.type === 'MCP_COMMAND_RECEIVED' && event.data?.messageId === messageId) {
-            console.log('Command received by iframe:', messageId);
-            // Don't remove listener yet, wait for the result
-          }
-          
-          // Handle command result
-          if (event.data?.type === 'MCP_COMMAND_RESULT' && event.data?.messageId === messageId) {
-            console.log('Command result received:', event.data);
-            window.removeEventListener('message', messageHandler);
-            if (event.data.success) {
-              resolve(event.data);
-            } else {
-              reject(new Error(event.data.error || 'Command failed'));
-            }
-          }
-        };
-        
-        window.addEventListener('message', messageHandler);
-        
-        // Set timeout to reject the promise if no response is received
-        setTimeout(() => {
-          window.removeEventListener('message', messageHandler);
-          console.error('Command timed out:', messageId);
-          reject(new Error('Command timed out after 30 seconds'));
-        }, 30000);
-      });
-      
-      // Send the command to the iframe
-      console.log('Looking for iframe to send command to...');
-      const iframe = document.querySelector('iframe');
-      
-      if (!iframe) {
-        console.error('No iframe found in the document');
-        throw new Error('Cannot find iframe in the document');
-      }
-      
-      if (!iframe.contentWindow) {
-        console.error('Cannot access iframe contentWindow');
-        throw new Error('Cannot access iframe content');
-      }
-      
-      // First, check if the MCP script is loaded in the iframe
-      console.log('Checking if MCP script is loaded in iframe...');
-      
-      // Set up a listener for script status check
-      const scriptCheckPromise = new Promise<boolean>((resolve) => {
-        const scriptCheckHandler = (event: MessageEvent) => {
-          if (event.data?.type === 'MCP_SCRIPT_STATUS') {
-            window.removeEventListener('message', scriptCheckHandler);
-            console.log('Received script status:', event.data.loaded);
-            resolve(!!event.data.loaded);
-          }
-        };
-        
-        window.addEventListener('message', scriptCheckHandler);
-        
-        // Set timeout for script check
-        setTimeout(() => {
-          window.removeEventListener('message', scriptCheckHandler);
-          console.log('Script check timed out, assuming not loaded');
-          resolve(false);
-        }, 2000);
-        
-        // Send script check request
-        iframe.contentWindow?.postMessage({
-          type: 'MCP_CHECK_SCRIPT'
-        }, '*');
-      });
-      
-      // Wait for script check result
-      const isScriptLoaded = await scriptCheckPromise;
-      
-      if (!isScriptLoaded) {
-        console.warn('MCP script may not be loaded in iframe, attempting to reinject...');
-        // Try to inject the script again
-        const scriptContent = `
-          (function() {
-            if (!window.__MCP_LOADED__) {
-              const script = document.createElement('script');
-              script.src = '${window.location.origin}/mcp-script.js';
-              script.onload = function() {
-                console.log('MCP script loaded via emergency injection');
-              };
-              document.head.appendChild(script);
-            }
-          })();
-        `;
-        
-        // Create a blob URL for the script
-        const blob = new Blob([scriptContent], { type: 'text/javascript' });
-        const scriptUrl = URL.createObjectURL(blob);
-        
-        // Send the script URL to the iframe
-        iframe.contentWindow.postMessage({
-          type: 'MCP_INJECT_SCRIPT',
-          scriptUrl
-        }, '*');
-        
-        // Wait a bit for the script to load
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
-      
-      console.log('Sending command to iframe:', {
-        type: 'MCP_EXECUTE_COMMAND',
-        messageId,
-        command: { action, target, value }
-      });
-      
-      // Add global message listener for debugging that will stay active longer
-      const debugMessageListener = (event: MessageEvent) => {
-        if (event.data?.messageId === messageId) {
-          console.log(`Received message for command ${messageId}:`, event.data);
         }
       };
-      window.addEventListener('message', debugMessageListener);
-      
-      // Send the command
-      iframe.contentWindow.postMessage({
+
+      window.addEventListener('message', listener);
+
+      console.log('Sending command to iframe:', { type: 'MCP_EXECUTE_COMMAND', messageId, command: { action: actionCmd, target: targetSelector, value: inputValue } });
+      contentWin.postMessage({
         type: 'MCP_EXECUTE_COMMAND',
         messageId,
         command: {
-          action,
-          target,
-          value,
+          action: actionCmd,
+          target: targetSelector,
+          value: inputValue
         }
-      }, '*');
-      
-      console.log('Message sent to iframe');
-      
-      // Remove debug listener after 30 seconds (matching the command timeout)
-      setTimeout(() => {
-        window.removeEventListener('message', debugMessageListener);
-        console.log(`Removed debug listener for command ${messageId}`);
-      }, 30000);
-      
-      // Wait for the result
-      const iframeResult = await resultPromise as any;
-      
-      // Add the result to chat messages
-      setChatMessages(prev => [...prev, { 
-        type: 'system', 
-        text: iframeResult.message || 'Command executed successfully'
-      }]);
-      
-      // Add as a test step if successful
-      if (iframeResult.success) {
-        const newStep = {
-          id: `step_${Date.now()}`,
-          action,
-          value,
-          selector: iframeResult.selector || '',
-          description: `Execute chat command: ${command}`
-        };
-        addTestStep(newStep);
-      }
-    } catch (error) {
-      // Handle different error types
-      let errorMessage = 'Unknown error occurred';
-      
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      
-      setChatMessages(prev => [...prev, { type: 'system', text: errorMessage }]);
-      toast.error(errorMessage);
-    } finally {
-      setIsProcessingCommand(false);
+      }, '*'); 
+    });
+  }, [iframeRef, setChatMessagesInternal]);
+
+  const handleChatCommand = useCallback(async () => {
+    console.log("handleChatCommand called (Simplified)"); 
+    if (!chatInput.trim()) {
+        console.log("handleChatCommand: chatInput was empty or whitespace.");
+        return;
     }
-  }, [websiteUrl, isIframeLoaded, currentTest?.id, addTestStep]);
+    console.log("handleChatCommand: chatInput is: ", chatInput);
+  }, [chatInput]);
+
+  const handleClearChat = useCallback(() => {
+    setChatMessagesInternal([]);
+  }, [setChatMessagesInternal]);
 
   return {
     // State
@@ -453,17 +411,22 @@ export const useTestBuilder = () => {
     isIframeLoaded,
     isRecording,
     chatInput,
-    chatMessages,
+    chatMessages: chatMessages, // Expose the state variable
     isProcessingCommand,
-    currentTest,
+    currentTest, 
+    browserSession,
+    isAutomatedBrowser,
+    lastScreenshot,
 
     // Setters
     setTestName,
     setTestDescription,
     setWebsiteUrl,
     setActiveStep,
-    setIsIframeLoaded,
+    setIsIframeLoaded, 
     setChatInput,
+    // setChatMessages is not directly exposed if setChatMessagesInternal is used internally.
+    // If TestBuilder needs to directly set messages, expose setChatMessagesInternal as setChatMessages.
 
     // Handlers
     handleStartRecording,
@@ -472,6 +435,6 @@ export const useTestBuilder = () => {
     handleRunTest,
     handleClearTest,
     handleClearChat,
-    handleChatCommand
+    handleChatCommand,
   };
 };

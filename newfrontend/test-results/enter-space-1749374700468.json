@@ -1,0 +1,26 @@
+{
+  "id": "enter-space-1749374700468",
+  "testId": "enter-space",
+  "testName": "Enter/Space Activation",
+  "url": "https://apply-qa.apps.asu.edu/dashboard",
+  "timestamp": "2025-06-08T09:25:34.431Z",
+  "status": "completed",
+  "passed": true,
+  "details": "Test completed successfully.",
+  "steps": [
+    {
+      "action": "Test started",
+      "timestamp": "2025-06-08T09:25:34.431Z",
+      "status": "in-progress"
+    },
+    {
+      "action": "Test passed",
+      "timestamp": "2025-06-08T09:25:36.510Z",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [],
+  "warnings": [],
+  "focusedElement": null,
+  "videoUrl": "blob:http://localhost:3000/e5ffedf7-1509-4671-834b-e56d88b15c68"
+}

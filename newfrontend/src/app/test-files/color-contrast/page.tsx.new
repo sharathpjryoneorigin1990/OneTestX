@@ -1,0 +1,227 @@
+"use client";
+
+import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
+import { Input } from '@/components/ui/Input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Badge } from '@/components/ui/Badge';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert';
+import { AlertCircle, CheckCircle2, ExternalLink, Loader2, Info, XCircle } from 'lucide-react';
+import { useContrastCheck } from '@/hooks/useContrastCheck';
+import { ContrastResultItem } from '@/components/accessibility/ContrastResultItem';
+
+export default function ColorContrastPage() {
+  const [url, setUrl] = useState('');
+  const [activeTab, setActiveTab] = useState('summary');
+  const { results, isLoading, error, checkContrast } = useContrastCheck();
+  
+  // Categorize results
+  const failures = results?.filter(r => r.contrast.wcagLevel === 'Fail') || [];
+  const warnings = results?.filter(r => r.contrast.wcagLevel === 'AA') || [];
+  const passes = results?.filter(r => r.contrast.wcagLevel === 'AAA') || [];
+  
+  const totalIssues = failures.length + warnings.length;
+  const totalPasses = passes.length;
+  const totalElements = totalIssues + totalPasses;
+
+  const handleRunTest = async () => {
+    if (!url) return;
+    await checkContrast(url);
+  };
+
+  return (
+    <div className="container mx-auto py-8 px-4">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Color Contrast Checker</h1>
+        <p className="text-muted-foreground">
+          Test your website's color contrast ratios to ensure text is readable for all users.
+        </p>
+      </div>
+      
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Test Configuration</CardTitle>
+          <CardDescription>
+            Enter a URL to check color contrast issues on the page.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex space-x-2">
+            <Input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://example.com"
+              className="flex-1"
+              disabled={isLoading}
+              onKeyDown={(e) => e.key === 'Enter' && handleRunTest()}
+            />
+            <Button 
+              onClick={handleRunTest}
+              disabled={isLoading || !url.trim()}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Testing...
+                </>
+              ) : (
+                'Run Test'
+              )}
+            </Button>
+          </div>
+          {error && (
+            <Alert variant="destructive" className="mt-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      {results && (
+        <div className="space-y-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center p-4 border rounded-lg">
+                  <div className="text-2xl font-bold text-destructive">{failures.length}</div>
+                  <div className="text-sm text-muted-foreground">Failures</div>
+                </div>
+                <div className="text-center p-4 border rounded-lg">
+                  <div className="text-2xl font-bold text-warning">{warnings.length}</div>
+                  <div className="text-sm text-muted-foreground">Warnings</div>
+                </div>
+                <div className="text-center p-4 border rounded-lg">
+                  <div className="text-2xl font-bold text-success">{passes.length}</div>
+                  <div className="text-sm text-muted-foreground">Passing</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="summary">Summary</TabsTrigger>
+              <TabsTrigger value="failures">
+                Failures <Badge variant="destructive" className="ml-2">{failures.length}</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="warnings">
+                Warnings <Badge variant="warning" className="ml-2">{warnings.length}</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="passes">
+                Passes <Badge variant="success" className="ml-2">{passes.length}</Badge>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="summary" className="space-y-4 pt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Test Summary</CardTitle>
+                  <CardDescription>
+                    Overview of color contrast issues found on the page.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {failures.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-medium flex items-center text-destructive">
+                          <XCircle className="h-5 w-5 mr-2" />
+                          {failures.length} Contrast Failures
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          These elements have insufficient color contrast and may be difficult to read.
+                        </p>
+                      </div>
+                    )}
+                    {warnings.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-medium flex items-center text-warning">
+                          <AlertCircle className="h-5 w-5 mr-2" />
+                          {warnings.length} Warnings
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          These elements meet minimum contrast requirements but could be improved.
+                        </p>
+                      </div>
+                    )}
+                    {passes.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-medium flex items-center text-success">
+                          <CheckCircle2 className="h-5 w-5 mr-2" />
+                          {passes.length} Passing Elements
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          These elements meet all contrast requirements.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="failures" className="pt-4">
+              <div className="space-y-4">
+                {failures.length === 0 ? (
+                  <Alert>
+                    <Info className="h-4 w-4" />
+                    <AlertTitle>No contrast failures found</AlertTitle>
+                    <AlertDescription>
+                      All text elements meet the minimum contrast requirements.
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  failures.map((result, index) => (
+                    <ContrastResultItem key={index} result={result} />
+                  ))
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="warnings" className="pt-4">
+              <div className="space-y-4">
+                {warnings.length === 0 ? (
+                  <Alert>
+                    <Info className="h-4 w-4" />
+                    <AlertTitle>No warnings found</AlertTitle>
+                    <AlertDescription>
+                      No elements with contrast warnings were found.
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  warnings.map((result, index) => (
+                    <ContrastResultItem key={index} result={result} />
+                  ))
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="passes" className="pt-4">
+              <div className="space-y-4">
+                {passes.length === 0 ? (
+                  <Alert>
+                    <Info className="h-4 w-4" />
+                    <AlertTitle>No passing elements found</AlertTitle>
+                    <AlertDescription>
+                      No elements with sufficient contrast were found.
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {passes.map((result, index) => (
+                      <ContrastResultItem key={index} result={result} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      )}
+    </div>
+  );
+}
