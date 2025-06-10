@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Badge } from '@/components/ui/Badge';
-import { ScrollArea } from '@/components/ui/ScrollArea';
 import { Terminal, Play, Loader2 } from 'lucide-react';
 
 type Test = {
@@ -56,7 +55,7 @@ const TestCard = ({
         onClick={() => onRun(test.id)}
         disabled={isRunning}
         className="w-full"
-        variant={isRunning ? 'secondary' : 'default'}
+        variant={isRunning ? 'secondary' : 'primary'}
       >
         {isRunning ? (
           <>
@@ -81,11 +80,11 @@ const TestCard = ({
             <span className="text-xs opacity-75">{result.timestamp}</span>
           </div>
           {result.output.length > 0 && (
-            <ScrollArea className="h-32 mt-2 bg-white/50 rounded p-2 text-xs font-mono">
+            <div className="h-32 mt-2 bg-white/50 rounded p-2 text-xs font-mono overflow-y-auto">
               {result.output.map((line, i) => (
                 <div key={i} className="whitespace-pre-wrap">{line}</div>
               ))}
-            </ScrollArea>
+            </div>
           )}
         </div>
       </div>
@@ -104,7 +103,7 @@ export default function PerformanceDashboard() {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const response = await fetch('http://localhost:3005/api/performance/tests');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ''}/api/performance/tests`);
         if (!response.ok) {
           const error = await response.text();
           throw new Error(`Failed to fetch tests: ${error}`);
@@ -130,7 +129,7 @@ export default function PerformanceDashboard() {
     setActiveTest(testId);
     
     try {
-      const response = await fetch('http://localhost:3005/api/performance/run-test', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ''}/api/performance/run-test`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

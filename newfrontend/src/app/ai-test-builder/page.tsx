@@ -144,11 +144,30 @@ export default function AiTestBuilderPage() {
       }
 
       if (structuredCommand) {
+        console.log('[AI_TEST_BUILDER] Structured command:', JSON.stringify(structuredCommand, null, 2));
+
+        // Adapt payload to be flatter for the backend
+        const payload: any = {
+          action: structuredCommand.action,
+        };
+
+        if (structuredCommand.selectors && structuredCommand.selectors.length > 0) {
+          payload.selector = structuredCommand.selectors[0]; // Use the first selector for now
+        }
+
+        if (structuredCommand.action === 'type' && structuredCommand.text) {
+          payload.value = structuredCommand.text;
+        }
+        // If other actions might have a 'value' (e.g. navigate), add them here
+        // else if (structuredCommand.action === 'navigate' && structuredCommand.text) { 
+        //   payload.value = structuredCommand.text; // Assuming navigate uses 'text' as URL
+        // }
+
+        console.log('[AI_TEST_BUILDER] Sending payload to backend:', JSON.stringify(payload, null, 2));
+
         // Execute command using MCP API
-        const response = await apiClient.post<{ success: boolean; message: string }>(`/api/mcp/session/${sessionId}/command`, {
-          command: structuredCommand
-        });
-        
+        const response = await apiClient.post<{ success: boolean; message: string }>(`/api/mcp/session/${sessionId}/command`, payload);
+
         const result = response.data;
         setChatMessages((prevMessages: Message[]) => [
           ...prevMessages,

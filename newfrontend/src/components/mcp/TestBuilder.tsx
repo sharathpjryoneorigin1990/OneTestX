@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FiMessageCircle, FiExternalLink } from 'react-icons/fi';
 import { useTestBuilder } from './hooks/useTestBuilder';
 import { TestHeader } from './components/TestHeader';
@@ -170,6 +170,14 @@ export const TestBuilder = () => {
     handleClearChat,
     handleChatCommand
   } = useTestBuilder(iframeRef);
+
+  useEffect(() => {
+    console.log('[TestBuilder.tsx] handleChatCommand reference updated. Function code:\n', handleChatCommand?.toString());
+  }, [handleChatCommand]);
+
+  useEffect(() => {
+    console.log('[TestBuilder.tsx] handleChatCommand reference updated. Function code:\n', handleChatCommand?.toString());
+  }, [handleChatCommand]);
 
   return (
     <div className="flex flex-col h-full bg-gray-900 text-white p-6 space-y-6 overflow-y-auto">

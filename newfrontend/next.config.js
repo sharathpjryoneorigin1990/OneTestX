@@ -13,7 +13,7 @@ const nextConfig = {
   
   // Environment variables
   env: {
-    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3005',
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000',
   },
   
   // Configure CORS headers for API routes
@@ -44,15 +44,8 @@ const nextConfig = {
     ];
   },
   
-  // Configure rewrites to proxy API requests to the backend
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://localhost:3005/api/:path*',
-      },
-    ];
-  },
+  // Using built-in Next.js API routes
+  // Remove the rewrites to use the built-in API routes
 };
 
 module.exports = nextConfig;

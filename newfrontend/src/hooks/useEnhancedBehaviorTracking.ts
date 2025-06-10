@@ -241,7 +241,7 @@ export function useEnhancedBehaviorTracking(): UseEnhancedBehaviorTrackingReturn
         };
         
         try {
-          const response = await fetch('http://localhost:3005/api/behavior-analysis', {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ''}/api/behavior-analysis`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

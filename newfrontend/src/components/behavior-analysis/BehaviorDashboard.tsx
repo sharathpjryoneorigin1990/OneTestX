@@ -452,7 +452,7 @@ const BehaviorDashboard: React.FC = () => {
           console.log('Sending analyze request for session:', currentSessionId);
           console.log('Number of events being sent:', activeSession.events?.length || 0);
           
-          const response = await fetch('http://localhost:3005/api/analyze-behavior', {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ''}/api/analyze-behavior`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -491,7 +491,7 @@ const BehaviorDashboard: React.FC = () => {
           console.log('Analysis state updated with new data');
           setAnalysisStatus({ 
             status: 'success', 
-            message: `Analysis completed successfully with ${result.eventCounts ? Object.values(result.eventCounts).reduce((a, b) => a + b, 0) : 0} events processed` 
+            message: `Analysis completed successfully with ${result.eventCounts ? (Object.values(result.eventCounts) as number[]).reduce((a, b) => a + b, 0) : 0} events processed` 
           });
           success = true;
           return; // Exit the function on success

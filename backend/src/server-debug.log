@@ -3607,3 +3607,237 @@
     "content-type": "application/json; charset=utf-8"
   }
 }
+[2025-06-10T05:52:03.819Z] Starting server script...
+[2025-06-10T05:52:03.825Z] Successfully registered /api route
+[2025-06-10T05:52:03.825Z] Successfully registered /api/tests route
+[2025-06-10T05:52:03.826Z] Successfully registered /api/k6-tests route
+[2025-06-10T05:52:03.826Z] Successfully registered /api/visual-tests route
+[2025-06-10T05:52:03.826Z] Successfully registered /api/keyboard-tests route
+[2025-06-10T05:52:03.826Z] Successfully registered image server routes
+[2025-06-10T05:52:03.828Z] Script end
+[2025-06-10T05:52:03.830Z] Server listening on port 3001
+[2025-06-10T05:52:03.830Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-10T05:52:03.837Z] Loaded 1 flows
+[2025-06-10T05:54:16.405Z] 
+[2025-06-10T05:54:16.405Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T05:54:16.444Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-10T05:54:16.445Z] [BrowserManager] Creating new browser session: mcp-1749534856444
+[2025-06-10T05:54:18.371Z] [BrowserManager] Browser session created: mcp-1749534856444 (chromium)
+[2025-06-10T05:54:18.372Z] [2025-06-10T05:54:16.405Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1967ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T05:55:25.311Z] 
+[2025-06-10T05:55:25.311Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749534856444/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "291",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T05:55:25.317Z] [API] Command received for session mcp-1749534856444: {}
+[2025-06-10T05:55:25.320Z] [2025-06-10T05:55:25.311Z] Response sent: {
+  "statusCode": 400,
+  "duration": "9ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T06:03:07.088Z] 
+[2025-06-10T06:03:07.088Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "31",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T06:03:07.092Z] [API] New MCP session requested {
+  "url": "apply-qa.apps.asu.edu"
+}
+[2025-06-10T06:03:07.093Z] [BrowserManager] Creating new browser session: mcp-1749535387093
+[2025-06-10T06:03:09.069Z] [BrowserManager] Browser session created: mcp-1749535387093 (chromium)
+[2025-06-10T06:03:09.070Z] [2025-06-10T06:03:07.088Z] Response sent: {
+  "statusCode": 200,
+  "duration": "1982ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T06:03:17.368Z] 
+[2025-06-10T06:03:17.368Z] Incoming request: {
+  "method": "POST",
+  "url": "/api/mcp/session/mcp-1749535387093/command",
+  "headers": {
+    "host": "localhost:3001",
+    "connection": "keep-alive",
+    "content-length": "238",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+    "content-type": "application/json",
+    "sec-ch-ua-mobile": "?0",
+    "origin": "http://localhost:3000",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-dest": "empty",
+    "referer": "http://localhost:3000/",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9"
+  },
+  "query": {}
+}
+[2025-06-10T06:03:17.372Z] [API] Command received for session mcp-1749535387093: {}
+[2025-06-10T06:03:17.373Z] [2025-06-10T06:03:17.368Z] Response sent: {
+  "statusCode": 400,
+  "duration": "5ms",
+  "headers": {
+    "x-powered-by": "Express",
+    "access-control-allow-origin": "*",
+    "vary": "Origin",
+    "access-control-allow-credentials": "true",
+    "access-control-expose-headers": "Content-Length,X-Foo,X-Bar",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "access-control-max-age": "86400",
+    "content-type": "application/json; charset=utf-8"
+  }
+}
+[2025-06-10T08:29:55.802Z] Starting server script...
+[2025-06-10T08:29:55.808Z] Successfully registered /api route
+[2025-06-10T08:29:55.808Z] Successfully registered /api/tests route
+[2025-06-10T08:29:55.808Z] Successfully registered /api/k6-tests route
+[2025-06-10T08:29:55.808Z] Successfully registered /api/visual-tests route
+[2025-06-10T08:29:55.808Z] Successfully registered /api/keyboard-tests route
+[2025-06-10T08:29:55.809Z] Successfully registered image server routes
+[2025-06-10T08:29:55.810Z] Script end
+[2025-06-10T08:29:55.812Z] Server listening on port 3001
+[2025-06-10T08:29:55.813Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-10T08:29:55.830Z] Loaded 1 flows
+[2025-06-10T08:40:33.849Z] Starting server script...
+[2025-06-10T08:40:33.855Z] Successfully registered /api route
+[2025-06-10T08:40:33.855Z] Successfully registered /api/tests route
+[2025-06-10T08:40:33.855Z] Successfully registered /api/k6-tests route
+[2025-06-10T08:40:33.855Z] Successfully registered /api/visual-tests route
+[2025-06-10T08:40:33.855Z] Successfully registered /api/keyboard-tests route
+[2025-06-10T08:40:33.855Z] Successfully registered image server routes
+[2025-06-10T08:40:33.859Z] Script end
+[2025-06-10T08:40:33.861Z] Server listening on port 3001
+[2025-06-10T08:40:33.862Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-10T08:40:33.888Z] Loaded 1 flows
+[2025-06-10T10:09:26.915Z] Starting server script...
+[2025-06-10T10:09:26.925Z] Successfully registered /api route
+[2025-06-10T10:09:26.925Z] Successfully registered /api/tests route
+[2025-06-10T10:09:26.925Z] Successfully registered /api/k6-tests route
+[2025-06-10T10:09:26.926Z] Successfully registered /api/visual-tests route
+[2025-06-10T10:09:26.926Z] Successfully registered /api/keyboard-tests route
+[2025-06-10T10:09:26.927Z] Successfully registered image server routes
+[2025-06-10T10:09:26.929Z] Script end
+[2025-06-10T10:09:26.932Z] Server listening on port 3001
+[2025-06-10T10:09:26.932Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-10T10:09:26.937Z] Loaded 1 flows
+[2025-06-10T10:39:11.006Z] Starting server script...
+[2025-06-10T10:39:11.009Z] Successfully registered /api route
+[2025-06-10T10:39:11.009Z] Successfully registered /api/tests route
+[2025-06-10T10:39:11.010Z] Successfully registered /api/k6-tests route
+[2025-06-10T10:39:11.010Z] Successfully registered /api/visual-tests route
+[2025-06-10T10:39:11.010Z] Successfully registered /api/keyboard-tests route
+[2025-06-10T10:39:11.010Z] Successfully registered image server routes
+[2025-06-10T10:39:11.011Z] Script end
+[2025-06-10T10:39:11.012Z] Server listening on port 3001
+[2025-06-10T10:39:11.012Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-10T10:39:11.017Z] Loaded 1 flows
+[2025-06-10T11:22:42.291Z] Starting server script...
+[2025-06-10T11:22:42.296Z] Successfully registered /api route
+[2025-06-10T11:22:42.296Z] Successfully registered /api/tests route
+[2025-06-10T11:22:42.297Z] Successfully registered /api/k6-tests route
+[2025-06-10T11:22:42.297Z] Successfully registered /api/visual-tests route
+[2025-06-10T11:22:42.297Z] Successfully registered /api/keyboard-tests route
+[2025-06-10T11:22:42.297Z] Successfully registered image server routes
+[2025-06-10T11:22:42.299Z] Script end
+[2025-06-10T11:22:42.301Z] Server listening on port 3001
+[2025-06-10T11:22:42.301Z] Performance testing API available at http://localhost:3001/api/performance
+[2025-06-10T11:22:42.310Z] Loaded 1 flows

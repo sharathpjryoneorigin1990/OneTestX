@@ -4,7 +4,7 @@ import axios from 'axios';
 import { io, Socket } from 'socket.io-client';
 
 // Backend server URL - using Next.js API routes
-const BACKEND_URL = typeof window !== 'undefined' ? '' : (process.env.BACKEND_URL || 'http://localhost:3005');
+const BACKEND_URL = typeof window !== 'undefined' ? '' : (process.env.BACKEND_URL || 'http://localhost:3000');
 
 // Create axios instance with default config
 const api = axios.create({
@@ -21,7 +21,7 @@ let socket: Socket | null = null;
 export const initializeSocket = () => {
   if (!socket) {
     // Use the full backend URL for socket connection
-    const socketUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3005';
+    const socketUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
     socket = io(socketUrl);
     
     socket.on('connect', () => {

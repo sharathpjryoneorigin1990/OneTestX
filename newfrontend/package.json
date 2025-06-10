@@ -42,6 +42,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^10.18.0",
     "get-contrast": "^3.0.0",
+    "jira-client": "^8.2.2",
     "js-yaml": "^4.1.0",
     "jsonpath": "^1.1.1",
     "lucide-react": "^0.511.0",
@@ -67,6 +68,7 @@
   },
   "devDependencies": {
     "@axe-core/cli": "^4.10.2",
+    "@types/jira-client": "^7.1.9",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.19.0",
     "@types/react": "^18.2.31",

@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     // Try to connect to the backend
-    const backendResponse = await fetch('http://localhost:3005/api/health');
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+    const backendResponse = await fetch(`${backendUrl}/api/health`);
     
     if (!backendResponse.ok) {
       throw new Error('Backend service is not healthy');

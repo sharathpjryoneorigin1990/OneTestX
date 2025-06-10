@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Progress } from '@/components/ui/Progress';
 import { Button } from '@/components/ui/Button';
-import { FiBarChart2, FiTrendingUp, FiClock, FiCheckCircle, FiAlertCircle, FiCalendar, FiUsers, FiX, FiActivity, FiCircle, FiSettings } from 'react-icons/fi';  
+import { FiBarChart2, FiTrendingUp, FiClock, FiCheckCircle, FiAlertCircle, FiCalendar, FiUsers, FiX, FiActivity, FiCircle, FiSettings, FiExternalLink } from 'react-icons/fi';  
 import BurndownChart from './BurndownChart';
 import TaskStatusWidget from './TaskStatusWidget';
 import TeamWorkload from './TeamWorkload';
@@ -130,6 +131,16 @@ const ProjectDashboard = () => {
             <FiTrendingUp className="w-4 h-4" />
             Export Report
           </Button>
+          <Link href="/jira-dashboard" className="inline-flex">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="flex items-center gap-2 bg-green-900/20 border-green-800/50 hover:bg-green-800/30 text-white transition-all duration-300"
+            >
+              <FiExternalLink className="w-4 h-4" />
+              Jira Dashboard
+            </Button>
+          </Link>
         </div>
       </div>
       {/* Section 1: Predictive & Planning Insights */}
